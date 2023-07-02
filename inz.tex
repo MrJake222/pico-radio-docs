@@ -1,4 +1,4 @@
-\documentclass[12pt]{article}
+\documentclass[12pt]{report}
 
 \usepackage{amssymb} % symbol kąta
 \usepackage[polish]{babel} % polskie nazwy
@@ -9,7 +9,7 @@
 \usepackage{color} % kolory
 \usepackage{indentfirst} % wcięcie w pierwszej linii paragrafu
 \usepackage{graphicx} % obrazy
-\usepackage{float} % dla image [H]
+%\usepackage{float} % dla image [H]
 \usepackage{amsmath,amsthm,amssymb,mathtools} % matematyka dowód
 \usepackage{changepage} % matematyka dowód
 \usepackage{siunitx} % wyrównanie do kropki
@@ -22,6 +22,7 @@
 	linkcolor=black,
 	urlcolor=magenta
 }
+\usepackage{caption} % link przenosi do góry obrazka
 
 % bez odstępu w itemize
 \let\tempone\itemize
@@ -31,45 +32,40 @@
 \definecolor{lbcolor}{rgb}{0.9,0.9,0.9}  
 \graphicspath{ {img/} }
 % obrazek {nazwa.png}{opis}
-\newcommand{\imgcustomsize}[3]{
-	\begin{figure}[H]
+\newcommand{\imgcs}[3]{
+	\begin{figure}
 		\centering
 		\includegraphics[width=#3\textwidth]{#1}
 		\caption{#2}
+		\label{#1}
 	\end{figure}
 }
-\newcommand{\img}[2]{\imgcustomsize{#1}{#2}{0.7}}
-
-% bez opisu
-\newcommand{\imgnocap}[1]{
-	\begin{figure}[H]
-		\centering
-		\includegraphics[width=0.6\textwidth]{#1}
-	\end{figure}
-}
+\newcommand{\img}[2]{\imgcs{#1}{#2}{0.7}}
 
 % dwa obrazki
-% \imgsidebyside{1}{opis 1}{2}{opis 2}
-\newcommand{\imgsidebyside}[4]{
-	\begin{figure}[H]
+% \imgss{1}{opis 1}{2}{opis 2}
+\newcommand{\imgss}[4]{
+	\begin{figure}
 		\centering
 		\begin{minipage}{.45\textwidth}
 			\centering
 			\includegraphics[width=1\linewidth]{#1}
 			\caption{#2}
+			\label{#1}
 		\end{minipage}%
 		\hfill
 		\begin{minipage}{.45\textwidth}
 			\centering
 			\includegraphics[width=1\linewidth]{#3}
 			\caption{#4}
+			\label{#3}
 		\end{minipage}
 	\end{figure}
 }
 
 % tabela z wynikami {nazwa.txt}{opis}
 \newcommand{\tab}[2]{
-	\begin{table}[H]
+	\begin{table}
 		\centering
 		\caption{#2}
 		\vspace{0.3cm}
@@ -81,7 +77,7 @@
 \renewcommand\theadfont{\bfseries}
 
 \begin{document}
-	\lstset{backgroundcolor=\color{lbcolor}, language=Python, inputencoding=utf8}
+	\lstset{backgroundcolor=\color{lbcolor}, language=C++, inputencoding=utf8, basicstyle=\ttfamily}
 	
 	\title{Odbiornik internetowych stacji radiowych \\
 		\vspace{0.2cm}
@@ -93,169 +89,170 @@
 	\tableofcontents
 	\pagebreak
 	
-	\section{Wizja}
+	\chapter{Cel prac i wizja produktu}
+	W tym rozdziale opisano jak będzie wyglądał końcowy produkt. Zwrócono też uwagę na to jak będzie przebiegała jego realizacja i jakie ryzyka mogą wystąpić.
 	
-	\subsection{Informacje ogólne}
-		Temat mojej pracy inżynierskiej brzmi \textit{Odbiornik internetowych stacji radiowych}. Radio internetowe staje się co raz popularniejsze. Wolność transmisji, brak regulacji i ograniczeń pasma radiowego powoduje, że wiele niezależnych stacji radiowych wybiera to medium przekazu. Urządzenie ma być zrealizowane na platformie wbudowanej, opartej o mikrokontroler.
+	\section{Opis problemu}
+		Radio internetowe staje się co raz popularniejsze. Wolność transmisji, regulacje tradycyjnego pasma radiowego powodują, że wiele niezależnych stacji radiowych wybiera właśnie to medium przekazu. Jednak większość funkcjonujących współcześnie odbiorników nie posiada funkcji odbioru strumienia internetowego. Celem pracy jest wykonanie kompletnego przenośnego urządzenia, które umożliwiłoby odbiór takich stacji.
 		
-		\paragraph{Klient}
-		Klientem jest promotor. Innych osób w projekcie nie ma.
+	\section{Rola produktu}
+		Radio jest skierowane do osób z małą wiedzą technologiczną. To znaczy, obsługa urządzenia powinna być prosta i intuicyjna. Nie powinny być wymagane żadne dodatkowe elementy do eksploatacji (zewnętrzne głośniki, specjalna ładowarka). Produkt ma być kompletnym urządzeniem gotowym do odbioru radia. Całość będzie zamknięta w obudowie. Na rysunku~\ref{1/radio_proj_trimmed} przedstawiony został projekt wizualny radia. Wszystkie wymagane elementy kontrolne zostały umieszczone na przedniej ścianie radia wraz z głośnikami. Rysunek~\ref{1/PicoRadio_blocks} przedstawia uproszczony schemat blokowy urządzenia.
 		
-		\paragraph{Nazwa kodowa}
-		Jako, że planuję uruchomić radio na platformie Raspberry Pi Pico projekt zyskał nazwę kodową \textbf{Pico-radio}.
+		\imgcs{1/radio_proj_trimmed}{Projekt wizualny radia (z zachowanymi proporcjami)}{0.9}
+		\imgcs{1/PicoRadio_blocks}{Schemat blokowy radia}{1}
 		
-	\subsection{Problem}
-		Poprzednie urządzenia tego typu powstałe na uczelni używały relatywnie drogiej płytki \textit{STM32F746G-Disco} kosztującej 389 zł \textsuperscript{\cite{botland_stm}}. Zawiera ona wyświetlacz.
-		\img{botland_stm}{Droga płytka STM}
-		
-		Ceny komercyjnych 'adapterów' radia internetowego zaczynają się od ok. 330 zł za produkt powystawowy \textsuperscript{\cite{allegro_adapter}}
-		\img{allegro_adapter}{Adapter radia internetowego}
-		
-		Wieże z wbudowaną opcją radia internetowego to koszt rzędu 230 zł za najtańszy produkt z głośnikiem mono \textsuperscript{\cite{xkom_tanie}} lub ok. 370 zł za wersję stereo \textsuperscript{\cite{xkom_drogie}}
-		\imgsidebyside{xkom_tanie}{Radio internetowe mono}{xkom_drogie}{Radio internetowe stereo}
-		
-		\subsubsection{Rozwiązanie}
-		\imgcustomsize{radio_proj_trimmed}{Projekt wizualny radia (z zachowanymi proporcjami)}{0.9}
-		
-%		Moja propozycja to wykorzystanie relatywnie taniej płytki \textit{Raspberry Pi Pico W} w cenie 35,90 zł \textsuperscript{\cite{botland_pi_pico}}.
-%		\img{botland_pi_pico}{Tania płytka Raspberry Pi Pico}
-		
-		Chciałbym aby końcowy produkt był kompletnym radiem. Poniżej przedstawiam uproszczony schemat blokowy.
-		\imgcustomsize{PicoRadio_blocks}{Schemat blokowy radia}{1}
-		
-		\pagebreak
-		Chciałbym użyć relatywnie taniej płytki \textit{Raspberry Pi Pico W} w cenie 35,90 zł \textsuperscript{\cite{botland_pi_pico}}.
-		\img{botland_pi_pico}{Tania płytka Raspberry Pi Pico}	
-		
-		Zamierzam zastosować graficzny wyświetlacz o przekątnej 1.8" \textsuperscript{\cite{botland_wysw}}.
-		\img{botland_wysw}{Graficzny wyświetlacz 1.8 cala}
-		Sterowanie będzie odbywało się za pomocą 5 przycisków (joystick + zatwierdź).
-		
-		Jako wzmacniacz mocy zastosowałbym tani moduł ze sklepu Botland \textsuperscript{\cite{botland_amp}}.
-		\img{botland_amp}{Wzmacniacz mocy stereo 3W}
-		
-		Głośniki będą pełnozakresowe w konfiguracji stereo zakupione na Allegro. \textsuperscript{\cite{allegro_glosnik}}
-		\img{allegro_glosnik}{Głośnik 3W}
-		
-		Zasilanie zamierzam zrobić bateryjne z wykorzystaniem ogniwa Li-Pol o pojemności 4000mAh. Pozwoliłoby to na ok. 4h słuchania prze głośności 50\% \textsuperscript{\cite{botland_aku}}. Potrzebna będzie też ładowarka. \textsuperscript{\cite{botland_aku_chg}}
-		\imgsidebyside{botland_aku}{Ogniwo Li-Pol}{botland_aku_chg}{Ładowarka}
-		
-		Obudowę zamierzam zaprojektować i wydrukować na drukarce 3D. Ewentualnie biorę pod uwagę możliwość zakupu obudowy uniwersalnej.
-		
-	\subsubsection{Koszt projektu}
-	\begin{table}[H]
-		\centering
-		\caption{aa}
-		\vspace{0.3cm}
-		\begin{tabular}{r|S}
-			Pico W&35.90 zł\\
-			Wyświetlacz&39.00 zł\\
-			Wzmacniacz&2.70 zł\\
-			Głośniki&77.68 zł\\
-			Ogniwo Li-Pol&39.90 zł\\
-			Ładowarka&6.30 zł\\
-			\textbf{Suma}&201.48 zł
-		\end{tabular}
-	\end{table}
-
-	Jest to około 170 zł mniej niż radio internetowe stereo pokazane wyżej. Oczywiście jest to tylko zgrubne oszacowanie. Końcowy koszt projektu na pewno będzie wyższy.
-		
-	\subsection{Wymagania funkcjonalne}
-		Główną funkcją budowanego urządzenia ma być możliwość odtwarzania radia internetowego. \paragraph{Wymagane funkcjonalności (oprócz odtwarzania)}
+	\section{Współpracujące systemy}
+		Oczywistym współpracującym systemem jest w przypadku tego projektu serwer strumieniujący radio internetowe. Standardem kodowania wykorzystywanym przez serwery jest format MP3 lub AAC/AAC+. Drugim współpracującym systemem jest baza danych zawierająca stacje radiowe. Baza taka powinna umożliwiać zapytania poprzez udokumentowane i dostępne API. List baz brana pod uwagę przy projektowaniu urządzenia:
 		\begin{itemize}
-			\item wstrzymywanie odtwarzania
-			\item prezentacja na zintegrowanym wyświetlaczu aktualnego stanu
-			\item regulacja głośności odtwarzania
-			\item lista stacji
-			\item lista ulubionych stacji
+			\item Radio-browser~\textsuperscript{\cite{radio-browser}}
+			\item fmstream~\textsuperscript{\cite{fmstream}}
+		\end{itemize}
+		
+		Druga baza, choć obszerniejsza (86,000 a 38,578 stacji), nie udostępnia interfejsu dla wszystkich. Autor życzy sobie osobistej prośby o dostęp, która na ten moment została wysłana i czeka na odpowiedź.
+		
+	\section{Wymagania funkcjonalne i niefunkcjonalne}
+		Główną funkcją budowanego urządzenia ma być możliwość odtwarzania radia internetowego.
+		
+		\paragraph{Wymagane funkcjonalności}
+		\begin{itemize}
+			\item odtwarzanie stacji internetowych,
+			\item wstrzymywanie odtwarzania,
+			\item prezentacja na zintegrowanym wyświetlaczu aktualnego stanu,
+			\item regulacja głośności odtwarzania,
+			\item lista stacji,
+			\item lista ulubionych stacji.
 		\end{itemize}
 		
 		\paragraph{Dodatkowe funkcjonalności (niewymagane)}
 		\begin{itemize}
-			\item odtwarzanie plików z nośnika przenośnego
+			\item odtwarzanie plików z nośnika przenośnego,
 		\end{itemize}
 	
 		\paragraph{Oczekiwany produkt}
 		\begin{itemize}
-			\item W pełni funkcjonalny prototyp urządzenia realizującego funkcje odbiornika internetowych stacji radiowych.
+			\item W pełni funkcjonalny prototyp urządzenia realizującego funkcje odbiornika internetowych stacji radiowych,
 			\item Dokumentacja techniczna pozwalająca na zbudowanie urządzenia oraz rozwój jego oprogramowania układowego.
 		\end{itemize}
 	
 	\subsection{Wymagania niefunkcjonalne}
-		Płytka rozwojowa powinna obsługiwać WiFi (do pobierania strumienia danych audio z serwera). Mikrokontroler musi poradzić sobie z dekodowaniem formatu MP3 lub AAC w czasie rzeczywistym.
+		Urządzenie ma być wykonane z wykorzystaniem mikrokontrolera, lub płytki rozwojowej opartej o mikrokontroler. Rozwiązanie powinno obsługiwać połaczenie z Internetem, np. WiFi, do pobierania strumienia danych audio z serwera oraz musi poradzić sobie z dekodowaniem formatu MP3 lub AAC w czasie rzeczywistym.
 		
-	\subsection{Koncepcja technologiczna}
-		Oprogramowanie będzie napisane w języku C++ z wykorzystaniem środowiska \textit{pico-sdk} \textsuperscript{\cite{pico_sdk}}. 
+	\section{Przegląd konkurencyjnych rozwiązań}
+		Ceny komercyjnych 'adapterów' radia internetowego zaczynają się od ok. 330 zł za produkt powystawowy (Rysunek~\ref{1/radio_adapter}). Wieże z wbudowaną opcją radia internetowego to koszt rzędu 230 zł za najtańszy produkt z głośnikiem mono (Rysunek~\ref{1/radio_tanie}) lub ok. 370 zł za wersję stereo (Rysunek~\ref{1/radio_drogie}). Chciałbym mój produkt zrealizować mniejszym kosztem.
 		
-	\subsection{Ryzyko}
-		Największym ryzykiem jest brak wystarczającej mocy obliczeniowej lub brak odpowiednich bibliotek do dekodowania formatów potrzebnych do odtworzenia dźwięku ze strumienia audio. Napisanie kodeka MP3 nie wchodzi w grę z powodu ograniczonego czasu na projekt. Zmiana płytki na droższą mija się z założeniami projektu. Rozwiązaniem może być użycie sprzętowego kodeka audio MP3 np. VS1003.
-		\img{botland_mp3}{Sprzętowy dekoder MP3}
-		Jego zastosowanie tylko nieznacznie powiększa koszty projektu, ale znacznie odciąża mikrokontroler.
+		Jednym z założeń pracy jest skonstruowanie systemu, którego dokumentacja pozwoli dowolnemu informatykowi/elektronikowi na skonstruowanie podobnego urządzenia i modyfikację jego oprogramowania. Projekt sam w sobie jest ciekawy ponieważ w Internecie mało jest prób konstrukcji radia internetowego opartego o Raspberry Pi Pico. Nie znaleziono żadnych projektów dekodujących samodzielnie format MP3.  Jeden z projektów~\textsuperscript{\cite{radio_pico1}} używa sprzętowego dekodera MP3 (przedstawiony na rysunku~\ref{1/radio_mp3}). Większość odtwarzaczy własnej konstrukcji opiera się o pełnoprawny komputer jednopłytkowy Raspberry Pi, który jest obecnie trudno dostępny i drogi.
 		
-	\subsection{Plan prac}
-		Część prac została już wykonana i przetestowana:
+		Urządzenie będzie także posiadać prosty i intuicyjny interfejs, aby trafić do szerokiej grupy odbiorców. Zastosowane zostaną ogniwa Li-ion 18650, tak, aby istniała łatwa możliwość wymiany rozładowanych ogniw (np. tam, gdzie nie ma dostępu do energii elektrycznej).
+		
+		\img{1/radio_adapter}{Adapter radia internetowego \textsuperscript{\cite{radio_adapter}}}
+		\imgss{1/radio_tanie}{Radio internetowe mono \textsuperscript{\cite{radio_tanie}}}{1/radio_drogie}{Radio internetowe stereo \textsuperscript{\cite{radio_drogie}}}
+		
+		\img{1/radio_mp3}{Sprzętowy dekoder MP3 \textsuperscript{\cite{radio_vs1003}}}
+		
+	\section{Analiza technologiczna}
+		Początkowo Raspberry Pi RP2040~\textsuperscript{\cite{rp2040}} wydawał się interesującą opcją. Jednak pojawiły się obawy o możliwość dekodowania formatu MP3 w czasie rzeczywistym.
+		
+		\subsection{Biblioteka dekodująca}
+			Standardowa ramka MP3 odtwarzana jest przez ok. 26ms. Początkowe testy z biblioteką \lstinline|minimp3|~\textsuperscript{\cite{minimp3}} do dekodowania formatu MP3 nie przyniosły obiecujących rezultatów.  Przy użyciu tej biblioteki ramka dekodowała się w 90ms. Jest to 350\% czasu, który mógł zostać wykorzystany. Jednak wykorzystanie \lstinline|helixmp3|~\textsuperscript{\cite{helixmp3}} (matematyka stałoprzecinkowa) pozwoliło na zdekodowanie ramki w 22ms (80\% dostępnego czasu) przy domyślnym taktowaniu procesora.
+			
+			Martwiące może się wydawać poświęcenie 80\% czasu procesora na dekodowanie formatu, jednak jako że mikrokontroler jest dwurdzeniowy, cały jeden rdzeń może zostać wykorzystany do dekodowania.
+		
+		\subsection{Oprogramowanie}
+			Oprogramowanie zostanie napisane w języku C++ z wykorzystaniem środowiska \lstinline|pico-sdk|~\textsuperscript{\cite{pico_sdk}}.  W prototypowaniu brakowało centralnego systemu zarządzającego przepływem informacji oraz zadaniami, zatem do projektu dołączone zostało jądro systemu czasu rzeczywistego FreeRTOS Kernel~\textsuperscript{\cite{freertos_kernel}}
+	
+	\section{Ryzyko}
+		Należy uwzględnić ryzyko opóźnień w ustalonym trybie prac. Tworzenie oprogramowania wiąże się z ryzykiem dotarcia w ślepy zaułek i konieczności gruntownego przeprojektowania części systemów. Dostosowanie platformy pod centralny system czasu rzeczywistego stanowi przykład takiego opóźnienia. Posiadając jedną płytkę Raspberry Pi Pico, jej uszkodzenie również może powodować opóźnienia w realizacji projektu. Warto zaopatrzyć się w więcej niż jedną sztukę krytycznych elementów. Niespodziewane problemy z jakością oprogramowania, takie jak na przykład ciężko reprodukowalne błędy w strumieniowaniu audio, także mogą przyczynić się do wielu godzin poszukiwania przyczyn takiego zachowania aplikacji.
+		Dobre planowanie, rzetelne projektowanie i tworzenie aplikacji powinny umniejszyć rolę w.w. ryzyk.
+	
+	\section{Słownik pojęć}
 		\begin{itemize}
-			\item Wykonanie odtwarzacza nieskompresowanego dźwięku
-			\item Próba dekodowania MP3 na mikrokontrolerze (sukces)
+			\item MP3 (\textit{MPEG-1 Audio Layer 3}) -- popularny format zapisu dźwięku; implementuje stratną kompresję,
+			\item AAC/AAC+ (\textit{Advanced Audio Coding}) -- inny format dźwięku z kompresją stratną
+			\item Li-ion -- akumulatory Litowo-jonowe (ładowalne)
+			\item Raspberry Pi -- komputery jednopłytkowe tworzone przez Raspberry Pi Foundation
+			\item Raspberry Pi Pico -- płytki rozwojowe oparte o mikrokontroler RP2040 (produkowane również przez Raspberry Pi Foundation)
 		\end{itemize}
 	
-		W obecnej formie mam działający odtwarzacz plików MP3 z karty SD. Na teraz planuję dołączenie do niego stosu WiFi i odtworzenie strumienia dźwięku z internetu. Niestety nigdy nie interesowałem się radiem internetowym i zasadą jego działania.
-		
-		\paragraph{Prototyp}
-		Do 24 maja chciałbym mieć zrobiony odtwarzacz z zapisaną na stałe jedną/paroma ścieżkami do strumieni audio. Muszę zgłębić zasadę działania radia internetowego i wypróbować odtwarzanie takiego strumienia na Pi Pico. Muszę także napisać/wykorzystać dostępne w internecie implementacje klienta HTTP działające na Pi Pico (co po wstępnym przejrzeniu dostępnych rozwiązań może skończyć się implementacją własnego klienta HTTP)
-		
-		\paragraph{Wersja alpha}
-		Do tego czasu chciałbym mieć zmontowane wszystko z części powyżej + podstawowa obsługa wyświetlacza i przycisków. Planuję także mieć już większość implementacji za sobą. Tzn. odtwarzanie radia z listy stacji wybieranych z wyświetlacza.
-		
-		\paragraph{Dalsza perspektywa}
-		Planuję także zaprojektować płytkę drukowaną do mojego projektu. Wykonam też obudowę techniką druku 3D. Tą część projektu zostawiam na wakacje po tym semestrze.
-		
-	\section{Projekt interfejsu i interakcji z użytkownikiem}
-	\imgcustomsize{interface/1flow}{Przemieszczanie się pomiędzy ekranami}{0.9}
-	W trakcie projektowania ekranów konieczne stało się założenie użycia 5 przycisków. Cztery z nich zostaną użyte do nawigacji prawo/lewo/góra/dół, a pozostały (środkowy) do wykonania wybranej akcji.
-		 
+	\chapter{Projekt interfejsu i interakcji z użytkownikiem}
+	W rozdziale drugim skupiono się jak produkt ma funkcjonować i jak użytkownik będzie wchodził w interakcje z nim.\\
 	
+	Najważniejszym elementem planowania projektu z perspektywy użyteczności dla klienta jest plan wygodnego i intuicyjnego interfejsu użytkownika. Dodatkową komplikacją jest fakt, że urządzenie będzie miało do dyspozycji tylko niewielki wyświetlacz i parę przycisków. Należy więc zadbać, żeby przy tym niewielkim asortymencie sprzętu dało się przekazać wszystkie informacje i uzyskać co użytkownik planuje zrobić w następnej kolejności.
+		
+	\section{Projekt interfejsu}
+		Do zaprojektowania ekranów posłużyło narzędzie Figma~\textsuperscript{\cite{figma}}. Na rysunku~\ref{2/interface/flow} widać jak wyglądają poszczególne okna oraz jak użytkownik może przemieszczać się  pomiędzy nimi. Na rysunkach \ref{2/interface/real1} oraz \ref{2/interface/real2} widać jak prezentują się ekrany na rzeczywistym wyświetlaczu.
+		
+		\paragraph{Ikony statusu}
+			Przy projektowaniu interfejsów poczyniono założenie, że ikony statusowe (połączenie WiFi / włożona karta SD) znajdować się będą na górze ekranu. Będzie można się tam dostać, a po kliknięciu otworzy się ekran statusowy z większą ilością informacji i potencjalnymi parametrami do zmiany.
+			
+		\paragraph{Ikony akcji}
+			Na ekranach na których przejście w przód lub wstecz nie jest zdefiniowane przez pozostałe elementu interfejsu (np. wyszukaj, gdy na ekranie jest klawiatura) w dolnej części umieszczono ikony akcji. Jest to np. ikona wstecz lub stop.
+			
+		Przy wyświetlaniu listy (np. wyników wyszukiwania lub listy ulubionych stacji) kliknięcie w daną pozycję powoduje zaakceptowanie jej i otworzenie następnego ekranu.
+
+		\imgcs{2/interface/flow}{Przemieszczanie się pomiędzy ekranami}{0.9}
+		\imgss{2/interface/real1}{Wyszukiwanie stacji}{2/interface/real2}{Wyniki wyszukiwania}
+	
+	\section{Interakcja z użytkownikiem}
+		W trakcie projektowania ekranów konieczne stało się założenie użycia 5 przycisków. Cztery z nich zostaną użyte do nawigacji prawo/lewo/góra/dół, a pozostały (środkowy) do wykonania wybranej akcji. Nawigacja oparta jest na siatce przycisków, przy czym może być ona nieregularna (różna liczba przycisków w różnych wierszach). Poniżej przedstawione zostały wybrane scenariusze obsługi radia:
+		
+		\begin{itemize}
+			\item Na rysunku~\ref{2/flows/1} widać jak użytkownik aby poruszyć się w dół listy stacji naciska dolny przycisk. Powrót do \textit{Radio 1} jest oczywiście możliwy poprzez naciśnięcie górnego przycisku.
+			
+			\item Rysunek~\ref{2/flows/2} przedstawia jeden ze sposobów przejścia do ikon statusu. Jeżeli na górnej pozycji listy użytkownik naciśnie górny przycisk, przeniesie on go do górnego rzędu ikon.
+			
+			\item Poruszanie się w obrębie jednego wiersza zostało zrealizowane poprzez przyciski \mbox{lewo/prawo}. Przedstawiają to rysunki \ref{2/flows/3p} i \ref{2/flows/3l} na przykładzie dwóch ikon statusu.
+			
+			\item Po dojściu do czwartej pozycji na liście, jeżeli na liście jest więcej niż 4 stacje, po naciśnięciu dolnego przycisku, zgodne z rysunkiem~\ref{2/flows/4}, kursor zostanie przeniesiony do piątej stacji. Należy zwrócić uwagę na zmianę położenia paska przewijania (po prawej stronie).
+			
+			\item Jeżeli wskaźnik znajduje się na końcu listy (pasek przewijania w skrajnie dolnej pozycji), po naciśnięciu przycisku w dół, kursor znajdzie się w pasku ikon akcji. Sytuację tę przedstawia rysunek \ref{2/flows/5}. Powrót na listę stacji jest możliwy przy pomocy górnego przycisku.
+			
+			\item Poruszanie się pomiędzy paskami akcji i statusu jest możliwe przy pomocy przycisków \mbox{góra/dół}. Oba scenariusze przedstawiają rysunki \ref{2/flows/6d} i \ref{2/flows/6g}.
+			
+			\item Rysunek \ref{2/flows/7} przedstawia powrót z przycisków statusu na listę stacji.
+			
+			\item Po powrocie można wybrać daną stację i rozpocząć odtwarzanie przyciskiem środkowym (rysunek \ref{2/flows/8})
+		\end{itemize}
+		
+		\imgss{2/flows/1}{Krok w dół na liście}{2/flows/2}{Przejście do ikon statusu}
+		\imgss{2/flows/3p}{Przejście w prawo}{2/flows/3l}{Przejście w lewo}
+		\imgss{2/flows/4}{Przewinięcie listy stacji do góry}{2/flows/5}{Przejście z listy do ikon akcji}
+		\imgss{2/flows/6d}{Przejście z ikon akcji (na dole) do ikon statusu (na górze)}{2/flows/6g}{Przejście z ikon statusu (na górze) do akcji (na dole)}
+		\imgss{2/flows/7}{Powrót z ikon statusu do listy}{2/flows/8}{Akceptacja wyboru}
 	
 	\pagebreak
 	\begin{thebibliography}{9}
-		\bibitem{botland_stm}
-		\href{https://botland.com.pl/stm32-discovery/4715-stm32f746g-disco-discovery-stm32f746ng-cortex-m7-ekran-dotykowy-pojemnosciowy-43--5904422374082.html}{\textit{STM32F746G-Disco} -- Sklep Botland}
+		\bibitem{radio-browser}
+		\href{https://www.radio-browser.info/}{\textit{Radio-browser} -- baza danych stacji radiowych}
+		\bibitem{fmstream}
+		\href{http://fmstream.org}{\textit{fmstream} -- baza danych stacji radiowych}
 		
-		\bibitem{allegro_adapter}
-		\href{https://allegro.pl/oferta/adapter-radia-internetowego-dual-ir-3a-dab-fm-rds-12692108793}{\textit{Radio sieciowe} -- Sklep Allegro}
+		\bibitem{minimp3}
+		\href{https://github.com/lieff/minimp3}{\textit{minimp3} -- biblioteka dekodująca MP3}
+		\bibitem{helixmp3}
+		\href{https://realnetworks.com}{\textit{helixmp3} -- biblioteka dekodująca MP3 (napisana w 2003 roku przez RealNetworks)}
 		
-		\bibitem{xkom_tanie}
-		\href{https://www.x-kom.pl/p/653480-radio-internetowe-technisat-sternradio-ir-2-biale.html}{\textit{Radio internetowe mono} -- Sklep x-kom}
-		
-		\bibitem{xkom_drogie}
-		\href{https://www.x-kom.pl/p/724674-radio-internetowe-blaupunkt-ir10bt.html}{\textit{Radio internetowe stereo} -- Sklep }
-		
-		
-		\bibitem{botland_pi_pico}
-		\href{https://botland.com.pl/moduly-i-zestawy-do-raspberry-pi-pico/21574-raspberry-pi-pico-w-rp2040-arm-cortex-m0-cyw43439-wifi-5056561803173.html}{\textit{Raspberry Pi Pico W} -- Sklep Botland}
-		
-		\bibitem{botland_wysw}
-		\href{https://botland.com.pl/wyswietlacze-lcd-tft-i-ips/10754-wyswietlacz-lcd-tft-kolorowy-18-128x160px-spi-waveshare-13892-5904422316600.html}{\textit{Wyświetlacz 1.8 cala} -- Sklep Botland}
-		
-		\bibitem{botland_amp}
-		\href{https://botland.com.pl/odtwarzacze-mp3-wav-ogg-midi/6641-wzmacniacz-audio-stereo-pam8403-5v-3w-dwukanalowy-zielony-5904422359850.html}{\textit{Wzmacniacz mocy 2x3W} -- Sklep Botland}
-		
-		\bibitem{allegro_glosnik}
-		\href{https://allegro.pl/oferta/glosnik-pelnozakresowy-4ohm-3w-5cm-diy-lekki-10744973650}{\textit{Głośnik pełnozakresowy} -- Sklep Allegro}
-		
-		\bibitem{botland_aku}
-		\href{https://botland.com.pl/akumulatory-li-pol-1s-37v/15644-akumulator-li-pol-akyga-4000mah-1s-37v-zlacze-jst-bec-gniazdo-80x50x8mm-5904422343644.html}{\textit{Akumulator Li-Pol} -- Sklep Botland}
-		
-		\bibitem{botland_aku_chg}
-		\href{https://botland.com.pl/moduly-ladowania-lipol-usb-micro-usb/6944-ladowarka-li-pol-tp4056-pojedyncza-cela-1s-37v-microusb-z-zabezpieczeniami-5904422375355.html}{\textit{Ładowarka Li-Pol} -- Sklep Botland}
-		
+		\bibitem{rp2040}
+		\href{https://www.raspberrypi.com/documentation/microcontrollers/rp2040.html}{\textit{RP2040} -- Mikrokontroler firmy Raspberry Pi}
 		\bibitem{pico_sdk}
 		\href{https://github.com/raspberrypi/pico-sdk}{\textit{pico-sdk} -- Zestaw bibliotek do Raspberry Pi Pico}
+		\bibitem{freertos_kernel}
+		\href{https://github.com/FreeRTOS/FreeRTOS-Kernel}{\textit{FreeRTOS Kernel} -- Jądro systemu czasu rzeczywistego FreeRTOS}
 		
+		\bibitem{radio_adapter}
+		\href{https://allegro.pl/oferta/adapter-radia-internetowego-dual-ir-3a-dab-fm-rds-12692108793}{\textit{Radio sieciowe} -- Sklep Allegro}
+		\bibitem{radio_tanie}
+		\href{https://www.x-kom.pl/p/653480-radio-internetowe-technisat-sternradio-ir-2-biale.html}{\textit{Radio internetowe mono} -- Sklep x-kom}
+		\bibitem{radio_drogie}
+		\href{https://www.x-kom.pl/p/724674-radio-internetowe-blaupunkt-ir10bt.html}{\textit{Radio internetowe stereo} -- Sklep x-kom}
 		
-
-%		\bibitem{allegro_adapter}
-%		\href{}{\textit{e} -- Sklep }
+		\bibitem{radio_pico1}
+		\href{https://github.com/episource/picopdio}{\textit{picopdio} -- Przykładowe radio internetowe Raspberry Pi Pico}
+		\bibitem{radio_vs1003}
+		\href{https://botland.com.pl/odtwarzacze-mp3-wav-ogg-midi/14308-odtwarzacz-mp3-vs1003-z-mikrofonem-5903351241786.html}{\textit{VS1003} -- Sprzętowy dekoder MP3}
+		
+		\bibitem{figma}
+		\href{https://www.figma.com}{\textit{Figma} -- Narzędzie do projektowania interfejsów}
+		
 	\end{thebibliography}
 	
 \end{document}
