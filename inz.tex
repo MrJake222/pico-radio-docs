@@ -93,10 +93,10 @@
 	W tym rozdziale opisano jak będzie wyglądał końcowy produkt. Zwrócono też uwagę na to jak będzie przebiegała jego realizacja i jakie ryzyka mogą wystąpić.
 	
 	\section{Opis problemu}
-		Radio internetowe staje się co raz popularniejsze. Wolność transmisji, regulacje tradycyjnego pasma radiowego powodują, że wiele niezależnych stacji radiowych wybiera właśnie to medium przekazu. Jednak większość funkcjonujących współcześnie odbiorników nie posiada funkcji odbioru strumienia internetowego. Celem pracy jest wykonanie kompletnego przenośnego urządzenia, które umożliwiłoby odbiór takich stacji.
+		Radio internetowe staje się co raz popularniejsze. Wolność transmisji, brak regulacji pasma radiowego powodują, że wiele niezależnych stacji radiowych wybiera właśnie to medium przekazu. Jednak większość funkcjonujących współcześnie odbiorników nie posiada funkcji odbioru strumienia internetowego. Celem pracy jest wykonanie kompletnego przenośnego urządzenia, które umożliwiłoby odbiór takich stacji.
 		
 	\section{Rola produktu}
-		Radio jest skierowane do osób z małą wiedzą technologiczną. To znaczy, obsługa urządzenia powinna być prosta i intuicyjna. Nie powinny być wymagane żadne dodatkowe elementy do eksploatacji (zewnętrzne głośniki, specjalna ładowarka). Produkt ma być kompletnym urządzeniem gotowym do odbioru radia. Całość będzie zamknięta w obudowie. Na rysunku~\ref{1/radio_proj_trimmed} przedstawiony został projekt wizualny radia. Wszystkie wymagane elementy kontrolne zostały umieszczone na przedniej ścianie radia wraz z głośnikami. Rysunek~\ref{1/PicoRadio_blocks} przedstawia uproszczony schemat blokowy urządzenia.
+		Radio jest skierowane do osób z małą wiedzą technologiczną. To znaczy, obsługa urządzenia powinna być prosta i intuicyjna. Nie powinny być wymagane żadne dodatkowe elementy do eksploatacji (zewnętrzne głośniki, specjalna ładowarka). Produkt ma być kompletnym urządzeniem gotowym do odbioru radia. Całość będzie zamknięta w obudowie. Na rysunku~\ref{1/radio_proj_trimmed} przedstawiony został projekt wizualny radia. Rysunek~\ref{1/PicoRadio_blocks} przedstawia uproszczony schemat blokowy urządzenia.
 		
 		\imgcs{1/radio_proj_trimmed}{Projekt wizualny radia (z zachowanymi proporcjami)}{0.9}
 		\imgcs{1/PicoRadio_blocks}{Schemat blokowy radia}{1}
@@ -104,8 +104,8 @@
 	\section{Współpracujące systemy}
 		Oczywistym współpracującym systemem jest w przypadku tego projektu serwer strumieniujący radio internetowe. Standardem kodowania wykorzystywanym przez serwery jest format MP3 lub AAC/AAC+. Drugim współpracującym systemem jest baza danych zawierająca stacje radiowe. Baza taka powinna umożliwiać zapytania poprzez udokumentowane i dostępne API. List baz brana pod uwagę przy projektowaniu urządzenia:
 		\begin{itemize}
-			\item Radio-browser~\textsuperscript{\cite{radio-browser}}
-			\item fmstream~\textsuperscript{\cite{fmstream}}
+			\item Radio-browser\textsuperscript{\cite{radio-browser}}
+			\item fmstream\textsuperscript{\cite{fmstream}}
 		\end{itemize}
 		
 		Druga baza, choć obszerniejsza (86,000 a 38,578 stacji), nie udostępnia interfejsu dla wszystkich. Autor życzy sobie osobistej prośby o dostęp, która na ten moment została wysłana i czeka na odpowiedź.
@@ -116,7 +116,7 @@
 		\subsection{Wymagane funkcjonalności}
 			\begin{itemize}
 				\item odtwarzanie stacji internetowych,
-				\item wstrzymywanie odtwarzania,
+%				\item wstrzymywanie odtwarzania,
 				\item prezentacja na zintegrowanym wyświetlaczu aktualnego stanu,
 				\item regulacja głośności odtwarzania,
 				\item lista stacji,
@@ -138,27 +138,29 @@
 			Urządzenie ma być wykonane z wykorzystaniem mikrokontrolera, lub płytki rozwojowej opartej o mikrokontroler. Rozwiązanie powinno obsługiwać połaczenie z Internetem, np. WiFi, do pobierania strumienia danych audio z serwera oraz musi poradzić sobie z dekodowaniem formatu MP3 lub AAC w czasie rzeczywistym.
 		
 	\section{Przegląd konkurencyjnych rozwiązań}
-		Ceny komercyjnych 'adapterów' radia internetowego zaczynają się od ok. 330 zł za produkt powystawowy (Rysunek~\ref{1/radio_adapter}). Wieże z wbudowaną opcją radia internetowego to koszt rzędu 230 zł za najtańszy produkt z głośnikiem mono (Rysunek~\ref{1/radio_tanie}) lub ok. 370 zł za wersję stereo (Rysunek~\ref{1/radio_drogie}). Chciałbym mój produkt zrealizować mniejszym kosztem.
+		Ceny komercyjnych adapterów radia internetowego zaczynają się od ok. 330 zł za produkt powystawowy (Rysunek~\ref{1/radio_adapter}). Wieże z wbudowaną opcją radia internetowego to koszt rzędu 230 zł za najtańszy produkt z głośnikiem mono (Rysunek~\ref{1/radio_tanie}) lub ok. 370 zł za wersję stereo (Rysunek~\ref{1/radio_drogie}). Chciałbym mój produkt zrealizować kosztem przystępnym dla hobbystycznego amatora elektroniki. Wykluczam zatem użycie gotowych, drogich płytek rozwojowych, takich jak np. \textit{STM32F746G-Disco} kosztującej 389 zł (Rysunek~\ref{botland_stm}).
 		
-		Jednym z założeń pracy jest skonstruowanie systemu, którego dokumentacja pozwoli dowolnemu informatykowi/elektronikowi na skonstruowanie podobnego urządzenia i modyfikację jego oprogramowania. Projekt sam w sobie jest ciekawy ponieważ w Internecie mało jest prób konstrukcji radia internetowego opartego o Raspberry Pi Pico. Nie znaleziono żadnych projektów dekodujących samodzielnie format MP3.  Jeden z projektów~\textsuperscript{\cite{radio_pico1}} używa sprzętowego dekodera MP3 (przedstawiony na rysunku~\ref{1/radio_mp3}). Większość odtwarzaczy własnej konstrukcji opiera się o pełnoprawny komputer jednopłytkowy Raspberry Pi, który jest obecnie trudno dostępny i drogi.
+		Jednym z założeń pracy jest skonstruowanie systemu, którego dokumentacja pozwoli dowolnemu informatykowi/elektronikowi na skonstruowanie podobnego urządzenia i modyfikację jego oprogramowania. Projekt sam w sobie jest ciekawy ponieważ w Internecie mało jest prób konstrukcji radia internetowego opartego o Raspberry Pi Pico. Nie znaleziono żadnych projektów dekodujących samodzielnie format MP3.  Jeden z projektów\textsuperscript{\cite{radio_pico1}} używa sprzętowego dekodera MP3 (przedstawiony na rysunku~\ref{1/radio_mp3}). Większość odtwarzaczy własnej konstrukcji opiera się o pełnoprawny komputer jednopłytkowy Raspberry Pi, który jest obecnie trudno dostępny.
 		
-		Urządzenie będzie także posiadać prosty i intuicyjny interfejs, aby trafić do szerokiej grupy odbiorców. Zastosowane zostaną ogniwa Li-ion 18650, tak, aby istniała łatwa możliwość wymiany rozładowanych ogniw (np. tam, gdzie nie ma dostępu do energii elektrycznej).
+		Urządzenie będzie także posiadać prosty i intuicyjny interfejs, aby trafić do szerokiej grupy odbiorców. Zastosowane zostaną ogniwa ładowalne, tak, aby użytkownik przy pomocy np. portu USB mógł je naładować po wyczerpaniu.
 		
 		\img{1/radio_adapter}{Adapter radia internetowego \textsuperscript{\cite{radio_adapter}}}
 		\imgss{1/radio_tanie}{Radio internetowe mono \textsuperscript{\cite{radio_tanie}}}{1/radio_drogie}{Radio internetowe stereo \textsuperscript{\cite{radio_drogie}}}
 		
+		\img{botland_stm}{Droga płytka STM\textsuperscript{\cite{botland_stm}}}
+		
 		\img{1/radio_mp3}{Sprzętowy dekoder MP3 \textsuperscript{\cite{radio_vs1003}}}
 		
 	\section{Analiza technologiczna}
-		Początkowo Raspberry Pi RP2040~\textsuperscript{\cite{rp2040}} wydawał się interesującą opcją. Jednak pojawiły się obawy o możliwość dekodowania formatu MP3 w czasie rzeczywistym.
+		Do realizacji projektu wybrany został bogato wyposażony mikrokontroler Raspberry Pi RP2040\textsuperscript{\cite{rp2040}}. Jednak pojawiły się obawy o możliwość dekodowania formatu MP3 w czasie rzeczywistym.
 		
 		\subsection{Biblioteka dekodująca}
-			Standardowa ramka MP3 odtwarzana jest przez ok. 26ms. Początkowe testy z biblioteką \lstinline|minimp3|~\textsuperscript{\cite{minimp3}} do dekodowania formatu MP3 nie przyniosły obiecujących rezultatów.  Przy użyciu tej biblioteki ramka dekodowała się w 90ms. Jest to 350\% czasu, który mógł zostać wykorzystany. Jednak wykorzystanie \lstinline|helixmp3|~\textsuperscript{\cite{helixmp3}} (matematyka stałoprzecinkowa) pozwoliło na zdekodowanie ramki w 22ms (80\% dostępnego czasu) przy domyślnym taktowaniu procesora.
+			Standardowa ramka MP3 odtwarzana jest przez ok. 26ms. Początkowe testy z biblioteką \lstinline|minimp3|\textsuperscript{\cite{minimp3}} do dekodowania formatu MP3 nie przyniosły obiecujących rezultatów.  Przy użyciu tej biblioteki ramka była dekodowana w 90ms. Jednak wykorzystanie \lstinline|helixmp3|\textsuperscript{\cite{helixmp3}} pozwoliło na zdekodowanie ramki w 22ms (80\% dostępnego czasu) przy domyślnym taktowaniu procesora.  Używa ona matematyki stałoprzecinkowej, co w przypadku jednostki bez koprocesora matematycznego stanowi dużą przewagę.
 			
 			Martwiące może się wydawać poświęcenie 80\% czasu procesora na dekodowanie formatu, jednak jako że mikrokontroler jest dwurdzeniowy, cały jeden rdzeń może zostać wykorzystany do dekodowania.
 		
 		\subsection{Oprogramowanie}
-			Oprogramowanie zostanie napisane w języku C++ z wykorzystaniem środowiska \lstinline|pico-sdk|~\textsuperscript{\cite{pico_sdk}}.  W prototypowaniu brakowało centralnego systemu zarządzającego przepływem informacji oraz zadaniami, zatem do projektu dołączone zostało jądro systemu czasu rzeczywistego FreeRTOS Kernel~\textsuperscript{\cite{freertos_kernel}}
+			Oprogramowanie zostanie napisane w języku C++ z wykorzystaniem środowiska \lstinline|pico-sdk|\textsuperscript{\cite{pico_sdk}}.  W środowisko brak wbudowanego centralnego systemu zarządzającego przepływem informacji oraz zadaniami, zatem do projektu dołączone zostało jądro systemu czasu rzeczywistego FreeRTOS\textsuperscript{\cite{freertos_kernel}}
 	
 	\section{Ryzyko}
 		Należy uwzględnić ryzyko opóźnień w ustalonym trybie prac. Tworzenie oprogramowania wiąże się z ryzykiem dotarcia w ślepy zaułek i konieczności gruntownego przeprojektowania części systemów. Dostosowanie platformy pod centralny system czasu rzeczywistego stanowi przykład takiego opóźnienia. Posiadając jedną płytkę Raspberry Pi Pico, jej uszkodzenie również może powodować opóźnienia w realizacji projektu. Warto zaopatrzyć się w więcej niż jedną sztukę krytycznych elementów. Niespodziewane problemy z jakością oprogramowania, takie jak na przykład ciężko reprodukowalne błędy w strumieniowaniu audio, także mogą przyczynić się do wielu godzin poszukiwania przyczyn takiego zachowania aplikacji.
@@ -174,19 +176,20 @@
 		\end{itemize}
 	
 	\chapter{Projekt interfejsu i interakcji z użytkownikiem}
-	W rozdziale drugim skupiono się jak produkt ma funkcjonować i jak użytkownik będzie wchodził w interakcje z nim.\\
+	W rozdziale drugim skupiono się na aspektach funkcjonalności produktu jak i projekcje interakcji z użytkownikiem.\\
 	
-	Najważniejszym elementem planowania projektu z perspektywy użyteczności dla klienta jest plan wygodnego i intuicyjnego interfejsu użytkownika. Dodatkową komplikacją jest fakt, że urządzenie będzie miało do dyspozycji tylko niewielki wyświetlacz i parę przycisków. Należy więc zadbać, żeby przy tym niewielkim asortymencie sprzętu dało się przekazać wszystkie informacje i uzyskać co użytkownik planuje zrobić w następnej kolejności.
+	Najważniejszym elementem planowania projektu z perspektywy użyteczności dla klienta jest plan wygodnego i intuicyjnego interfejsu użytkownika. Dodatkową komplikacją jest fakt, że urządzenie będzie miało do dyspozycji tylko niewielki wyświetlacz i kilka przycisków. Należy więc zadbać, żeby przy tym niewielkim asortymencie sprzętu dało się przekazać wszystkie informacje i ustalić co użytkownik planuje zrobić w następnej kolejności.
 		
 	\section{Projekt interfejsu}
-		Do zaprojektowania ekranów posłużyło narzędzie Figma~\textsuperscript{\cite{figma}}. Na rysunku~\ref{2/interface/flow} widać jak wyglądają poszczególne okna oraz jak użytkownik może przemieszczać się  pomiędzy nimi. Na rysunkach \ref{2/interface/real1} oraz \ref{2/interface/real2} widać jak prezentują się ekrany na rzeczywistym wyświetlaczu.
+		Do zaprojektowania ekranów posłużyło narzędzie Figma\textsuperscript{\cite{figma}}. Na rysunku~\ref{2/interface/flow} przedstawiono jak wyglądają poszczególne okna oraz jak użytkownik może przemieszczać się  pomiędzy nimi. Na rysunkach \ref{2/interface/real1} oraz \ref{2/interface/real2} umieszczono zdjęcia interfejsu na rzeczywistym wyświetlaczu.
 		
 		\paragraph{Ikony statusu}
-			Przy projektowaniu interfejsów poczyniono założenie, że ikony statusowe (połączenie WiFi / włożona karta SD) znajdować się będą na górze ekranu. Będzie można się tam dostać, a po kliknięciu otworzy się ekran statusowy z większą ilością informacji i potencjalnymi parametrami do zmiany.
+			Przy projektowaniu interfejsów poczyniono założenie, że ikony statusowe (połączenie WiFi  / włożona karta SD/ etc.) znajdować się będą na górze ekranu. Nie będą one klikalne.
 			
 		\paragraph{Ikony akcji}
-			Na ekranach na których przejście w przód lub wstecz nie jest zdefiniowane przez pozostałe elementu interfejsu (np. wyszukaj, gdy na ekranie jest klawiatura) w dolnej części umieszczono ikony akcji. Jest to np. ikona wstecz lub stop.
-			
+			Na ekranach w dolnej części umieszczono ikony akcji. Jest to np. ikona wstecz lub wyszukaj. Użytkownik dzięki nim będzie mógł przeprowadzać dodatkowe akcje.
+		
+		$ $\\
 		Przy wyświetlaniu listy (np. wyników wyszukiwania lub listy ulubionych stacji) kliknięcie w daną pozycję powoduje zaakceptowanie jej i otworzenie następnego ekranu.
 
 		\imgcs{2/interface/flow}{Przemieszczanie się pomiędzy ekranami}{0.9}
@@ -248,6 +251,8 @@
 		\href{https://www.x-kom.pl/p/653480-radio-internetowe-technisat-sternradio-ir-2-biale.html}{\textit{Radio internetowe mono} -- Sklep x-kom}
 		\bibitem{radio_drogie}
 		\href{https://www.x-kom.pl/p/724674-radio-internetowe-blaupunkt-ir10bt.html}{\textit{Radio internetowe stereo} -- Sklep x-kom}
+		\bibitem{botland_stm}
+		\href{https://botland.com.pl/stm32-discovery/4715-stm32f746g-disco-discovery-stm32f746ng-cortex-m7-ekran-dotykowy-pojemnosciowy-43--5904422374082.html}{\textit{STM32F746G-Disco} -- Sklep Botland}
 		
 		\bibitem{radio_pico1}
 		\href{https://github.com/episource/picopdio}{\textit{picopdio} -- Przykładowe radio internetowe Raspberry Pi Pico}
