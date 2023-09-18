@@ -30,31 +30,33 @@
 \renewenvironment{itemize}{\tempone\setlength{\itemsep}{0cm}}{\temptwo}
 
 \definecolor{lbcolor}{rgb}{0.9,0.9,0.9}  
+
+% Obrazki
+% ścieżki do obrazków
 \graphicspath{ {img/} }
-% obrazek {nazwa.png}{opis}{rozmiar}
-\newcommand{\imgcs}[3]{
-	\begin{figure}
+
+% obrazek {nazwa.png}{opis}{rozmiar}{H - wymuszanie}
+\newcommand{\imgint}[4]{
+	\begin{figure}[{#4}]
 		\centering
 		\includegraphics[width=#3\textwidth]{#1}
 		\caption{#2}
 		\label{#1}
 	\end{figure}
 }
+
+% obrazek {nazwa.png}{opis}{rozmiar} (bez wymuszania)
+\newcommand{\imgcs}[3]{\imgint{#1}{#2}{#3}{}}
+
 % obrazek {nazwa.png}{opis} (domyślny rozmiar)
 \newcommand{\img}[2]{\imgcs{#1}{#2}{0.7}}
+
 % obrazek {nazwa.png}{opis}{rozmiar} (wymuszona pozycja)
-\newcommand{\imgh}[3]{
-	\begin{figure}[H]
-		\centering
-		\includegraphics[width=#3\textwidth]{#1}
-		\caption{#2}
-		\label{#1}
-	\end{figure}
-}
-% dwa obrazki
-% \imgss{1}{opis 1}{2}{opis 2}
-\newcommand{\imgss}[4]{
-	\begin{figure}
+\newcommand{\imgh}[3]{\imgint{#1}{#2}{#3}{H}}
+
+% dwa obrazki {1}{opis 1}{2}{opis 2}{H - wymuszanie}
+\newcommand{\imgintss}[5]{
+	\begin{figure}[{#5}]
 		\centering
 		\begin{minipage}{.45\textwidth}
 			\centering
@@ -71,25 +73,12 @@
 		\end{minipage}
 	\end{figure}
 }
-% dwa obrazki (wymuszona pozycja)
-\newcommand{\imghss}[4]{
-	\begin{figure}[H]
-		\centering
-		\begin{minipage}{.45\textwidth}
-			\centering
-			\includegraphics[width=1\linewidth]{#1}
-			\caption{#2}
-			\label{#1}
-		\end{minipage}%
-		\hfill
-		\begin{minipage}{.45\textwidth}
-			\centering
-			\includegraphics[width=1\linewidth]{#3}
-			\caption{#4}
-			\label{#3}
-		\end{minipage}
-	\end{figure}
-}
+
+% dwa obrazki {1}{opis 1}{2}{opis 2} (bez wymuszania)
+\newcommand{\imgss}[4]{\imgintss{#1}{#2}{#3}{#4}{}}
+
+% dwa obrazki {1}{opis 1}{2}{opis 2} (wymuszona pozycja)
+\newcommand{\imghss}[4]{\imgintss{#1}{#2}{#3}{#4}{H}}
 
 % tabela z wynikami {nazwa.txt}{opis}
 \newcommand{\tab}[2]{
