@@ -9,7 +9,7 @@
 \usepackage{color} % kolory
 \usepackage{indentfirst} % wcięcie w pierwszej linii paragrafu
 \usepackage{graphicx} % obrazy
-%\usepackage{float} % dla image [H]
+\usepackage{float} % dla image [H]
 \usepackage{amsmath,amsthm,amssymb,mathtools} % matematyka dowód
 \usepackage{changepage} % matematyka dowód
 \usepackage{siunitx} % wyrównanie do kropki
@@ -31,7 +31,7 @@
 
 \definecolor{lbcolor}{rgb}{0.9,0.9,0.9}  
 \graphicspath{ {img/} }
-% obrazek {nazwa.png}{opis}
+% obrazek {nazwa.png}{opis}{rozmiar}
 \newcommand{\imgcs}[3]{
 	\begin{figure}
 		\centering
@@ -40,12 +40,40 @@
 		\label{#1}
 	\end{figure}
 }
+% obrazek {nazwa.png}{opis} (domyślny rozmiar)
 \newcommand{\img}[2]{\imgcs{#1}{#2}{0.7}}
-
+% obrazek {nazwa.png}{opis}{rozmiar} (wymuszona pozycja)
+\newcommand{\imgh}[3]{
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=#3\textwidth]{#1}
+		\caption{#2}
+		\label{#1}
+	\end{figure}
+}
 % dwa obrazki
 % \imgss{1}{opis 1}{2}{opis 2}
 \newcommand{\imgss}[4]{
 	\begin{figure}
+		\centering
+		\begin{minipage}{.45\textwidth}
+			\centering
+			\includegraphics[width=1\linewidth]{#1}
+			\caption{#2}
+			\label{#1}
+		\end{minipage}%
+		\hfill
+		\begin{minipage}{.45\textwidth}
+			\centering
+			\includegraphics[width=1\linewidth]{#3}
+			\caption{#4}
+			\label{#3}
+		\end{minipage}
+	\end{figure}
+}
+% dwa obrazki (wymuszona pozycja)
+\newcommand{\imghss}[4]{
+	\begin{figure}[H]
 		\centering
 		\begin{minipage}{.45\textwidth}
 			\centering
@@ -138,7 +166,7 @@
 			Urządzenie ma być wykonane z wykorzystaniem mikrokontrolera, lub płytki rozwojowej opartej o mikrokontroler. Rozwiązanie powinno obsługiwać połaczenie z Internetem, np. WiFi, do pobierania strumienia danych audio z serwera oraz musi poradzić sobie z dekodowaniem formatu MP3 lub AAC w czasie rzeczywistym.
 		
 	\section{Przegląd konkurencyjnych rozwiązań}
-		Ceny komercyjnych adapterów radia internetowego zaczynają się od ok. 330 zł za produkt powystawowy (Rysunek~\ref{1/radio_adapter}). Wieże z wbudowaną opcją radia internetowego to koszt rzędu 230 zł za najtańszy produkt z głośnikiem mono (Rysunek~\ref{1/radio_tanie}) lub ok. 370 zł za wersję stereo (Rysunek~\ref{1/radio_drogie}). Chciałbym mój produkt zrealizować kosztem przystępnym dla hobbystycznego amatora elektroniki. Wykluczam zatem użycie gotowych, drogich płytek rozwojowych, takich jak np. \textit{STM32F746G-Disco} kosztującej 389 zł (Rysunek~\ref{botland_stm}).
+		Ceny komercyjnych adapterów radia internetowego zaczynają się od ok. 330 zł za produkt powystawowy (Rysunek~\ref{1/radio_adapter}). Wieże z wbudowaną opcją radia internetowego to koszt rzędu 230 zł za najtańszy produkt z głośnikiem mono (Rysunek~\ref{1/radio_tanie}) lub ok. 370 zł za wersję stereo (Rysunek~\ref{1/radio_drogie}). Chciałbym mój produkt zrealizować kosztem przystępnym dla hobbystycznego amatora elektroniki. Wykluczam zatem użycie gotowych, drogich płytek rozwojowych, takich jak np. \textit{STM32F746G-Disco} kosztującej 389 zł (Rysunek~\ref{1/botland_stm}).
 		
 		Jednym z założeń pracy jest skonstruowanie systemu, którego dokumentacja pozwoli dowolnemu informatykowi/elektronikowi na skonstruowanie podobnego urządzenia i modyfikację jego oprogramowania. Projekt sam w sobie jest ciekawy ponieważ w Internecie mało jest prób konstrukcji radia internetowego opartego o Raspberry Pi Pico. Nie znaleziono żadnych projektów dekodujących samodzielnie format MP3.  Jeden z projektów\textsuperscript{\cite{radio_pico1}} używa sprzętowego dekodera MP3 (przedstawiony na rysunku~\ref{1/radio_mp3}). Większość odtwarzaczy własnej konstrukcji opiera się o pełnoprawny komputer jednopłytkowy Raspberry Pi, który jest obecnie trudno dostępny.
 		
@@ -147,7 +175,7 @@
 		\img{1/radio_adapter}{Adapter radia internetowego \textsuperscript{\cite{radio_adapter}}}
 		\imgss{1/radio_tanie}{Radio internetowe mono \textsuperscript{\cite{radio_tanie}}}{1/radio_drogie}{Radio internetowe stereo \textsuperscript{\cite{radio_drogie}}}
 		
-		\img{botland_stm}{Droga płytka STM\textsuperscript{\cite{botland_stm}}}
+		\img{1/botland_stm}{Droga płytka STM\textsuperscript{\cite{botland_stm}}}
 		
 		\img{1/radio_mp3}{Sprzętowy dekoder MP3 \textsuperscript{\cite{radio_vs1003}}}
 		
@@ -196,35 +224,26 @@
 		\imgss{2/interface/real1}{Wyszukiwanie stacji}{2/interface/real2}{Wyniki wyszukiwania}
 	
 	\section{Interakcja z użytkownikiem}
-		W trakcie projektowania ekranów konieczne stało się założenie użycia 5 przycisków. Cztery z nich zostaną użyte do nawigacji prawo/lewo/góra/dół, a pozostały (środkowy) do wykonania wybranej akcji. Nawigacja oparta jest na siatce przycisków, przy czym może być ona nieregularna (różna liczba przycisków w różnych wierszach). Poniżej przedstawione zostały wybrane scenariusze obsługi radia:
+		W trakcie projektowania ekranów konieczne stało się założenie użycia 5 przycisków. Cztery z nich zostaną użyte do nawigacji prawo/lewo/góra/dół, a pozostały (środkowy) do wykonania wybranej akcji. Nawigacja oparta jest na siatce przycisków, przy czym może być ona nieregularna (różna liczba przycisków w różnych wierszach). Poniżej przedstawione zostały wybrane scenariusze obsługi radia.
 		
-		\begin{itemize}
-			\item Na rysunku~\ref{2/flows/1} widać jak użytkownik aby poruszyć się w dół listy stacji naciska dolny przycisk. Powrót do \textit{Radio 1} jest oczywiście możliwy poprzez naciśnięcie górnego przycisku.
-			
-			\item Rysunek~\ref{2/flows/2} przedstawia jeden ze sposobów przejścia do ikon statusu. Jeżeli na górnej pozycji listy użytkownik naciśnie górny przycisk, przeniesie on go do górnego rzędu ikon.
-			
-			\item Poruszanie się w obrębie jednego wiersza zostało zrealizowane poprzez przyciski \mbox{lewo/prawo}. Przedstawiają to rysunki \ref{2/flows/3p} i \ref{2/flows/3l} na przykładzie dwóch ikon statusu.
-			
-			\item Po dojściu do czwartej pozycji na liście, jeżeli na liście jest więcej niż 4 stacje, po naciśnięciu dolnego przycisku, zgodne z rysunkiem~\ref{2/flows/4}, kursor zostanie przeniesiony do piątej stacji. Należy zwrócić uwagę na zmianę położenia paska przewijania (po prawej stronie).
-			
-			\item Jeżeli wskaźnik znajduje się na końcu listy (pasek przewijania w skrajnie dolnej pozycji), po naciśnięciu przycisku w dół, kursor znajdzie się w pasku ikon akcji. Sytuację tę przedstawia rysunek \ref{2/flows/5}. Powrót na listę stacji jest możliwy przy pomocy górnego przycisku.
-			
-			\item Poruszanie się pomiędzy paskami akcji i statusu jest możliwe przy pomocy przycisków \mbox{góra/dół}. Oba scenariusze przedstawiają rysunki \ref{2/flows/6d} i \ref{2/flows/6g}.
-			
-			\item Rysunek \ref{2/flows/7} przedstawia powrót z przycisków statusu na listę stacji.
-			
-			\item Po powrocie można wybrać daną stację i rozpocząć odtwarzanie przyciskiem środkowym (rysunek \ref{2/flows/8})
-		\end{itemize}
+		\imgh{2/flows/1}{Krok w dół na liście}{0.7}
+		Na rysunku~\ref{2/flows/1} widać jak użytkownik aby poruszyć się w dół listy stacji naciska dolny przycisk. Powrót do \textit{Radio 1} jest oczywiście możliwy poprzez naciśnięcie górnego przycisku.
+
+%TODO make flow images		
+%		\imghss{2/flows/3p}{Przejście w prawo}{2/flows/3l}{Przejście w lewo}
+		Poruszanie się w obrębie jednego wiersza zostało zrealizowane poprzez przyciski \mbox{lewo/prawo}. Przedstawiają to rysunki \ref{2/flows/3p} i \ref{2/flows/3l} na przykładzie dwóch ikon akcji.
 		
-		\imgss{2/flows/1}{Krok w dół na liście}{2/flows/2}{Przejście do ikon statusu}
-		\imgss{2/flows/3p}{Przejście w prawo}{2/flows/3l}{Przejście w lewo}
-		\imgss{2/flows/4}{Przewinięcie listy stacji do góry}{2/flows/5}{Przejście z listy do ikon akcji}
-		\imgss{2/flows/6d}{Przejście z ikon akcji (na dole) do ikon statusu (na górze)}{2/flows/6g}{Przejście z ikon statusu (na górze) do akcji (na dole)}
-		\imgss{2/flows/7}{Powrót z ikon statusu do listy}{2/flows/8}{Akceptacja wyboru}
+		\imgh{2/flows/4}{Przewinięcie listy stacji do góry}{0.7}
+		Po dojściu do czwartej pozycji na liście, jeżeli na liście jest więcej niż 4 stacje, po naciśnięciu dolnego przycisku, zgodne z rysunkiem~\ref{2/flows/4}, kursor zostanie przeniesiony do piątej stacji. Należy zwrócić uwagę na zmianę położenia paska przewijania (po prawej stronie).
 		
+		\imgh{2/flows/5}{Przejście z listy do ikon akcji}{0.7}
+		Jeżeli wskaźnik znajduje się na końcu listy (pasek przewijania w skrajnie dolnej pozycji), po naciśnięciu przycisku w dół, kursor znajdzie się w pasku ikon akcji. Sytuację tę przedstawia rysunek \ref{2/flows/5}. Powrót na listę stacji jest możliwy przy pomocy górnego przycisku.
+		
+		\imgh{2/flows/8}{Akceptacja wyboru}{0.7}
+		Jeżeli kursor jest ustawiony na liście, możemy rozpocząć odtwarzanie przyciskiem środkowym (rysunek \ref{2/flows/8})
+		
+		\imghss{2/err1}{Błąd odtwarzania}{2/err2}{Błąd ładowania stacji z bazy danych}
 		Czasami w komunikacji z serwerem może wystąpić błąd. Takie sytuacje są zgłaszane użytkownikowi poprzez ekrany błędów widoczne na rysunkach \ref{2/err1} i \ref{2/err2} . Aby wyjść z takiego ekranu nacisnąć dowolny przycisk.
-		
-		\imgss{2/err1}{Błąd odtwarzania}{2/err2}{Błąd ładowania stacji z bazy danych}
 	
 	\pagebreak
 	\begin{thebibliography}{9}
