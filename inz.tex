@@ -185,11 +185,15 @@
 	
 	\section{Słownik pojęć}
 		\begin{itemize}
-			\item MP3 (\textit{MPEG-1 Audio Layer 3}) -- popularny format zapisu dźwięku; implementuje stratną kompresję,
+%			\item MP3 (\textit{MPEG-1 Audio Layer 3}) -- popularny format zapisu dźwięku; implementuje stratną kompresję,
 			\item AAC/AAC+ (\textit{Advanced Audio Coding}) -- inny format dźwięku z kompresją stratną
-			\item Li-ion -- akumulatory Litowo-jonowe (ładowalne)
+%			\item Li-ion -- akumulatory Litowo-jonowe (ładowalne)
 			\item Raspberry Pi -- komputery jednopłytkowe tworzone przez Raspberry Pi Foundation
 			\item Raspberry Pi Pico -- płytki rozwojowe oparte o mikrokontroler RP2040 (produkowane również przez Raspberry Pi Foundation)
+			\item PWM
+			\item DMA
+			\item PIO
+%			TODO fill in dict
 		\end{itemize}
 	
 	\chapter{Projekt interfejsu i interakcji z użytkownikiem}
@@ -201,7 +205,7 @@
 		Do zaprojektowania ekranów posłużyło narzędzie Figma\textsuperscript{\cite{figma}}. Na rysunku~\ref{2/interface/all} przedstawiono jak wyglądają poszczególne okna oraz jak użytkownik może przemieszczać się  pomiędzy nimi. Na rysunkach \ref{2/interface/real1} oraz \ref{2/interface/real2} umieszczono zdjęcia interfejsu na rzeczywistym wyświetlaczu.
 		
 		\paragraph{Ikony statusu}
-			Przy projektowaniu interfejsów poczyniono założenie, że ikony statusowe (połączenie WiFi  / włożona karta SD/ etc.) znajdować się będą na górze ekranu. Nie będą one klikalne.
+			Przy projektowaniu interfejsów poczyniono założenie, że ikony statusowe (połączenie WiFi/włożona karta SD/etc.) znajdować się będą na górze ekranu. Nie będą one klikalne.
 			
 		\paragraph{Ikony akcji}
 			Na ekranach w dolnej części umieszczono ikony akcji. Jest to np. ikona wstecz lub wyszukaj. Użytkownik dzięki nim będzie mógł przeprowadzać dodatkowe akcje.
@@ -213,7 +217,8 @@
 		\imgss{2/interface/real1}{Wyszukiwanie stacji}{2/interface/real2}{Wyniki wyszukiwania}
 	
 	\section{Interakcja z użytkownikiem}
-		W trakcie projektowania ekranów konieczne stało się założenie użycia 5 przycisków. Cztery z nich zostaną użyte do nawigacji prawo/lewo/góra/dół, a pozostały (środkowy) do wykonania wybranej akcji. Nawigacja oparta jest na siatce przycisków, przy czym może być ona nieregularna (różna liczba przycisków w różnych wierszach). Poniżej przedstawione zostały wybrane scenariusze obsługi radia.
+		W trakcie projektowania ekranów konieczne stało się założenie użycia 5 przycisków. Cztery z nich zostaną użyte do nawigacji prawo/lewo/góra/dół, a pozostały (środkowy) do wykonania wybranej akcji. Poniżej przedstawione zostały wybrane scenariusze obsługi radia.
+%		Nawigacja oparta jest na siatce przycisków, przy czym może być ona nieregularna (różna liczba przycisków w różnych wierszach). 
 		
 		\imgh{2/btn/1}{Krok w dół na liście}{0.7}
 		Na rysunku~\ref{2/btn/1} widać jak użytkownik aby poruszyć się w dół listy stacji naciska dolny przycisk. Powrót do \textit{Radio 1} jest oczywiście możliwy poprzez naciśnięcie górnego przycisku.
@@ -228,10 +233,82 @@
 		Poruszanie się w obrębie jednego wiersza zostało zrealizowane poprzez przyciski \mbox{lewo/prawo}. Przedstawiają to rysunki \ref{2/btn/4r} i \ref{2/btn/4l} na przykładzie dwóch ikon akcji.
 		
 		\imgh{2/btn/5}{Akceptacja wyboru}{0.7}
-		Jeżeli kursor jest ustawiony na liście, możemy rozpocząć odtwarzanie przyciskiem środkowym (rysunek \ref{2/btn/5})
+		Przycisk środkowy służy do wykonania akcji. Jeżeli kursor jest ustawiony na liście, możemy rozpocząć odtwarzanie naciskając go (rysunek \ref{2/btn/5})
 		
 		\imghss{2/err1}{Błąd odtwarzania}{2/err2}{Błąd ładowania stacji z bazy danych}
-		Czasami w komunikacji z serwerem może wystąpić błąd. Takie sytuacje są zgłaszane użytkownikowi poprzez ekrany błędów widoczne na rysunkach \ref{2/err1} i \ref{2/err2} . Aby wyjść z takiego ekranu nacisnąć dowolny przycisk.
+		Czasami w komunikacji z serwerem może wystąpić błąd. Takie sytuacje są zgłaszane użytkownikowi poprzez ekrany błędów widoczne na rysunkach \ref{2/err1} i \ref{2/err2} (czerwone tło). Aby wyjść z takiego ekranu nacisnąć dowolny przycisk.
+	
+	\chapter{Wybrane aspekty realizacji}
+	W tym rozdziale wyjaśnione zostało jak funkcjonuje powstały projekt.
+	
+	\section{Moduły projektu}
+	W kodzie starano się zachować porządek. Wydzielone zostały główne funkcjonalne elementy i na podstawie tego podziału stworzona została struktura modularna przedstawiona poniżej.
+	
+	\subsection{Moduły własne}
+	Większość kodu projektu zawiera katalog \lstinline|libs|. W nim znajdują się poszczególne moduły. Wszystkie wypisane w tej sekcji zostały zaimplementowane samodzielnie, chyba, że zaznaczono inaczej. Dla przejrzystości pogrupowano moduły wg ich ról.
+	
+	\paragraph{Wejście}
+	\begin{itemize}
+		\item \lstinline|analog| -- dostęp do pomiaru poziomu naładowania baterii
+		\item \lstinline|buttons| -- funkcje do obsługi przycisków
+		\item \lstinline|sd| -- wykrywanie i montowanie karty SD z systemem plików FAT
+	\end{itemize}
+
+	\paragraph{Wyjście}
+	\begin{itemize}
+		\item \lstinline|display| -- obsługa wyświetlacza
+		\begin{itemize}
+			\item \lstinline|assets| -- artefakty; takie jak czcionki i ikony
+			\item \lstinline|radios| -- obsługa list jak i ich ładowanie (wyszukiwanie/ulubione/listing plików na karcie SD)
+			\item \lstinline|screens| -- widoki użytkownika
+			\item \lstinline|tft| -- niskopoziomowa obsługa ekranu ze sterownikiem ST7735s. Kod inicjalizacji i przesyłania pikseli zaczerpnięty z Adafruit \ref{?}
+		\end{itemize}
+	\end{itemize}
+
+	\paragraph{Źródła danych}
+	\begin{itemize}
+		\item \lstinline|ds| -- interfejs \lstinline|DataSource| łączący różne źródła danych
+		\item \lstinline|httpc| -- klient protokołu HTTP
+		\item \lstinline|lfs| -- kod integrujący system plików LittleFS\textsuperscript{\cite{littlefs}}
+	\end{itemize}
+
+	\paragraph{Odtwarzanie}
+	\begin{itemize}
+		\item \lstinline|mcorefifo| -- funkcje pomocnicze do przesyłania komunikatów z rdzenia 1 do 0
+		\item \lstinline|player| -- kontrola i odtwarzanie plików/strumieni internetowych
+		\begin{itemize}
+			\item \lstinline|decode| -- abstrakcje/implementacje dekodowania typów i odczytywania źródeł danych
+		\end{itemize}
+	\end{itemize}
+
+	\paragraph{Pliki pomocnicze}
+	\begin{itemize}
+		\item \lstinline|circularbuffer| -- bufor kołowy
+		\item \lstinline|static| -- statycznie alokowane bufory
+		\item \lstinline|util| -- funkcje pomocnicze
+	\end{itemize}
+
+	\subsection{Moduły zewnętrzne}
+	W folderze \lstinline|libs/external| umieszczone zostały moduły dostarczone z zewnątrz:
+	\begin{itemize}
+		\item \lstinline|FreeRTOS-Kernel| -- jądro systemu czasu rzeczywistego FreeRTOS\textsuperscript{\cite{freertos_kernel}}
+		\item \lstinline|helixmp3| -- biblioteka dekodująca format MP3\textsuperscript{\cite{helixmp3}}
+		\item \lstinline|littlefs| -- system plików LittleFS\textsuperscript{\cite{littlefs}}
+		\item \lstinline|sd_lib| -- biblioteka FatFS \ref{?} wraz z kodem dostępu do karty sd\textsuperscript{\cite{sdfs}}
+	\end{itemize}
+
+	\section{Odtwarzanie dźwięku}
+	Zanim radio urosło do rangi pracy inżynierskiej, było ono moim prywatnym projektem. Chciałem poznać mikrokontroler RP2040. Poznać \lstinline|pico-sdk|. Po pierwszym kontakcie na \textit{Systemach Wbudowanych} środowisko stworzone wokół przystępnej cenowo płytki Raspberry Pi Pico wydawało się ciekawe i interesujące. Mikrokontroler ten, bogato wyposażony, stanowił idealną podstawę do stworzenia czegoś, co zawsze chciałem zbudować: odtwarzacza dźwięku. Przy okazji, tworząc taki projekt mogłem zaznajomić się ze wszystkimi ważniejszymi peryferiami układu (wykorzystałem m.in. PWM, DMA, a także później).
+	
+	Szybko jednak okazało się, że odtwarzania dźwięku za pomocą wbudowanego układu PWM jest niewystarczające. Dźwięk był zbyt niskiej jakości aby nadawał się do odtwarzania muzyki. Wykorzystałem układ TDA1543 jako przetwornik cyfrowo-analogowy. Projekt odtwarzał tylko pliki WAV i wyglądał tak, jak na rysunku \ref{3/pr_wav}.
+	
+	Wtedy też wybrałem ten temat pracy inżynierskiej. Lecz zanim mogłem kontynuować, należało szybko zorientować się, czy płytka poradzi sobie z dekodowaniem formatu MP3 w czasie rzeczywistym. Dzięki bibliotece \lstinline|helixmp3| używającej arytmetyki stałoprzecinkowej, było to możliwe.
+	
+	\imgcs{3/pr_wav}{Projekt we wczesnych fazach rozwoju}{0.45}
+	
+	\subsection{Model przetwarzania dźwięku}
+	
+	\imgcs{3/pipeline}{Koncepcja wielowątkowego dekodowania}{0.8}
 	
 	\pagebreak
 	\begin{thebibliography}{9}
