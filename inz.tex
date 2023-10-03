@@ -1,3 +1,4 @@
+% !TeX spellcheck = pl_PL
 \documentclass[12pt]{report}
 
 \usepackage{amssymb} % symbol kąta
@@ -92,6 +93,9 @@
 
 % nagłowek tabeli bold
 \renewcommand\theadfont{\bfseries}
+
+% interfejs I2S
+\newcommand{\isqs}{$\text{I}^{2}\text{S}$}
 
 \begin{document}
 	\lstset{backgroundcolor=\color{lbcolor}, language=C++, inputencoding=utf8, basicstyle=\ttfamily}
@@ -193,6 +197,9 @@
 			\item PWM
 			\item DMA
 			\item PIO
+			\item DAC
+			\item \isqs{} proto
+			\item PCM
 %			TODO fill in dict
 		\end{itemize}
 	
@@ -309,6 +316,23 @@
 	\subsection{Model przetwarzania dźwięku}
 	
 	\imgcs{3/pipeline}{Koncepcja wielowątkowego dekodowania}{0.8}
+	
+	Odtwarzanie dźwięku odbywa się za pomocą zewnętrznego przetwornika DAC. Mikrokontroler wysyła dźwięk w formacie PCM protokołem \isqs{} do specjalizowanego układu. Drugi rdzeń procesora wykorzystywany jest do dekompresji formatów audio.
+	
+	\subsection{Komunikacja z przetwornikiem}
+	W programie zadeklarowany został bufor nieskompresowanego dźwięku PCM \lstinline|audio_pcm|. Ma on konfigurowalny rozmiar wyrażony w jednostkach 32-bitowych (2 kanały * 16-bitowa próbka). Przekazywany jest on do systemu DMA.
+	
+	\paragraph{DMA}
+		\imgcs{3/dma_chain}{Kolejkowanie kanałów DMA}{0.55}
+		Podsystem bezpośredniego dostępu do pamięci wysyła dane do maszyn stanu PIO. Wykorzystane zostały dwa kanały, aby móc prowadzić nieprzerwaną transmisję. Schemat działania przedstawiony został na rysunku \ref{3/dma_chain}. W momencie gdy jeden kanał skończy transfer, automatycznie uruchamia drugi kanał. Jest to sprzętowa funkcja RP2040. Wywoływane jest także przerwanie, które zgłasza procesorowi potrzebę załadowania nowych danych.
+		
+	\paragraph{PIO}
+		RP2040 posiada programowalne maszyny stanów. Programowane są one własnościowym językiem z rodziny assembler. Dzięki tym blokom, możliwe jest dodanie do mikrokontrolera dowolnego protokołu danych bez zbytniego obciążenia procesora jego pełną symulacją. W ramach tej pracy został stworzony blok obsługi interfejsu \isqs{}, który serializuje dane dostarczane przez DMA i wysyła do układu DAC.
+	$ $\\
+	
+	Wszystko to dzieje się na rdzeniu 0. Taka koncepcja pozwala na odtwarzanie plików WAV (jeżeli mamy je jak załadować do pamięci). Problem powstaje, gdy musimy w czasie rzeczywistym zdekodować nietrywialny format zapisu audio, np. MP3.
+	
+	\subsection{Dekompresja formatów}
 	
 	\pagebreak
 	\begin{thebibliography}{9}
