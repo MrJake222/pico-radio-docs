@@ -103,11 +103,12 @@
 \lstdefinestyle{pio}{
 	basicstyle={\ttfamily \footnotesize},
 	morekeywords={out, side, jmp, set},
-	numbers=left
+	numbers=left,
+	backgroundcolor=\color{lbcolor}
 }
 
 \begin{document}
-	\lstset{backgroundcolor=\color{lbcolor}, language=C++, inputencoding=utf8, basicstyle=\ttfamily}
+	\lstset{inputencoding=utf8, basicstyle=\ttfamily}
 	
 	\title{Odbiornik internetowych stacji radiowych \\
 		\vspace{0.2cm}
@@ -146,7 +147,7 @@
 		\subsection{Wymagane funkcjonalności}
 			\begin{itemize}
 				\item odtwarzanie stacji internetowych,
-%				\item wstrzymywanie odtwarzania,
+				\item wstrzymywanie odtwarzania,
 				\item prezentacja na zintegrowanym wyświetlaczu aktualnego stanu,
 				\item regulacja głośności odtwarzania,
 				\item lista stacji,
@@ -163,6 +164,8 @@
 				\item W pełni funkcjonalny prototyp urządzenia realizującego funkcje odbiornika internetowych stacji radiowych,
 				\item Dokumentacja techniczna pozwalająca na zbudowanie urządzenia oraz rozwój jego oprogramowania układowego.
 			\end{itemize}
+			
+			% TODO opisać że decydujemy się na wyświetlacz i przyciski. Jakie to pociąga za sobą moduły software.
 		
 		\subsection{Wymagania niefunkcjonalne}
 			Urządzenie ma być wykonane z wykorzystaniem mikrokontrolera, lub płytki rozwojowej opartej o mikrokontroler. Rozwiązanie powinno obsługiwać połaczenie z Internetem, np. WiFi, do pobierania strumienia danych audio z serwera oraz musi poradzić sobie z dekodowaniem formatu MP3 lub AAC w czasie rzeczywistym.
@@ -255,13 +258,14 @@
 		Czasami w komunikacji z serwerem może wystąpić błąd. Takie sytuacje są zgłaszane użytkownikowi poprzez ekrany błędów widoczne na rysunkach \ref{2/err1} i \ref{2/err2} (czerwone tło). Aby wyjść z takiego ekranu nacisnąć dowolny przycisk.
 	
 	\chapter{Wybrane aspekty realizacji}
-	W tym rozdziale wyjaśnione zostało jak funkcjonuje powstały projekt.
+	W tym rozdziale wyjaśnione zostało jak zbudowany został projekt.
 	
 	\section{Moduły projektu}
-	W kodzie starano się zachować porządek. Wydzielone zostały główne funkcjonalne elementy i na podstawie tego podziału stworzona została struktura modularna przedstawiona poniżej.
+	W kodzie starano się zachować porządek. Wydzielone zostały główne funkcjonalne elementy i na podstawie tego podziału stworzona została struktura modularna przedstawiona na rysunku \ref{3/pico-radio-code-block-diagram}.
+	\imgh{3/pico-radio-code-block-diagram}{Schemat blokowy modułów projektu}{0.7}
 	
 	\subsection{Moduły własne}
-	Większość kodu projektu zawiera katalog \lstinline|libs|. W nim znajdują się poszczególne moduły. Wszystkie wypisane w tej sekcji zostały zaimplementowane samodzielnie, chyba, że zaznaczono inaczej. Dla przejrzystości pogrupowano moduły wg ich ról.
+	Większość kodu projektu zawiera katalog \lstinline|libs|. W nim znajdują się poszczególne moduły (nazwane odpowiednimi nazwami podfolderów). Wszystkie wypisane w tej sekcji zostały zaimplementowane samodzielnie, chyba, że zaznaczono inaczej. Dla przejrzystości pogrupowano moduły wg ich ról.
 	
 	\paragraph{Wejście}
 	\begin{itemize}
@@ -275,9 +279,22 @@
 		\item \lstinline|display| -- obsługa wyświetlacza
 		\begin{itemize}
 			\item \lstinline|assets| -- artefakty; takie jak czcionki i ikony
-			\item \lstinline|radios| -- obsługa list jak i ich ładowanie (wyszukiwanie/ulubione/listing plików na karcie SD)
 			\item \lstinline|screens| -- widoki użytkownika
-			\item \lstinline|tft| -- niskopoziomowa obsługa ekranu ze sterownikiem ST7735s. Kod inicjalizacji i przesyłania pikseli zaczerpnięty z Adafruit \ref{?}
+			\item \lstinline|tft| -- niskopoziomowa obsługa ekranu ze sterownikiem ST7735s. Kod inicjalizacji i przesyłania pikseli zaczerpnięty z \textit{Adafruit-ST7735-Library}\textsuperscript{\cite{adafruit_st7735}}
+		\end{itemize}
+	\end{itemize}
+	
+	\paragraph{Obsługa list}
+	\begin{itemize}
+		\item \lstinline|list| -- obsługa list jak i ich ładowanie (wyszukiwanie/ulubione/listing plików na karcie SD)
+	\end{itemize}
+	
+	\paragraph{Odtwarzanie}
+	\begin{itemize}
+		\item \lstinline|mcorefifo| -- funkcje pomocnicze do przesyłania komunikatów z rdzenia 1 do 0
+		\item \lstinline|player| -- kontrola i odtwarzanie plików/strumieni internetowych
+		\begin{itemize}
+			\item \lstinline|decode| -- abstrakcje/implementacje dekodowania typów i odczytywania źródeł danych
 		\end{itemize}
 	\end{itemize}
 
@@ -286,15 +303,6 @@
 		\item \lstinline|ds| -- interfejs \lstinline|DataSource| łączący różne źródła danych
 		\item \lstinline|httpc| -- klient protokołu HTTP
 		\item \lstinline|lfs| -- kod integrujący system plików LittleFS\textsuperscript{\cite{littlefs}}
-	\end{itemize}
-
-	\paragraph{Odtwarzanie}
-	\begin{itemize}
-		\item \lstinline|mcorefifo| -- funkcje pomocnicze do przesyłania komunikatów z rdzenia 1 do 0
-		\item \lstinline|player| -- kontrola i odtwarzanie plików/strumieni internetowych
-		\begin{itemize}
-			\item \lstinline|decode| -- abstrakcje/implementacje dekodowania typów i odczytywania źródeł danych
-		\end{itemize}
 	\end{itemize}
 
 	\paragraph{Pliki pomocnicze}
@@ -310,7 +318,7 @@
 		\item \lstinline|FreeRTOS-Kernel| -- jądro systemu czasu rzeczywistego FreeRTOS\textsuperscript{\cite{freertos_kernel}}
 		\item \lstinline|helixmp3| -- biblioteka dekodująca format MP3\textsuperscript{\cite{helixmp3}}
 		\item \lstinline|littlefs| -- system plików LittleFS\textsuperscript{\cite{littlefs}}
-		\item \lstinline|sd_lib| -- biblioteka FatFS \ref{?} wraz z kodem dostępu do karty sd\textsuperscript{\cite{sdfs}}
+		\item \lstinline|sd_lib| -- biblioteka FatFS\textsuperscript{\cite{fatfs}} wraz z kodem dostępu do karty SD\textsuperscript{\cite{sdfs}}
 	\end{itemize}
 
 	\section{Odtwarzanie dźwięku}
@@ -400,6 +408,14 @@
 		\href{https://github.com/raspberrypi/pico-sdk}{\textit{pico-sdk} -- Zestaw bibliotek do Raspberry Pi Pico}
 		\bibitem{freertos_kernel}
 		\href{https://github.com/FreeRTOS/FreeRTOS-Kernel}{\textit{FreeRTOS Kernel} -- Jądro systemu czasu rzeczywistego FreeRTOS}
+		\bibitem{adafruit_st7735}
+		\href{https://github.com/adafruit/Adafruit-ST7735-Library}{\textit{Adafruit-ST7735-Library} -- biblioteka do obsługi ekranów LCD napisana przez firmę Adafruit}
+		\bibitem{littlefs}
+		\href{https://github.com/littlefs-project/littlefs}{\textit{LittleFS} -- System plików przeznaczony do pamięci flash}
+		\bibitem{fatfs}
+		\href{http://elm-chan.org/fsw/ff/00index_e.html}{\textit{FatFS} -- Obsługa systemów plików z rodziny FAT}
+		\bibitem{sdfs}
+		\href{https://github.com/carlk3/no-OS-FatFS-SD-SPI-RPi-Pico}{\textit{FatFS+SPI na Pi Pico} --  kompleksowa biblioteka łącząca FatFS i komunikację poprzez SPI z kartą SD (przystosowana do Pi Pico)}
 		
 		\bibitem{radio_adapter}
 		\href{https://allegro.pl/oferta/adapter-radia-internetowego-dual-ir-3a-dab-fm-rds-12692108793}{\textit{Radio sieciowe} -- Sklep Allegro}
@@ -420,7 +436,6 @@
 		
 		\bibitem{pico_pdf}
 		\href{https://datasheets.raspberrypi.com/rp2040/rp2040-datasheet.pdf}{\textit{RP2040 Datasheet} -- dokumentacja techniczna procesora RP2040}
-		
 		\bibitem{tda_pdf}
 		\href{http://www.lampizator.eu/lampizator/LINKS%20AND%20DOWNLOADS/DATAMINING/tda%201543.pdf}{\textit{TDA1543 Datasheet} -- dokumentacja techniczna układu DAC TDA1543}
 		
