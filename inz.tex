@@ -318,7 +318,7 @@
 	W folderze \lstinline|libs/external| umieszczone zostały moduły dostarczone z zewnątrz:
 	\begin{itemize}
 		\item \lstinline|FreeRTOS-Kernel| -- jądro systemu czasu rzeczywistego FreeRTOS\textsuperscript{\cite{freertos_kernel}}
-		\item \lstinline|helixmp3| -- biblioteka dekodująca format MP3\textsuperscript{\cite{helixmp3}}
+		\item \lstinline|helixmp3| -- biblioteka dekodująca format MP3\textsuperscript{\cite{helixmp3_repo}} oryginalnie napisana przez firmę \textit{RealNetworks}\textsuperscript{\cite{realnetworks}}
 		\item \lstinline|littlefs| -- system plików LittleFS\textsuperscript{\cite{littlefs}}
 		\item \lstinline|sd_lib| -- biblioteka FatFS\textsuperscript{\cite{fatfs}} wraz z kodem dostępu do karty SD\textsuperscript{\cite{sdfs}}
 	\end{itemize}
@@ -388,9 +388,24 @@
 			
 %		Rdzeń 0 obsługuje te przerwania. Bardziej korzystnym scenariuszem byłoby, gdyby to rdzeń 1 czekał na przerwanie instrukcją \lstinline|wfi| (\textit{wait-for-interrupt}), ponieważ nie ma on innych zadań. Jest to droga do dalszej opytmalizacji projektu.
 
-	Wszystko to dzieje się na rdzeniu 0. Taka koncepcja pozwala na odtwarzanie plików WAV (jeżeli mamy je jak załadować do pamięci). Problem powstaje, gdy musimy w czasie rzeczywistym zdekodować nietrywialny format zapisu audio, np. MP3.
+	Wszystko to dzieje się na rdzeniu 0. Taka koncepcja pozwala na odtwarzanie nieskompresowanego dźwięku. Problem powstaje, gdy musimy w czasie rzeczywistym zdekodować nietrywialny format zapisu audio, np. MP3.
 	
 	\subsection{Dekompresja formatów}
+	\imgh{3/rb_chart}{Udział kodeków w stacjach radiowych}{0.7}
+	
+	Wybór padł na format MP3. Jest on popularnym formatem zapisu skompresowanego dźwięku. Wg agregatu stacji radiowych \textit{Radio Browser}\textsuperscript{\cite{radio_browser_codecs}}, około 66\% wszystkich wpisów używa kodeku MP3 (w przypadku polskich stacji jest to około 60\%). Graficznie procentowe udziały przedstawia rysunek \ref{3/rb_chart}.
+	
+	\paragraph{Droga dalszego rozwoju}
+	Najbardziej korzystną drogą rozwoju jest implementacja dekodowania AAC/AAC+. Na ten moment nie zostało to zrobione.
+	$ $\\
+	
+	\subsubsection{Architektura programowa dekodera}
+	\imgh{3/PicoRadio-sound-decoding}{Architektura dekodowania dźwięku}{0.95}
+	
+	\subsubsection{Biblioteka \textit{helixmp3}}
+	Do dekodowania formatu MP3 wykorzystana została biblioteka \lstinline|helixmp3|. Opiera się ona na arytmetyce stałoprzecinkowej. Oryginalnie napisana przez \textit{RealNetworks}\textsuperscript{\cite{helixmp3}} w 2003 roku, znaleziona została w internecie pod postacią repozytoria GitHub\textsuperscript{\cite{helixmp3_repo}}. Do tej biblioteki dodana została obsługa RP2040 jak również integracja ze środowiskiem CMake. Jest to pierwszy wynik w wyszukiwarce Google (fraza \textit{mp3 decoding library fixed point}), dlatego poczynione ulepszenia, zostały zgłoszone autorowi repozytorium\textsuperscript{\cite{helixmp3_pr}}. Umożliwiona została także statyczna alokacja buforów na dane dekodera.
+	
+	\subsubsection{Message passing}
 	
 	\pagebreak
 	\begin{thebibliography}{9}
@@ -401,8 +416,10 @@
 		
 		\bibitem{minimp3}
 		\href{https://github.com/lieff/minimp3}{\textit{minimp3} -- biblioteka dekodująca MP3}
-		\bibitem{helixmp3}
-		\href{https://realnetworks.com}{\textit{helixmp3} -- biblioteka dekodująca MP3 (napisana w 2003 roku przez RealNetworks)}
+		\bibitem{realnetworks}
+		\href{https://realnetworks.com}{\textit{RealNetworks} -- firma odpowiedzialna za bibliotekę \textit{helixmp3}}
+		\bibitem{helixmp3_repo}
+		\href{https://github.com/ultraembedded/libhelix-mp3}{\textit{helixmp3} -- biblioteka dekodująca MP3 (napisana w 2003 roku przez RealNetworks)}
 		
 		\bibitem{rp2040}
 		\href{https://www.raspberrypi.com/documentation/microcontrollers/rp2040.html}{\textit{RP2040} -- Mikrokontroler firmy Raspberry Pi}
@@ -440,6 +457,11 @@
 		\href{https://datasheets.raspberrypi.com/rp2040/rp2040-datasheet.pdf}{\textit{RP2040 Datasheet} -- dokumentacja techniczna procesora RP2040}
 		\bibitem{tda_pdf}
 		\href{http://www.lampizator.eu/lampizator/LINKS%20AND%20DOWNLOADS/DATAMINING/tda%201543.pdf}{\textit{TDA1543 Datasheet} -- dokumentacja techniczna układu DAC TDA1543}
+		
+		\bibitem{radio_browser_codecs}
+		\href{https://www.radio-browser.info/codecs}{\textit{Radio browser codecs} -- kodeki audio wylistowane na stronie Radio Browser}
+		\bibitem{helixmp3_pr}
+		\href{https://github.com/ultraembedded/libhelix-mp3/pull/3}{\textit{helixmp3 pull request} -- ulepszenia biblioteki dekodującej}
 		
 	\end{thebibliography}
 	
