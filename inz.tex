@@ -208,12 +208,14 @@
 %			\item Li-ion -- akumulatory Litowo-jonowe (ładowalne)
 			\item Raspberry Pi -- komputery jednopłytkowe tworzone przez Raspberry Pi Foundation
 			\item Raspberry Pi Pico -- płytki rozwojowe oparte o mikrokontroler RP2040 (produkowane również przez Raspberry Pi Foundation)
+			\item \textit{Cortex M0+}
 			\item PWM
 			\item DMA
 			\item PIO
 			\item DAC
 			\item \isqs{} proto
 			\item PCM
+			\item SIO
 %			TODO fill in dict
 		\end{itemize}
 	
@@ -402,10 +404,28 @@
 	\subsubsection{Architektura programowa dekodera}
 	\imgh{3/PicoRadio-sound-decoding}{Architektura dekodowania dźwięku}{0.95}
 	
-	\subsubsection{Biblioteka \textit{helixmp3}}
-	Do dekodowania formatu MP3 wykorzystana została biblioteka \lstinline|helixmp3|. Opiera się ona na arytmetyce stałoprzecinkowej. Oryginalnie napisana przez \textit{RealNetworks}\textsuperscript{\cite{helixmp3}} w 2003 roku, znaleziona została w internecie pod postacią repozytoria GitHub\textsuperscript{\cite{helixmp3_repo}}. Do tej biblioteki dodana została obsługa RP2040 jak również integracja ze środowiskiem CMake. Jest to pierwszy wynik w wyszukiwarce Google (fraza \textit{mp3 decoding library fixed point}), dlatego poczynione ulepszenia, zostały zgłoszone autorowi repozytorium\textsuperscript{\cite{helixmp3_pr}}. Umożliwiona została także statyczna alokacja buforów na dane dekodera.
+	Powyższy rysunek przedstawia w jaki sposób zorganizowane zostało odtwarzanie i dekodowanie dźwięku. Wszelkie interakcje z pozostałymi komponentami systemu obsługiwane są przez rdzeń 0, natomiast rdzeń 1 obsługuje dekodowanie formatów audio. Droga, jaką obrano, pozwala na łatwe rozszerzanie obsługiwanych formatów. Ważne jest tylko, aby pojedynczy rdzeń \textit{Cortex M0+} poradził sobie z obsłużeniem dekodowania nowego formatu w czasie rzeczywistym.
 	
-	\subsubsection{Message passing}
+%	\paragraph{Flagi przerwań}
+%	Jak wcześniej wspomniano, przerwania generowane przez kanały DMA ustawiają dwie flagi \lstinline|a_done_irq| lub \lstinline|b_done_irq|. Poprzez wspólną pamięć są one odczytywane przez rdzeń 1, a ten dekoduje dane i uzupełn
+
+	\paragraph{Część Decode}
+	Komponenty z tej rodziny odpowiedzialne są za dostarczanie nowych danych surowych (w kodzie \lstinline|raw_buf|(\textit{raw buffer}) lub \lstinline|cbuf| (\textit{content buffer})). Klasa bazowa \lstinline|DecodeBase| odpowiada za wspólne elementy obu źródeł danych. Obsługuje ona m.in. zunifikowane funkcje do wysyłania komunikatów o zakończeniu dekodowania, zużyciu danych z bufora, bądź błędach. Umożliwione zostało także odczytywanie statystyk i metadanych. Poszczególne klasy podrzędne skupiają się na dostarczaniu danych z różnych źródeł. \lstinline|DecodeFile| odpowiada za odczyt plików z karty SD, natomiast \lstinline|DecodeStream| odbiera dane ze strumienia internetowego.
+	
+	\paragraph{Część Format}
+	Powstały interfejs \lstinline|Format| służy do abstrakcji dekodowania danych surowych. Jego główną metodą jest \lstinline|decode_up_to_n|, która dekoduje co najwyżej \lstinline|n| jednostek danych. Aby dowiedzieć się ile jednostek należy zdekodować istnieją funkcje \lstinline|units_to_decode_whole| i \lstinline|units_to_decode_half|, zwracające odpowiednio ile jednostek zapełni cały bufor \lstinline|audio_pcm| a ile pół bufora (taka liczba jest dekodowana po otrzymaniu przerwania od DMA, którego jeden kanał transferuje pół bufora). W przypadku formatu WAV jednostki to po prostu bajty, a gdy mówimy o MP3 będą to ramki. Podklasy implementują specjalizowane funkcje do dekodowania poszczególnych formatów.
+	
+	\paragraph{Bufor FIFO}
+	RP2040 posiada wbudowane dwa bufory FIFO do komunikacji między rdzeniami. Jeden z rdzenia 0 do rdzenia 1, drugi w przeciwnym kierunku. Wykorzystany został bufor w kierunku $1 \rightarrow 0$ do przekazywania informacji o stanie dekodowania. Zaimplementowany został moduł \lstinline|mcorefifo| do wysyłania abstrakcyjnych wiadomości. Wykorzystuje on przerwanie SIO do odbioru komunikatów, a następnie przekazuje je do zarejestrowanego odbiorcy. Jednym z takich odbiorców jest moduł odtwarzacza, który w pliku \lstinline|decodebase.cpp| odbiera komunikaty o identyfikatorze \lstinline|PLAYER| w funkcji \lstinline|player_msg()| i przekazuje do swojej głównej pętli w funkcji \lstinline|play()|.
+	
+	\subsubsection{Biblioteka \textit{helixmp3}}
+	Do dekodowania formatu MP3 wykorzystana została biblioteka \lstinline|helixmp3|. Opiera się ona na arytmetyce stałoprzecinkowej. Oryginalnie napisana przez \textit{RealNetworks}\textsuperscript{\cite{realnetworks}} w 2003 roku, znaleziona została w internecie pod postacią repozytoria GitHub\textsuperscript{\cite{helixmp3_repo}}. Do tej biblioteki dodana została obsługa RP2040 jak również integracja ze środowiskiem CMake. Jest to pierwszy wynik w wyszukiwarce Google (fraza \textit{mp3 decoding library fixed point}), dlatego poczynione ulepszenia, zostały zgłoszone autorowi repozytorium\textsuperscript{\cite{helixmp3_pr}}. Umożliwiona została także statyczna alokacja buforów na dane dekodera.
+	
+	Do biblioteki dekodującej odwołuje się tylko \lstinline|FormatMP3|, który funkcją \lstinline|decode_up_to_n|, dekoduje co najwyżej \lstinline|n| ramek MP3. Zwracana jest liczba zdekodowanych ramek. Jeżeli zdekoduje ich mniej, to znaczy, że odtwarzanie zakończyło się pomyślnie (np. koniec pliku). Jeżeli zwrócona zostanie wartość mniejsza od zera, oznacza to błąd. Jeżeli danych w buforze brakuje (np. niestabilna komunikacja sieciowa), rdzeń 1 czeka na dane w nieskończoność. Użytkownik jednak w każdej chwili może przerwać oczekiwanie.
+	
+	\subsubsection{Zatrzymywanie odtwarzania}
+	% TODO opisać jak działa abort/eof
+	% TODO zrobić kolejnego screena jiry
 	
 	\pagebreak
 	\begin{thebibliography}{9}
