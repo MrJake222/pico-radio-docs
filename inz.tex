@@ -340,6 +340,8 @@
 	
 	Odtwarzanie dźwięku odbywa się za pomocą zewnętrznego przetwornika DAC. Mikrokontroler wysyła dźwięk w formacie PCM protokołem \isqs{} do specjalizowanego układu z wykorzystaniem DMA. Drugi rdzeń procesora wykorzystywany jest wyłącznie do dekompresji formatów audio.
 	
+%	TODO opisać tutaj co robi player.cpp (zmienna dec, funkcje publcizne)
+	
 	\subsection{Komunikacja z przetwornikiem}
 	W programie zadeklarowany został bufor nieskompresowanego dźwięku PCM \lstinline|audio_pcm|. Ma on konfigurowalny rozmiar wyrażony w jednostkach 32-bitowych (2 kanały * 16-bitowa próbka). Przekazywany jest on do systemu DMA.
 	
@@ -404,7 +406,7 @@
 	\subsubsection{Architektura programowa dekodera}
 	\imgh{3/PicoRadio-sound-decoding}{Architektura dekodowania dźwięku}{0.95}
 	
-	Powyższy rysunek przedstawia w jaki sposób zorganizowane zostało odtwarzanie i dekodowanie dźwięku. Wszelkie interakcje z pozostałymi komponentami systemu obsługiwane są przez rdzeń 0, natomiast rdzeń 1 obsługuje dekodowanie formatów audio. Droga, jaką obrano, pozwala na łatwe rozszerzanie obsługiwanych formatów. Ważne jest tylko, aby pojedynczy rdzeń \textit{Cortex M0+} poradził sobie z obsłużeniem dekodowania nowego formatu w czasie rzeczywistym.
+	Rysunek \ref{3/PicoRadio-sound-decoding} przedstawia w jaki sposób zorganizowane zostało odtwarzanie i dekodowanie dźwięku. Wszelkie interakcje z pozostałymi komponentami systemu obsługiwane są przez rdzeń 0, natomiast rdzeń 1 obsługuje dekodowanie formatów audio. Droga, jaką obrano, pozwala na łatwe rozszerzanie obsługiwanych formatów. Ważne jest tylko, aby pojedynczy rdzeń \textit{Cortex M0+} poradził sobie z obsłużeniem dekodowania nowego formatu w czasie rzeczywistym.
 	
 %	\paragraph{Flagi przerwań}
 %	Jak wcześniej wspomniano, przerwania generowane przez kanały DMA ustawiają dwie flagi \lstinline|a_done_irq| lub \lstinline|b_done_irq|. Poprzez wspólną pamięć są one odczytywane przez rdzeń 1, a ten dekoduje dane i uzupełn
@@ -424,8 +426,21 @@
 	Do biblioteki dekodującej odwołuje się tylko \lstinline|FormatMP3|, który funkcją \lstinline|decode_up_to_n|, dekoduje co najwyżej \lstinline|n| ramek MP3. Zwracana jest liczba zdekodowanych ramek. Jeżeli zdekoduje ich mniej, to znaczy, że odtwarzanie zakończyło się pomyślnie (np. koniec pliku). Jeżeli zwrócona zostanie wartość mniejsza od zera, oznacza to błąd. Jeżeli danych w buforze brakuje (np. niestabilna komunikacja sieciowa), rdzeń 1 czeka na dane w nieskończoność. Użytkownik jednak w każdej chwili może przerwać oczekiwanie.
 	
 	\subsubsection{Zatrzymywanie odtwarzania}
-	% TODO opisać jak działa abort/eof
-	% TODO zrobić kolejnego screena jiry
+	\imgcs{3/PicoRadio-stop}{Schemat obsługi żądań zakończenia odtwarzania}{1}
+	Zakończenie przetwarzania audio wbrew pozorom nie jest trywialne. Sygnał do zatrzymania może pochodzić z trzech źródeł. Na rysunku~\ref{3/PicoRadio-stop} przedstawione zostały kolejne etapy obsługi tych sygnałów. Natomiast poniżej opisano skrótowo ...
+	$ $\\
+	
+	Parametrem funkcji \lstinline|DecodeBase::notify_playback_end(bool error)| jest flaga, która mówi, czy odtwarzanie zakończyło się błędem. Jeżeli jest ona ustawiona, to program wyświetli ekran błędu.
+	
+	\paragraph{Użytkownik}
+		Użytkownik może zakończyć odtwarzanie poprzez naciśnięcie przycisku \textit{Wstecz} na ekranie. Podsystem wyświetlacza wywołuje wtedy funkcje \lstinline|player_stop()|, która rozpoczyna proces zakończenia odtwarzania i czeka aż rzeczywiście się ono zakończy. Ustawiana jest flaga \lstinline|abort|, która powoduje, że wszystkie implementacje \lstinline|decode_up_to_n(int n)|, kończą dekodowanie natychmiast. Dekodowane jest mniej ramek niż zadane \lstinline|n|, co wykrywane jest przez program jako zakończenie odtwarzania.
+	
+	\paragraph{Koniec pliku}
+		Gdy funkcja \lstinline|load_buffer()| w \lstinline|DecodeFile| napotka koniec pliku powiadamia o tym fakcie klasę nadrzędną wywołując \lstinline|notify_eof()|. Nie używa ona bezpośrednio funkcji \lstinline|notify_playback_end()|, ponieważ przy zakończeniu odtwarzania bufor może zawierać jeszcze do 4 sekund dźwięku (bufor 64kB, format MP3 128kbps). Dopiero gdy funkcja oczekiwania na dane wykryje że jest ich za mało, a w pliku nie ma więcej bajtów do odczytania, odtwarzanie jest zakańczane. Dzieje się to w analogiczny sposób jak w przypadku zakończenia go przez użytkownika. Dekodowane jest mniej ramek audio.
+	
+	\paragraph{Błąd}
+	aabc
+		% TODO opisać jak działa abort
 	
 	\pagebreak
 	\begin{thebibliography}{9}
