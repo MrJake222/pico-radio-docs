@@ -425,22 +425,24 @@
 	
 	Do biblioteki dekodującej odwołuje się tylko \lstinline|FormatMP3|, który funkcją \lstinline|decode_up_to_n|, dekoduje co najwyżej \lstinline|n| ramek MP3. Zwracana jest liczba zdekodowanych ramek. Jeżeli zdekoduje ich mniej, to znaczy, że odtwarzanie zakończyło się pomyślnie (np. koniec pliku). Jeżeli zwrócona zostanie wartość mniejsza od zera, oznacza to błąd. Jeżeli danych w buforze brakuje (np. niestabilna komunikacja sieciowa), rdzeń 1 czeka na dane w nieskończoność. Użytkownik jednak w każdej chwili może przerwać oczekiwanie.
 	
+	\subsubsection{Rozpoczynanie odtwarzania}
+	% TODO opisać jak wykrywane są formaty, błędy które mogą wystąpić (DNS, connect, itp.) i że nie dotyczą one błędów opisanych niżej
+	
 	\subsubsection{Zatrzymywanie odtwarzania}
 	\imgcs{3/PicoRadio-stop}{Schemat obsługi żądań zakończenia odtwarzania}{1}
-	Zakończenie przetwarzania audio wbrew pozorom nie jest trywialne. Sygnał do zatrzymania może pochodzić z trzech źródeł. Na rysunku~\ref{3/PicoRadio-stop} przedstawione zostały kolejne etapy obsługi tych sygnałów. Natomiast poniżej opisano skrótowo ...
+	Zakończenie przetwarzania audio jest nietrywialnym procesem. Sygnał do zatrzymania może pochodzić z trzech różnych źródeł. Na rysunku~\ref{3/PicoRadio-stop} przedstawione zostały kolejne etapy obsługi tych sygnałów. Natomiast poniżej opisano skrótowo jak działa zgłaszanie poszczególnych kategorii zdarzeń. 
 	$ $\\
 	
 	Parametrem funkcji \lstinline|DecodeBase::notify_playback_end(bool error)| jest flaga, która mówi, czy odtwarzanie zakończyło się błędem. Jeżeli jest ona ustawiona, to program wyświetli ekran błędu.
 	
 	\paragraph{Użytkownik}
-		Użytkownik może zakończyć odtwarzanie poprzez naciśnięcie przycisku \textit{Wstecz} na ekranie. Podsystem wyświetlacza wywołuje wtedy funkcje \lstinline|player_stop()|, która rozpoczyna proces zakończenia odtwarzania i czeka aż rzeczywiście się ono zakończy. Ustawiana jest flaga \lstinline|abort|, która powoduje, że wszystkie implementacje \lstinline|decode_up_to_n(int n)|, kończą dekodowanie natychmiast. Dekodowane jest mniej ramek niż zadane \lstinline|n|, co wykrywane jest przez program jako zakończenie odtwarzania.
+		Użytkownik może zakończyć odtwarzanie poprzez naciśnięcie przycisku \textit{Wstecz} na ekranie odtwarzania. Podsystem wyświetlacza wywołuje wtedy funkcje \lstinline|player_stop()|, która rozpoczyna proces zakończenia odtwarzania i czeka aż rzeczywiście się ono zakończy. Ustawiana jest flaga \lstinline|abort|, która powoduje, że wszystkie implementacje \lstinline|decode_up_to_n(int n)|, kończą dekodowanie natychmiast. Dekodowane jest mniej ramek niż zadane \lstinline|n|, co wykrywane jest przez program jako zakończenie odtwarzania.
 	
 	\paragraph{Koniec pliku}
-		Gdy funkcja \lstinline|load_buffer()| w \lstinline|DecodeFile| napotka koniec pliku powiadamia o tym fakcie klasę nadrzędną wywołując \lstinline|notify_eof()|. Nie używa ona bezpośrednio funkcji \lstinline|notify_playback_end()|, ponieważ przy zakończeniu odtwarzania bufor może zawierać jeszcze do 4 sekund dźwięku (bufor 64kB, format MP3 128kbps). Dopiero gdy funkcja oczekiwania na dane wykryje że jest ich za mało, a w pliku nie ma więcej bajtów do odczytania, odtwarzanie jest zakańczane. Dzieje się to w analogiczny sposób jak w przypadku zakończenia go przez użytkownika. Dekodowane jest mniej ramek audio.
+		Gdy funkcja \lstinline|load_buffer()| w \lstinline|DecodeFile| napotka koniec pliku powiadamia o tym fakcie klasę nadrzędną wywołując \lstinline|notify_eof()|. Nie używa ona bezpośrednio funkcji \lstinline|notify_playback_end()|, ponieważ przy zakończeniu odtwarzania bufor może zawierać jeszcze do 4 sekund dźwięku (bufor 64kB, format MP3 128kbps). Dopiero gdy funkcja oczekiwania na dane wykryje że jest ich za mało, a w pliku nie ma więcej bajtów do odczytania, odtwarzanie jest zakańczane. Dzieje się to w analogiczny sposób jak w przypadku zakończenia go przez użytkownika: dekodowane jest mniej ramek audio.
 	
 	\paragraph{Błąd}
-	aabc
-		% TODO opisać jak działa abort
+		Błędy modułu odtwarzacza mogą być dwojakie. Błąd sieciowy występuje przy odtwarzaniu strumieni internetowych, np. radia. Biblioteka \textit{LWIP} zgłasza błąd, który poprzez \lstinline|notify_playback_end()| powoduje natychmiastowe zatrzymanie odtwarzania i wyświetlenie komunikatu o błędzie (flaga \lstinline|error| ustawiona na \lstinline|true|). Błąd odczytu z pliku występuje, gdy funkcja uzupełniająca bufor o dane z pliku zakończy się niepowodzeniem. Oznaczać to może na przykład że użytkownik usunął kartę SD z urządzenia lub wystąpił błąd komunikacji z nią. Analogicznie jak w przypadku błędu sieci odtwarzanie jest zakańczane natychmiast.
 	
 	\pagebreak
 	\begin{thebibliography}{9}
