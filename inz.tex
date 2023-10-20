@@ -164,8 +164,6 @@
 				\item W pełni funkcjonalny prototyp urządzenia realizującego funkcje odbiornika internetowych stacji radiowych,
 				\item Dokumentacja techniczna pozwalająca na zbudowanie urządzenia oraz rozwój jego oprogramowania układowego.
 			\end{itemize}
-			
-			% TODO opisać że decydujemy się na wyświetlacz i przyciski. Jakie to pociąga za sobą moduły software.
 		
 		\subsection{Wymagania niefunkcjonalne}
 			Urządzenie ma być wykonane z wykorzystaniem mikrokontrolera, lub płytki rozwojowej opartej o mikrokontroler. Rozwiązanie powinno obsługiwać połaczenie z Internetem, np. WiFi, do pobierania strumienia danych audio z serwera oraz musi poradzić sobie z dekodowaniem formatu MP3 lub AAC w czasie rzeczywistym.
@@ -425,10 +423,23 @@
 	
 	Do biblioteki dekodującej odwołuje się tylko \lstinline|FormatMP3|, który funkcją \lstinline|decode_up_to_n|, dekoduje co najwyżej \lstinline|n| ramek MP3. Zwracana jest liczba zdekodowanych ramek. Jeżeli zdekoduje ich mniej, to znaczy, że odtwarzanie zakończyło się pomyślnie (np. koniec pliku). Jeżeli zwrócona zostanie wartość mniejsza od zera, oznacza to błąd. Jeżeli danych w buforze brakuje (np. niestabilna komunikacja sieciowa), rdzeń 1 czeka na dane w nieskończoność. Użytkownik jednak w każdej chwili może przerwać oczekiwanie.
 	
-	\subsubsection{Rozpoczynanie odtwarzania}
-	% TODO opisać jak wykrywane są formaty, błędy które mogą wystąpić (DNS, connect, itp.) i że nie dotyczą one błędów opisanych niżej
+	\subsection{Rozpoczynanie odtwarzania}
+	\imgcs{3/PicoRadio-start}{Schemat procesu rozpoczynania odtwarzania}{0.7}
+	Użytkownik rozpoczyna odtwarzanie poprzez wybranie pozycji z listy ulubionych lub wyszukanie stacji/wybór pliku na karcie SD. Dowolny widok może zainicjować ekran odtwarzania \lstinline|ScPlay|. Jednym z parametrów inicjalizacyjnych jest ścieżka dostępu. Gdy nastąpi zmiana aktywnego ekranu, wywoływana jest funkcja \lstinline|player_start()|. Więcej na temat widoków i zarządzania ekranem napisano w sekcji \ref{?}. % TODO uzupełnić ref
 	
-	\subsubsection{Zatrzymywanie odtwarzania}
+	\paragraph{Zadania systemu FreeRTOS}
+		Funkcja \lstinline|player_start()| tworzy dwa osobne zadania w systemie operacyjnym, a sama kończy działanie od razu. Pierwsze z nich, \lstinline|player|, odpowiedzialne jest za uruchomienie procesu odtwarzania i przetwarzanie komunikatów (np. odnośnie konsumpcji bajtów z bufora czy wystąpienia błędów). Ładuje ono także dane do bufora z pliku. Drugie, pomocnicze zadanie \lstinline|player stat| służy do okresowego aktualizowania stanu odtwarzania na ekranie.
+	
+	\paragraph{Wykrywanie formatu}
+		Format audio wykrywany jest na podstawie ścieżki do zasobu. Jeżeli ta zaczyna się od \lstinline|http|, zostanie użyta klasa \lstinline|DecodeStream| i \lstinline|FormatMP3|. Jeżeli początek nie dopasuje się do wzorca, przyjmowane jest odtwarzanie z pliku (klasa \lstinline|DecodeFile|) i na podstawie rozszerzenia pliku definiowane jest użycie klasy \lstinline|FormatWAV| lub \lstinline|FormatMP3|.
+		
+	\paragraph{Ograniczenia detekcji plików}
+		Definicja formatu audio przebiega na samym początku co jest poważnym ograniczeniem i nie pozwala na zmianę formatu np. po odczytaniu nagłówka \lstinline|Content-type|. Jednak w obecnej formie projekt obsługuje tylko strumieniowanie plików MP3. Gdyby została dodana obsługa stacji AAC/AAC+ należałoby poprawić ten fragment kodu. Dodatkowo wtedy detekcja formatu plików lokalnych mogłaby zostać przeniesiona do \lstinline|DecodeFile|. Oprócz rozszerzeń, możliwa byłaby detekcja formatów plików na podstawie ich nagłówków. Pliki rozpoczynające się od \lstinline|http| zostaną potraktowane jako strumienie audio. Należy rozważyć użycie prefiksu \lstinline|file://| dla plików lokalnych.
+	
+	\paragraph{Możliwe błędy}
+		Jeden z możliwych błędów występuje, gdy nie zostanie dopasowany żaden znany format audio. Należy wtedy zweryfikować czy pliki posiadają odpowiednie rozszerzenia, a strumienie sieciowe prefiks \lstinline|http|. Inny błąd oznacza że nie udało się rozpocząć odtwarzania, tzn. plik nie istnieje/nie można go odczytać lub serwer strumieniujący nie odpowiada lub też nie udało się określić jego adresu. Przedstawione poniżej zakańczanie odtwarzania nie uwzględnia tych błędów, ponieważ z punktu widzenia programu jeszcze się ono nie rozpoczęło.
+	
+	\subsection{Zatrzymywanie odtwarzania}
 	\imgcs{3/PicoRadio-stop}{Schemat obsługi żądań zakończenia odtwarzania}{1}
 	Zakończenie przetwarzania audio jest nietrywialnym procesem. Sygnał do zatrzymania może pochodzić z trzech różnych źródeł. Na rysunku~\ref{3/PicoRadio-stop} przedstawione zostały kolejne etapy obsługi tych sygnałów. Natomiast poniżej opisano skrótowo jak działa zgłaszanie poszczególnych kategorii zdarzeń. 
 	$ $\\
