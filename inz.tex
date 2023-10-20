@@ -297,6 +297,7 @@
 		\item \lstinline|player| -- kontrola i odtwarzanie plików/strumieni internetowych
 		\begin{itemize}
 			\item \lstinline|decode| -- abstrakcje/implementacje dekodowania typów i odczytywania źródeł danych
+			\item \lstinline|metadata| -- dekodowanie metadanych w różnych formatach audio
 		\end{itemize}
 	\end{itemize}
 
@@ -454,6 +455,10 @@
 	
 	\paragraph{Błąd}
 		Błędy modułu odtwarzacza mogą być dwojakie. Błąd sieciowy występuje przy odtwarzaniu strumieni internetowych, np. radia. Biblioteka \textit{LWIP} zgłasza błąd, który poprzez \lstinline|notify_playback_end()| powoduje natychmiastowe zatrzymanie odtwarzania i wyświetlenie komunikatu o błędzie (flaga \lstinline|error| ustawiona na \lstinline|true|). Błąd odczytu z pliku występuje, gdy funkcja uzupełniająca bufor o dane z pliku zakończy się niepowodzeniem. Oznaczać to może na przykład że użytkownik usunął kartę SD z urządzenia lub wystąpił błąd komunikacji z nią. Analogicznie jak w przypadku błędu sieci odtwarzanie jest zakańczane natychmiast.
+		
+	\subsection{Metadane}
+	\subsubsection{ICY}
+	\subsubsection{ID3v2}
 	
 	\pagebreak
 	\begin{thebibliography}{9}
