@@ -468,16 +468,21 @@
 		
 		Funkcja \lstinline|DecodeStream::play()|, jeżeli dostępny jest nagłówek \lstinline|icy-metaint|, inicjalizuje odbierane danych metodą \lstinline|ICY::start()|. Następnie rejestruje odwołanie, które jest wywoływane po każdym zapisie do bufora oraz przetwarza już odebrane dane. W trakcie tych czynności blokowany jest kontekst biblioteki sieciowej, aby w trakcie przetwarzania danych nie zostały odebrane żadne nowe dane, a po odblokowaniu każde następne były wychwycone przez funkcję \lstinline|cbuf_write_cb()|.
 		
-		W każdym z tych scenariuszy (wstępne i późniejsze przetwarzanie) wywoływana jest w pętli funkcja \lstinline|ICY::read|. Pętla jest potrzebna, ponieważ w porcji odebranych danych, szczególnie dla niskich wartości \lstinline|icy-metaint|, może wystąpić więcej niż jedna ramka ICY.
+		W każdym z tych scenariuszy (wstępne i późniejsze przetwarzanie) wywoływana jest w pętli funkcja \lstinline|ICY::read()|. Pętla jest potrzebna, ponieważ w porcji odebranych danych, szczególnie dla niskich wartości \lstinline|icy-metaint|, może wystąpić więcej niż jedna ramka ICY.
 		
 		\imgcs{3/PicoRadio-icy}{Ramka MP3 rozdzielona ramką ICY}{0.9}
 		\paragraph{Format danych ICY}
 			Nagłówek metadanych ICY składa się z jednego bajtu kodującego rozmiar danych (bez nagłówka) podzielony przez 16. Dane dopełniane są zerami do podanego rozmiaru. Wewnątrz ramki kolejne pola oddzielone są od siebie średnikami, a same pola są w formacie \lstinline|klucz='wartosc'|. Dekoder zaimplementowany w projekcie obsługuje tylko klucz \lstinline|StreamTitle|, którego wartość to zazwyczaj tytuł utworu i jego wykonawca. Ramka ICY została przedstawiona na rysunku~\ref{3/PicoRadio-icy}.
 			$ $\\
 			
-		Wywołanie \lstinline|ICY::read| kopiuje ramkę ICY z bufora audio do bufora tymczasowego, a następnie przesuwa dane za ramką wstecz o rozmiar ramki. Operację można porównać do wycinania tekstu z dokumentu tekstowego. W ten sposób przywracamy ciągłość ramce MP3. Dane w buforze tymczasowym nie są interpretowane aby zaoszczędzić cenny czas. Przypomnijmy, cała ta operacja odbywa się przy zablokowanej komunikacji sieciowej. Dane interpretowane są dopiero gdy zadanie \lstinline|player stat| wywoła \lstinline|DecodeBase::get_meta_str()|, która w implementacji \lstinline|DecodeStream| odwołuje się do metody \lstinline|ICY::get_stream_title()|. Funkcja ta blokuje mutex bufora tymczasowego i kopiuje dane do swojego buforu na stosie. Dopiero wtedy rozpoczyna potencjalnie kosztowną czasowo interpretację danych.
+		Wywołanie \lstinline|ICY::read()| kopiuje ramkę ICY z bufora audio do bufora tymczasowego, a następnie przesuwa dane za ramką wstecz o rozmiar ramki. Operację można porównać do wycinania tekstu z dokumentu tekstowego. W ten sposób przywracamy ciągłość ramce MP3. Dane w buforze tymczasowym nie są interpretowane aby zaoszczędzić cenny czas. Przypomnijmy, cała ta operacja odbywa się przy zablokowanej komunikacji sieciowej. Dane interpretowane są dopiero gdy zadanie \lstinline|player stat| wywoła \lstinline|DecodeBase::get_meta_str()|, która w implementacji \lstinline|DecodeStream| odwołuje się do metody \lstinline|ICY::get_stream_title()|. Funkcja ta blokuje mutex bufora tymczasowego i kopiuje dane do swojego buforu na stosie. Dopiero wtedy rozpoczyna potencjalnie kosztowną czasowo interpretację danych.
 	
-	\subsubsection{ID3v2}
+	\subsubsection{Lokalne pliki MP3 -- ID3v2}
+		Tagowanie MP3 obsługiwane jest zupełnie różnie od ramek ICY. Mogą one występować na początku plików MP3. Sygnalizuje to fakt, że pliki te rozpoczynają się 3 bajtami równymi: \lstinline|I D 3|. Funkcje do obsługi tego typu tagowań zostały zaimplementowane w klasach pochodnych \lstinline|Format|. Wykorzystana została już wcześniej istniejąca funkcja \lstinline|Format::decode_header()|. Obsługiwała ona dekodowanie nagłówków WAVE. Wywoływana jest ona po pierwszym załadowaniu bufora, tylko raz na dany plik/strumień. Implementacja \lstinline|FormatMP3| wywołuje wtedy funkcję \lstinline|ID3::try_parse()|.
+		
+%		\paragraph{Format ramek ID3v2}
+%		...
+		%TODO opisać format ramek, jak są one czytane, które tagi obsługiwane
 	
 	\pagebreak
 	\begin{thebibliography}{9}
