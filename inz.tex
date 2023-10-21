@@ -457,7 +457,26 @@
 		Błędy modułu odtwarzacza mogą być dwojakie. Błąd sieciowy występuje przy odtwarzaniu strumieni internetowych, np. radia. Biblioteka \textit{LWIP} zgłasza błąd, który poprzez \lstinline|notify_playback_end()| powoduje natychmiastowe zatrzymanie odtwarzania i wyświetlenie komunikatu o błędzie (flaga \lstinline|error| ustawiona na \lstinline|true|). Błąd odczytu z pliku występuje, gdy funkcja uzupełniająca bufor o dane z pliku zakończy się niepowodzeniem. Oznaczać to może na przykład że użytkownik usunął kartę SD z urządzenia lub wystąpił błąd komunikacji z nią. Analogicznie jak w przypadku błędu sieci odtwarzanie jest zakańczane natychmiast.
 		
 	\subsection{Metadane}
-	\subsubsection{ICY}
+	Jednym z wymagań projektu było wyświetlanie aktualnie odtwarzanego utworu. Należało więc co najmniej zdekodować metadane wysyłane przez stacje radiowe. Dodatkowo, zostało zaimplementowane odczytywanie metadanych z plików MP3.
+	
+	\subsubsection{Stacje radiowe -- ICY}
+		Szeroko stosowanym formatem przesyłania danych o utworach w strumieniach radiowych jest format ICY\textsuperscript{\cite{icy_spec}}. Klient może zażądać od serwera metadanych wysyłając do niego nagłówek \lstinline|Icy-Metadata: 1|. Serwer, jeżeli zaakceptował żądanie, odsyła nagłówek \lstinline|icy-metaint: <n>|. Jego wartość oznacza co ile bajtów strumienia będą wysyłane ramki z metadanymi. Zwykle \lstinline|<n>| jest równe 16000, co oznacza, że co każde odebrane 16000 bajtów wystąpią metadane. Jest to 1 sekunda dźwięku MP3 128kbps, czyli nazwy utworów będą aktualizowane raz na sekundę. Występuje też wartość 1000, co oznacza 16 aktualizacji w ciągu sekundy. Inne wartości są możliwe, ale nie są spotykane w praktyce.
+		
+		\paragraph{Abstrakcyjne położenie ramek ICY}
+		Warto zaznaczyć, że miejsce wstawienia metadanych w żaden sposób nie uwzględnia formatu audio. Nie możemy zakładać że nie podzielą one jednej ramki MP3 na dwie części. Dla dźwięku MP3 128kbps ramka ma rozmiar 418 bajtów. Przy wartości \lstinline|icy-metaint| równej 16000, dane dźwiękowe będą podzielone co ok. $38.28$ ramki. Z tego powodu konieczne stało się obsługiwanie ramek ICY w momencie zapisu do bufora, zamiast przy jego odczycie. Odczyt obsługuje odpowiednia instancja \lstinline|Format|, która nie musi obsługiwać odczytywania ramek bajt po bajcie. Na przykład \lstinline|FormatMP3| nie obsługuje dekodowania ramek w częściach. Ramka MP3 musi znaleźć się w ciągłym obszarze pamięci, nie może być rozdzielona ramką ICY.
+		$ $\\
+		
+		Funkcja \lstinline|DecodeStream::play()|, jeżeli dostępny jest nagłówek \lstinline|icy-metaint|, inicjalizuje odbierane danych metodą \lstinline|ICY::start()|. Następnie rejestruje odwołanie, które jest wywoływane po każdym zapisie do bufora oraz przetwarza już odebrane dane. W trakcie tych czynności blokowany jest kontekst biblioteki sieciowej, aby w trakcie przetwarzania danych nie zostały odebrane żadne nowe dane, a po odblokowaniu każde następne były wychwycone przez funkcję \lstinline|cbuf_write_cb()|.
+		
+		W każdym z tych scenariuszy (wstępne i późniejsze przetwarzanie) wywoływana jest w pętli funkcja \lstinline|ICY::read|. Pętla jest potrzebna, ponieważ w porcji odebranych danych, szczególnie dla niskich wartości \lstinline|icy-metaint|, może wystąpić więcej niż jedna ramka ICY.
+		
+		\imgcs{3/PicoRadio-icy}{Ramka MP3 rozdzielona ramką ICY}{0.9}
+		\paragraph{Format danych ICY}
+			Nagłówek metadanych ICY składa się z jednego bajtu kodującego rozmiar danych (bez nagłówka) podzielony przez 16. Dane dopełniane są zerami do podanego rozmiaru. Wewnątrz ramki kolejne pola oddzielone są od siebie średnikami, a same pola są w formacie \lstinline|klucz='wartosc'|. Dekoder zaimplementowany w projekcie obsługuje tylko klucz \lstinline|StreamTitle|, którego wartość to zazwyczaj tytuł utworu i jego wykonawca. Ramka ICY została przedstawiona na rysunku~\ref{3/PicoRadio-icy}.
+			$ $\\
+			
+		Wywołanie \lstinline|ICY::read| kopiuje ramkę ICY z bufora audio do bufora tymczasowego, a następnie przesuwa dane za ramką wstecz o rozmiar ramki. Operację można porównać do wycinania tekstu z dokumentu tekstowego. W ten sposób przywracamy ciągłość ramce MP3. Dane w buforze tymczasowym nie są interpretowane aby zaoszczędzić cenny czas. Przypomnijmy, cała ta operacja odbywa się przy zablokowanej komunikacji sieciowej. Dane interpretowane są dopiero gdy zadanie \lstinline|player stat| wywoła \lstinline|DecodeBase::get_meta_str()|, która w implementacji \lstinline|DecodeStream| odwołuje się do metody \lstinline|ICY::get_stream_title()|. Funkcja ta blokuje mutex bufora tymczasowego i kopiuje dane do swojego buforu na stosie. Dopiero wtedy rozpoczyna potencjalnie kosztowną czasowo interpretację danych.
+	
 	\subsubsection{ID3v2}
 	
 	\pagebreak
@@ -515,6 +534,9 @@
 		\href{https://www.radio-browser.info/codecs}{\textit{Radio browser codecs} -- kodeki audio wylistowane na stronie Radio Browser}
 		\bibitem{helixmp3_pr}
 		\href{https://github.com/ultraembedded/libhelix-mp3/pull/3}{\textit{helixmp3 pull request} -- ulepszenia biblioteki dekodującej}
+		
+		\bibitem{icy_spec}
+		\href{https://gist.github.com/niko/2a1d7b2d109ebe7f7ca2f860c3505ef0#file-icy_meta-md}{\textit{ICY} -- protokół przesyłania metadanych}
 		
 	\end{thebibliography}
 	
