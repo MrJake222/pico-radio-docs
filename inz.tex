@@ -478,11 +478,17 @@
 		Wywołanie \lstinline|ICY::read()| kopiuje ramkę ICY z bufora audio do bufora tymczasowego, a następnie przesuwa dane za ramką wstecz o rozmiar ramki. Operację można porównać do wycinania tekstu z dokumentu tekstowego. W ten sposób przywracamy ciągłość ramce MP3. Dane w buforze tymczasowym nie są interpretowane aby zaoszczędzić cenny czas. Przypomnijmy, cała ta operacja odbywa się przy zablokowanej komunikacji sieciowej. Dane interpretowane są dopiero gdy zadanie \lstinline|player stat| wywoła \lstinline|DecodeBase::get_meta_str()|, która w implementacji \lstinline|DecodeStream| odwołuje się do metody \lstinline|ICY::get_stream_title()|. Funkcja ta blokuje mutex bufora tymczasowego i kopiuje dane do swojego buforu na stosie. Dopiero wtedy rozpoczyna potencjalnie kosztowną czasowo interpretację danych.
 	
 	\subsubsection{Lokalne pliki MP3 -- ID3v2}
-		Tagowanie MP3 obsługiwane jest zupełnie różnie od ramek ICY. Mogą one występować na początku plików MP3. Sygnalizuje to fakt, że pliki te rozpoczynają się 3 bajtami równymi: \lstinline|I D 3|. Funkcje do obsługi tego typu tagowań zostały zaimplementowane w klasach pochodnych \lstinline|Format|. Wykorzystana została już wcześniej istniejąca funkcja \lstinline|Format::decode_header()|. Obsługiwała ona dekodowanie nagłówków WAVE. Wywoływana jest ona po pierwszym załadowaniu bufora, tylko raz na dany plik/strumień. Implementacja \lstinline|FormatMP3| wywołuje wtedy funkcję \lstinline|ID3::try_parse()|.
+		Tagowanie MP3 obsługiwane jest zupełnie różnie od ramek ICY. Mogą one występować na początku plików MP3. Sygnalizuje to fakt, że pliki te rozpoczynają się 3 bajtami równymi \lstinline|ID3|. Funkcje do obsługi tego typu tagowań zostały zaimplementowane w klasach pochodnych \lstinline|Format|. Wykorzystana została już wcześniej istniejąca funkcja \lstinline|Format::decode_header()|. Obsługiwała ona dekodowanie nagłówków WAVE. Wywoływana jest ona po pierwszym załadowaniu bufora, tylko raz na dany plik/strumień. Implementacja \lstinline|FormatMP3| wywołuje wtedy funkcję \lstinline|ID3::try_parse()|.
 		
-%		\paragraph{Format ramek ID3v2}
-%		...
-		%TODO opisać format ramek, jak są one czytane, które tagi obsługiwane
+		\paragraph{Standard ID3v2}
+		Ramki ID3 w wersji drugiej mają znacznie bardziej rozbudowane kodowanie od np. ramek ICY czy starszego formatu ID3v1. Dokumentacja oryginalnie dostępna była pod adresem \href{id3.org}{id3.org} lecz w trakcie pisania pracy była ona niedostępna. Skorzystano z alternatywnej strony\textsuperscript{\cite{id3_spec_mutagen}}.
+		
+		\paragraph{Format ramek}
+		\imgcs{3/PicoRadio-id3}{Format danych ID3v2}{0.8}
+		Budowa formatu ID3v2 została przedstawiona na rysunku~\ref{3/PicoRadio-id3}. Podstawową jednostką budowy są tagi. Może być ich w pliku dowolna liczba. Są one opakowane dodatkowymi informacjami, takimi jak np. nagłówki. Z głównego nagłówka pobierany jest rozmiar i flaga czy nagłówek rozszerzony jest obecny. Jeżeli tak, to jest on ignorowany. Padding i stopka również są ignorowane.
+		$ $\\
+		
+		Parser rozpoznaje ramki o kodach \lstinline|TPE1|(artysta) i \lstinline|TIT2|(tytuł). Są to ramki tekstowe, dlatego wyszczególniono taki format ramek na rysunku. Pierwszy bajt oznacza jakie kodowanie wykorzystano do zapisania tekstu. Możliwe formaty to ISO-8859-1, UTF-16, UTF-16BE i UTF-8. Wszystkie zostały zaimplementowane i przetestowane.
 	
 	\pagebreak
 	\begin{thebibliography}{9}
@@ -542,6 +548,8 @@
 		
 		\bibitem{icy_spec}
 		\href{https://gist.github.com/niko/2a1d7b2d109ebe7f7ca2f860c3505ef0#file-icy_meta-md}{\textit{ICY} -- protokół przesyłania metadanych}
+		\bibitem{id3_spec_mutagen}
+		\href{https://mutagen-specs.readthedocs.io/en/latest/id3/id3v2.4.0-structure.html}{\textit{ID3v2.4.0} -- protokół zapisu metadanych w plikach MP3}
 		
 	\end{thebibliography}
 	
