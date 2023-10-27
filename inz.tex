@@ -325,7 +325,7 @@
 	\end{itemize}
 
 	\section{Odtwarzanie dźwięku}
-	Zanim radio urosło do rangi pracy inżynierskiej, było ono moim prywatnym projektem. Chciałem poznać mikrokontroler RP2040. Poznać \lstinline|pico-sdk|. Po pierwszym kontakcie na \textit{Systemach Wbudowanych} środowisko stworzone wokół przystępnej cenowo płytki Raspberry Pi Pico wydawało się ciekawe i interesujące. Mikrokontroler ten, bogato wyposażony, stanowił idealną podstawę do stworzenia czegoś, co zawsze chciałem zbudować: odtwarzacza dźwięku. Przy okazji, tworząc taki projekt mogłem zaznajomić się ze wszystkimi ważniejszymi peryferiami układu (wykorzystałem m.in. PWM, DMA, a także później).
+	Zanim radio urosło do rangi pracy inżynierskiej, było ono moim prywatnym projektem. Chciałem poznać mikrokontroler RP2040. Poznać \lstinline|pico-sdk|. Po pierwszym kontakcie na \textit{Systemach Wbudowanych} środowisko stworzone wokół przystępnej cenowo płytki Raspberry Pi Pico wydawało się ciekawe i interesujące. Mikrokontroler ten, bogato wyposażony, stanowił idealną podstawę do stworzenia czegoś, co zawsze chciałem zbudować: odtwarzacza dźwięku. Przy okazji, tworząc taki projekt mogłem zaznajomić się ze wszystkimi ważniejszymi peryferiami układu (wykorzystałem m.in. PWM, DMA, a także później PIO).
 	
 	Szybko jednak okazało się, że odtwarzania dźwięku za pomocą wbudowanego układu PWM jest niewystarczające. Dźwięk był zbyt niskiej jakości aby nadawał się do odtwarzania muzyki. Wykorzystałem układ TDA1543 jako przetwornik cyfrowo-analogowy. Projekt odtwarzał tylko pliki WAV i wyglądał tak, jak na rysunku \ref{3/pr_wav}.
 	
@@ -394,9 +394,9 @@
 	Wszystko to dzieje się na rdzeniu 0. Taka koncepcja pozwala na odtwarzanie nieskompresowanego dźwięku. Problem powstaje, gdy musimy w czasie rzeczywistym zdekodować nietrywialny format zapisu audio, np. MP3.
 	
 	\subsection{Dekompresja formatów}
-	\imgh{3/rb_chart}{Udział kodeków w stacjach radiowych}{0.7}
+	\imgh{3/rb_chart_new}{Udział kodeków w stacjach radiowych}{0.9}
 	
-	Wybór padł na format MP3. Jest on popularnym formatem zapisu skompresowanego dźwięku. Wg agregatu stacji radiowych \textit{Radio Browser}\textsuperscript{\cite{radio_browser_codecs}}, około 66\% wszystkich wpisów używa kodeku MP3 (w przypadku polskich stacji jest to około 60\%). Graficznie procentowe udziały przedstawia rysunek \ref{3/rb_chart}.
+	Wybór padł na format MP3. Jest on popularnym formatem zapisu skompresowanego dźwięku. Wg agregatu stacji radiowych \textit{Radio Browser}\textsuperscript{\cite{radio_browser_codecs}}, około 66\% wszystkich wpisów używa kodeku MP3 (w przypadku polskich stacji jest to około 60\%). Graficznie procentowe udziały przedstawia rysunek \ref{3/rb_chart_new}.
 	
 	\paragraph{Droga dalszego rozwoju}
 	Najbardziej korzystną drogą rozwoju jest implementacja dekodowania AAC/AAC+. Na ten moment nie zostało to zrobione.
