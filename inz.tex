@@ -214,6 +214,8 @@
 			\item \isqs{} proto
 			\item PCM
 			\item SIO
+			\item TCP
+			\item TLS
 %			TODO fill in dict
 		\end{itemize}
 	
@@ -508,6 +510,26 @@
 	
 	\paragraph{Wycinanie zapisanych danych}
 		Implementacja wycinania stała się konieczna w momencie kiedy w środku niepodzielnej jednostki przy odczycie (np. ramki MP3) pojawiają się metadane jak np. ICY. Trzeba je wtedy przetworzyć i usunąć, zapełniając powstałą lukę danymi występującymi dalej w buforze.
+	
+	\section{Klient protokołu HTTP}
+		Potrzeba stworzenia własnej implementacji klienta HTTP stała się konieczna, aby zintegrować go z buforem kołowym i biblioteką sieciową. Obsługuje on przekierowania i podstawowe nagłówki. Wystarczająco, aby z powodzeniem pobierać wyniki wyszukiwań stacji oraz odtwarzać je. Implementacja jest dwuczęściowa. Nadrzędny moduł \lstinline|HttpClient| obsługuje wysokopoziomowy standard HTTP. Zajmuje się komponowaniem żądań, ich nagłówków, a także przetwarzaniem odpowiedzi. Podrzędny moduł obsługuje niskopoziomową komunikację sieciową. Taka budowa modułowa pozwoliła na testowanie serwera w środowisku PC ze stosowną implementacją modułu podrzędnego. Urządzenie zawiera moduł \lstinline|HttpClientPico|, który współpracuje z zasobami dostępnymi na mikrokontrolerze.
+		$ $\\
+		
+		Obsługiwane nagłówki są ograniczone z uwagi na chęć statycznej alokacji pamięci. Żądanie wysyłane jest z nagłówkami:
+		\begin{itemize}
+			\item \lstinline|Host| o wartości hosta z którego pobierane są dane,
+			\item \lstinline|User-agent: PicoRadio/0.1|,
+			\item \lstinline|Icy-MetaData| o wartości \lstinline|1|, jeżeli program ustawił odpowiednią flagę.
+		\end{itemize}
+		Natomiast przetwarzane są następujące nagłówki odpowiedzi:
+		\begin{itemize}
+			\item \lstinline|Location| -- wykorzystywane przy przekierowaniach,
+			\item \lstinline|Content-Type| -- typ treści, używane głownie przy przetwarzaniu wyników wyszukiwania,
+			\item \lstinline|Content-Length| -- długość treści, j.w.
+			\item \lstinline|Icy-Metaint| -- używane przy przetwarzaniu metadanych ICY.
+		\end{itemize}
+		
+		Niestety brak jest obsługi szyfrowania. Środowisko zawiera implementację TLS, lecz nie została ona wykorzystana z uwagi na prawdopodobnie niewystarczającą moc obliczeniową mikrokontrolera. Wiele stacji transmituje z użyciem protokołu HTTP, tylko niewielka część z nich wymuszała przekierowania na szyfrowaną transmisję. Serwer musi je obsługiwać ponieważ wiele stacji wykorzystuje je do geolokalizacji serwera transmitującego. W konfiguracji zawarta została opcja \lstinline|HTTP_MAX_REDIRECTS| (domyślnie 2), która mówi, ile razy maksymalnie przekierowań chcemy obsłużyć. Zwykle jeżeli jest to więcej niż jedno, serwer próbuje wymusić transmisję szyfrowaną.
 	
 	\pagebreak
 	\begin{thebibliography}{9}
