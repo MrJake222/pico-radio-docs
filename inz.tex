@@ -530,6 +530,40 @@
 		\end{itemize}
 		
 		Niestety brak jest obsługi szyfrowania. Środowisko zawiera implementację TLS, lecz nie została ona wykorzystana z uwagi na prawdopodobnie niewystarczającą moc obliczeniową mikrokontrolera. Wiele stacji transmituje z użyciem protokołu HTTP, tylko niewielka część z nich wymuszała przekierowania na szyfrowaną transmisję. Serwer musi je obsługiwać ponieważ wiele stacji wykorzystuje je do geolokalizacji serwera transmitującego. W konfiguracji zawarta została opcja \lstinline|HTTP_MAX_REDIRECTS| (domyślnie 2), która mówi, ile razy maksymalnie przekierowań chcemy obsłużyć. Zwykle jeżeli jest to więcej niż jedno, serwer próbuje wymusić transmisję szyfrowaną.
+		
+	\section{Dane}
+		Główną jednostką informacji w projekcie jest stacja radiowa. Na potrzeby unifikacji dostępu do danych o stacjach powstał interfejs \lstinline|DataSource|. Zawiera on dwie metody:
+		\begin{itemize}
+			\item \lstinline|read_char()| -- odczytuje znak
+			\item \lstinline|more_content()| -- zwraca czy w źródle jest więcej danych
+		\end{itemize}
+		Nad metodą czytającą znak po znaku zaimplementowana została metoda \lstinline|read_line()| czytająca linia po linii. Obsługuje ona zakończenia linii \lstinline|\n| oraz \lstinline|\r\n|. Wykorzystywana jest ona przez moduł list oraz, aby uniknąć duplikacji kodu, przez klienta HTTP do przetwarzania odpowiedzi.
+		
+		\subsection{Moduł list}
+			Listy wykorzystują źródła danych i implementują wczytywanie różnych formatów.
+			
+			\subsubsection{Format M3U}
+			\subsubsection{Format PLS}
+			
+		\subsection{Klasy ładujące}
+			Wczytywanie list z konkretnych źródeł danych implementowane jest przez podklasy klasy \lstinline|Loader|. Prezentuje ona spójny interfejs do ładowania danych. Metody \lstinline|load()| oraz \lstinline|load_abort()| umożliwiają zarządzanie tym procesem. Tworzone jest zadanie systemowe, które wykonuje potrzebne kroki bez blokowania interfejsu użytkownika. Funkcje \lstinline|get_entry_count()| oraz \lstinline|get_entry()| pozwalają na pobieranie informacji o wynikach. Klasa obsługuje także paginację wyników. Podklasy mogą definiować własne funkcje \lstinline|begin()|, które pełnią rolę konstruktora obiektu (przekazują niezbędne parametry, ale bez dynamicznej alokacji pamięci). Mogą one wymagać podania ścieżki lub np. słowa kluczowego do wyszukania.
+
+			\paragraph{Statyczna alokacja} Wszystkie klasy ładujące są tworzone statycznie i współdzielą pamięć wpisów. Jest to bardzo istotnie w środowisku o ograniczonej pamięci operacyjnej. Zazwyczaj ładowanie jednego typu wyników nie koliduje z pozostałymi, a jeżeli tak się dzieje to resetowany jest stan programu ładującego który przy następnym użyciu musi przeładować swoje dane, bo zostały one nadpisane. Z tego też powodu modyfikowanie listy ulubionych odbywa się bezpośrednio w pamięci stałej, bez ładowania całej listy stacji. Statyczna alokacja ma też swoje pozytywne strony, mianowicie przechowywany jest stan klas ładujących. Wykorzystuje to np. klasa \lstinline|LoaderLocal| do przechowywania ścieżki w lokalnym systemie plików na karcie SD. Także po powrocie z wybranej stacji do wyników ładowania (do listy ulubionych lub wyszukiwania) nie ma potrzeby od nowa ładować danych.
+			
+			\subsubsection{Lista ulubionych stacji}
+			Klasa \lstinline|LoaderFav| implementuje ładowanie listy ulubionych stacji. Używana jest do tego lista \lstinline|ListM3U|. Dane zapisane są w pamięci flash znajdującej się na płytce Pi Pico.
+			
+			\paragraph{LittleFS}
+			 	Wykorzystany system plików to LittleFS, specjalnie stworzony do przechowywania danych w środowiskach wbudowanych.
+			
+			\subsubsection{Lista plików}
+			Przy pomocy \lstinline|LoaderLocal| tworzona jest lista lokalnych plików przechowywanych na karcie SD. Klasa implementuje również metody poruszania się po strukturze folderów. Metoda \lstinline|go()| powoduje zejście w dół struktury drzewiastej, natomiast \lstinline|up()| umożliwia przejście poziom wyżej. Komunikacja
+			
+			\paragraph{FatFS}
+				todo
+			
+			\subsubsection{Lista wyników wyszukiwania}
+			Współpraca klienta HTTP, który implementuje interfejs \lstinline|DataSource| z klasą \lstinline|LoaderSearch| umożliwia wyszukanie i załadowanie stacji z Internetu.
 	
 	\pagebreak
 	\begin{thebibliography}{9}
