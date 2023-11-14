@@ -490,6 +490,25 @@
 		
 		Parser rozpoznaje ramki o kodach \lstinline|TPE1|(artysta) i \lstinline|TIT2|(tytuł). Są to ramki tekstowe, dlatego wyszczególniono taki format ramek na rysunku. Pierwszy bajt oznacza jakie kodowanie wykorzystano do zapisania tekstu. Możliwe formaty to ISO-8859-1, UTF-16, UTF-16BE i UTF-8. Wszystkie zostały zaimplementowane i przetestowane.
 	
+	\section{Bufor kołowy}
+	\imgcs{3/PicoRadio-buffer}{Schemat wykorzystania bufora kołowego}{0.8}
+	Małym, lecz kluczowym modułem w projekcie jest bufor kołowy \lstinline|CircularBuffer|. Używany jest on przede wszystkim przy odtwarzaniu dźwięku. Schematyczne wykorzystanie przedstawiono na rysunku~\ref{3/PicoRadio-buffer}. Poniżej zostały opisane najważniejsze jego funkcje.
+	
+	\paragraph{Zapis i odczyt danych przez różne wątki}
+		Dzięki zastosowaniu osobnych liczników do zapisu i odczytu danych, nie występuje problem wyścigu. Każda operacja może być wykonywana niezależnie przez co najwyżej jeden wątek.
+		
+	\paragraph{Funkcje zgłaszające}
+		Moduł umożliwia zarejestrowanie funkcji, które zostaną wywołane po odczytaniu lub zapisaniu danych. Wykorzystywane są np. do potwierdzenia odbioru w komunikacji sieciowej lub do wycięcia metadanych ICY.
+	
+	\paragraph{Sprawdzanie stanu zapełnienia i czekanie}
+		Udostępniony jest szereg funkcji określających stan bufora. Można odczytać pozycje odczytu/zapisu bezpośrednio, lecz poza procesem tworzenia oprogramowania, nie jest to przydatna metryka, ponieważ bufor "zapętla się". Istotniejszą metryką jest natomiast to, ile danych zostało zapisane do bufora a ile odczytane od początku komunikacji. Dzięki tym danym możliwe jest jednoznaczne określenie, ile danych jest gotowych do odczytania w danej chwili, oraz ile jest to procent całkowitej pojemności bufora.
+	
+	\paragraph{Zapętlanie}
+		Najważniejszą funkcją bufora jest jego zapętlanie. Problem pojawił się w chwili implementacji dekodera MP3, ponieważ rozmiar bufora nie dzielił się całkowicie przez długość ramki. To znaczy, ostatnia ramka w buforze była nieciągła. Pierwsza część mogła znaleźć się na końcu bufora, a druga na jego początku. Problem rozwiązano poprzez dołożenie przed początkiem kilku kilobajtów pamięci, do której kopiowane są nieciągłe dane. Wskaźnik odczytu staje się wtedy ujemny. Poszczególne sekcje bufora zostały również pokazane na rysunku~\ref{3/PicoRadio-buffer}. Część normalna \lstinline|buffer| rozpoczyna się zerowym wskaźnikiem odczytu \lstinline|read_at|. Część ukryta \lstinline|buffer_hidden| znajduje się bezpośrednio przed nią.
+	
+	\paragraph{Wycinanie zapisanych danych}
+		Implementacja wycinania stała się konieczna w momencie kiedy w środku niepodzielnej jednostki przy odczycie (np. ramki MP3) pojawiają się metadane jak np. ICY. Trzeba je wtedy przetworzyć i usunąć, zapełniając powstałą lukę danymi występującymi dalej w buforze.
+	
 	\pagebreak
 	\begin{thebibliography}{9}
 		\bibitem{radio-browser}
