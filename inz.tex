@@ -534,36 +534,47 @@
 	\section{Dane}
 		Główną jednostką informacji w projekcie jest stacja radiowa. Na potrzeby unifikacji dostępu do danych o stacjach powstał interfejs \lstinline|DataSource|. Zawiera on dwie metody:
 		\begin{itemize}
-			\item \lstinline|read_char()| -- odczytuje znak
-			\item \lstinline|more_content()| -- zwraca czy w źródle jest więcej danych
+			\item \lstinline|read_char()| -- odczytuje znak,
+			\item \lstinline|more_content()| -- zwraca czy w źródle jest więcej danych.
 		\end{itemize}
 		Nad metodą czytającą znak po znaku zaimplementowana została metoda \lstinline|read_line()| czytająca linia po linii. Obsługuje ona zakończenia linii \lstinline|\n| oraz \lstinline|\r\n|. Wykorzystywana jest ona przez moduł list oraz, aby uniknąć duplikacji kodu, przez klienta HTTP do przetwarzania odpowiedzi.
 		
-		\subsection{Moduł list}
-			Listy wykorzystują źródła danych i implementują wczytywanie różnych formatów.
+		\subsection{Listy}
+			Listy implementują wczytywanie różnych formatów. Przechowują także wskaźniki na bufory danych, które są wspólne dla każdej implementacji. Klasa \lstinline|List| jest klasą nadrzędną. Odczytuje ona źródło danych linia po linii, a następnie przekazuje do funkcji \lstinline|List::consume_format()| której implementacja zawarta jest w podklasach opisanych poniżej. Dokonuje ona właściwej interpretacji formatu.
+			
+			\paragraph{Statyczna alokacja} Wszystkie klasy list są tworzone statycznie i współdzielą pamięć wpisów. Jest to bardzo istotnie w środowisku o ograniczonej pamięci operacyjnej. Zazwyczaj ładowanie jednego typu wyników nie koliduje z pozostałymi, a jeżeli tak się dzieje to resetowany jest stan programu ładującego który przy następnym użyciu musi przeładować dane listy, bo zostały one nadpisane. Z tego też powodu modyfikowanie listy ulubionych odbywa się bezpośrednio w pamięci stałej, bez ładowania całej listy stacji. Statyczna alokacja ma też swoje pozytywne strony, mianowicie przechowywany jest stan list. Po powrocie z wybranej stacji do wyników ładowania (do listy ulubionych lub wyszukiwania) nie ma potrzeby od nowa ładować danych.
 			
 			\subsubsection{Format M3U}
+				Jednym z formatów obsługiwanych przez projekt jest format M3U\textsuperscript{\cite{m3u}} w wersji \textit{Extended}. Format ten został wybrany z uwagi na jego prostotę budowy oraz to, że strony agregujące stacje radiowe go obsługują. Jest to popularny format zapisu list odtwarzania. W wersji standardowej przybiera postać linków do plików/strumieni zapisanych w osobnych liniach pliku tekstowego. Wersja rozszerzona wprowadza specjalne komentarze. Zaimplementowany interpreter obsługuje komentarz \lstinline|EXTINF|, który zawiera czas trwania ścieżki oraz jej nazwę.
+			
 			\subsubsection{Format PLS}
+				Niektóre stacje radiowe przed wysłaniem strumienia audio, wysyłają plik w formacie PLS\textsuperscript{\cite{pls}}. Plik taki zawiera różne warianty tego samego strumienia w celu równoważenia obciążenia. Po wykryciu tego formatu ładowane są pierwsze 2 stacje (konfigurowalne) i wybierana jest losowa z nich. Format składa się z par deklaracji postaci \lstinline|FileX| i \lstinline|TitleX|, gdzie \lstinline|X| to kolejne liczby naturalne.
 			
 		\subsection{Klasy ładujące}
 			Wczytywanie list z konkretnych źródeł danych implementowane jest przez podklasy klasy \lstinline|Loader|. Prezentuje ona spójny interfejs do ładowania danych. Metody \lstinline|load()| oraz \lstinline|load_abort()| umożliwiają zarządzanie tym procesem. Tworzone jest zadanie systemowe, które wykonuje potrzebne kroki bez blokowania interfejsu użytkownika. Funkcje \lstinline|get_entry_count()| oraz \lstinline|get_entry()| pozwalają na pobieranie informacji o wynikach. Klasa obsługuje także paginację wyników. Podklasy mogą definiować własne funkcje \lstinline|begin()|, które pełnią rolę konstruktora obiektu (przekazują niezbędne parametry, ale bez dynamicznej alokacji pamięci). Mogą one wymagać podania ścieżki lub np. słowa kluczowego do wyszukania.
-
-			\paragraph{Statyczna alokacja} Wszystkie klasy ładujące są tworzone statycznie i współdzielą pamięć wpisów. Jest to bardzo istotnie w środowisku o ograniczonej pamięci operacyjnej. Zazwyczaj ładowanie jednego typu wyników nie koliduje z pozostałymi, a jeżeli tak się dzieje to resetowany jest stan programu ładującego który przy następnym użyciu musi przeładować swoje dane, bo zostały one nadpisane. Z tego też powodu modyfikowanie listy ulubionych odbywa się bezpośrednio w pamięci stałej, bez ładowania całej listy stacji. Statyczna alokacja ma też swoje pozytywne strony, mianowicie przechowywany jest stan klas ładujących. Wykorzystuje to np. klasa \lstinline|LoaderLocal| do przechowywania ścieżki w lokalnym systemie plików na karcie SD. Także po powrocie z wybranej stacji do wyników ładowania (do listy ulubionych lub wyszukiwania) nie ma potrzeby od nowa ładować danych.
-			
-			\subsubsection{Lista ulubionych stacji}
-			Klasa \lstinline|LoaderFav| implementuje ładowanie listy ulubionych stacji. Używana jest do tego lista \lstinline|ListM3U|. Dane zapisane są w pamięci flash znajdującej się na płytce Pi Pico.
-			
-			\paragraph{LittleFS}
-			 	Wykorzystany system plików to LittleFS, specjalnie stworzony do przechowywania danych w środowiskach wbudowanych.
-			
-			\subsubsection{Lista plików}
-			Przy pomocy \lstinline|LoaderLocal| tworzona jest lista lokalnych plików przechowywanych na karcie SD. Klasa implementuje również metody poruszania się po strukturze folderów. Metoda \lstinline|go()| powoduje zejście w dół struktury drzewiastej, natomiast \lstinline|up()| umożliwia przejście poziom wyżej. Komunikacja
-			
-			\paragraph{FatFS}
-				todo
 			
 			\subsubsection{Lista wyników wyszukiwania}
-			Współpraca klienta HTTP, który implementuje interfejs \lstinline|DataSource| z klasą \lstinline|LoaderSearch| umożliwia wyszukanie i załadowanie stacji z Internetu.
+				Pierwszą implementacją klasy ładującej była klasa służąca do wczytania wyników wyszukiwania stacji \lstinline|LoaderSearch|. Poprzez metodę \lstinline|begin(query)| przekazywana jest jej fraza do wyszukania. Następnie następuje odwołanie do klienta HTTP, który implementuje interfejs \lstinline|DataSource|. Agregat stacji radiowych zwraca dane wraz z nagłówkiem \lstinline|Content-Type|. Jego wartość determinuje, która lista zostanie użyta do interpretacji. Typ \lstinline|audio/mpegurl| oznacza \lstinline|ListM3U|, natomiast \lstinline|audio/scpls| lub \lstinline|audio/x-scpls| implikuje wykorzystanie \lstinline|ListPLS|. Tak załadowana lista stacji jest dostępna dla reszty systemu poprzez metody klasy nadrzędnej \lstinline|Loader|.
+			
+			\subsubsection{Lista ulubionych stacji}
+				Z uwagi na gotową implementację formatu M3U, zdecydowano się na wykorzystane go do przechowywania listy ulubionych stacji. Prostota formy oznaczała że możliwe będzie dodawanie wpisów w miejscu bez konieczności ładowania całego pliku do pamięci. Kolejną zaletą jest fakt, że pliki \lstinline|.m3u| to pliki tekstowe. Przewidziano możliwość zaimplementowania funkcji eksportowania i importowania listy ulubionych na kartę SD. Użytkownik mógłby modyfikować plik we własnym zakresie dodając stacje niebędące w ogólnodostępnym spisie stacji. Na ten moment nie zostało to zaimplementowane.
+			
+				\paragraph{Pamięć Flash -- LittleFS}
+					Aby lista ulubionych stacji była przechowywana pomiędzy wyłączeniami urządzenia, musiała ona być zapisana w pamięci nieulotnej. Mikrokontroler RP2040 przechowuje program w zewnętrznej pamięci typu \textit{flash}. Na płytkach Pi Pico dostarczone zostały układy o rozmiarach 2MB. Środowisko programistyczne umożliwia, oprócz oczywistej operacji odczytu, także zapis do tej pamięci. Wykorzystano tą właściwość do umieszczenia w końcowych 64KB systemu plików LittleFS\textsuperscript{\cite{littlefs}}, specjalnie stworzonego do przechowywania danych w środowiskach wbudowanych i pamięciach typu \textit{flash}.
+			
+			\subsubsection{Lista plików}
+				Interfejs list i klas ładujących okazał się także przydatny przy ładowaniu listy lokalnych plików z karty SD. Klasa \lstinline|LoaderLocal| implementuje również metody poruszania się po strukturze folderów. Metoda \lstinline|go()| powoduje zejście w dół struktury drzewiastej, natomiast \lstinline|up()| umożliwia przejście poziom wyżej.
+%				\paragraph{Karta SD -- FatFS}
+
+		\subsection{Współpraca klas ze sobą}
+			\imgh{3/PicoRadio-loaders}{Współpraca list z klasami ładującymi i ekranami}{0.8}
+			Na rysunku~\ref{3/PicoRadio-loaders} przedstawiono współpracę poszczególnych klas. Klasy ładujące mogą wykorzystywać listy. Jeżeli to robią, ich źródło danych musi implementować interfejs \lstinline|DataSource|. Tak się dzieje w przypadku \lstinline|LoaderFav|, który ładuje z systemu plików w pamięci flash dane w formacie M3U. Natomiast \lstinline|LoaderSearch|, ładuje dane z Internetu w różnych formatach. Odmienna sytuacja ma miejsce w przypadku klasy \lstinline|LoaderLocal|. Operuje ona bezpośrednio na systemie plików FatFS, który zwraca listę pozycji w nim zawartych jako kolejne łańcuchy znaków. Nie wymagają one żadnej interpretacji, stąd brak wykorzystania jakiejkolwiek listy, która służyłaby do interpretacji danych.
+			
+			\paragraph{Ekrany}
+				Istnieje powiązanie pomiędzy klasami ładującymi a ekranami. Każdej klasie ładującej przyporządkowany jest ekran, który wyświetla dane pozycje. Zawiera on w sobie referencję klasy ładującej. Przekazuje ją swojej klasie nadrzędnej jako wskaźnik do klasy ogólnej \lstinline|Loader|. Tym sposobem, każdy z ekranów może ustalać szczegółowe parametry ładowania, a ekran nadrzędny implementuje ogólne funkcje związane z wyświetlaniem załadowanych pozycji na ekranie.
+	
+	\section{Ekran}
+			
 	
 	\pagebreak
 	\begin{thebibliography}{9}
@@ -625,6 +636,11 @@
 		\href{https://gist.github.com/niko/2a1d7b2d109ebe7f7ca2f860c3505ef0#file-icy_meta-md}{\textit{ICY} -- protokół przesyłania metadanych}
 		\bibitem{id3_spec_mutagen}
 		\href{https://mutagen-specs.readthedocs.io/en/latest/id3/id3v2.4.0-structure.html}{\textit{ID3v2.4.0} -- protokół zapisu metadanych w plikach MP3}
+		
+		\bibitem{m3u}
+		\href{https://en.wikipedia.org/wiki/M3U}{\textit{M3U} -- format zapisu playlist}
+		\bibitem{pls}
+		\href{https://en.wikipedia.org/wiki/PLS_(file_format)}{\textit{PLS} -- format zapisu playlist}
 		
 	\end{thebibliography}
 	
