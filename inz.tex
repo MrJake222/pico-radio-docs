@@ -574,6 +574,64 @@
 				Istnieje powiązanie pomiędzy klasami ładującymi a ekranami. Każdej klasie ładującej przyporządkowany jest ekran, który wyświetla dane pozycje. Zawiera on w sobie referencję klasy ładującej. Przekazuje ją swojej klasie nadrzędnej jako wskaźnik do klasy ogólnej \lstinline|Loader|. Tym sposobem, każdy z ekranów może ustalać szczegółowe parametry ładowania, a ekran nadrzędny implementuje ogólne funkcje związane z wyświetlaniem załadowanych pozycji na ekranie.
 	
 	\section{Ekran}
+		Z uwagi na założenie miniaturyzacji urządzenia wybrany został relatywnie mały ekran. Urządzenie firmy Adafruit o przekątnej 1.8 cala obsługiwane jest poprzez protokół SPI. Moduł wyświetlacza został podzielony na następujące podmoduły:
+		\begin{itemize}
+			\item \lstinline|tft| -- niskopoziomowa obsługa komunikacji i rysowania,
+			\item \lstinline|assets| -- zasoby do wyświetlania ikon i czcionek,
+			\item \lstinline|screens| -- ekrany użytkownika.
+		\end{itemize}
+		
+		\subsection{Komunikacja niskopoziomowa}
+			Kod niskopoziomowej komunikacji ze sterownikiem ekranu zawiera folder \lstinline|display/tft|. Inicjalizacja zapożyczona została z biblioteki firmy Adafruit. W pliku \lstinline|st7735_init.h| znajdują się definicje komend oraz listy poleceń potrzebne do uruchomienia wyświetlacza. Klasa \lstinline|ST7735S| zawiera metody \lstinline|reset()|, \lstinline|write_command_list()| oraz \lstinline|module_init()|, które odpowiadają za ustawienie poprawnych parametrów pracy urządzenia. Wszystkie wymagane operacje, włącznie z konfiguracją pinów mikrokontrolera, zawiera metoda \lstinline|ST7735S::init()|.
+			
+		\paragraph{Kolory}
+			Do każdej funkcji przekazywany jest kolor w formacie 24 bitowego RGB, tj. po 8 bitów na kolor, w postaci jednej liczby. Kolor ten jest automatycznie mapowany na wewnętrzną 16 bitową reprezentację obsługiwaną przez sterownik. Podział na składowe RGB w tej postaci to:
+			\begin{itemize}
+				\item 5 bitów -- kolor czerwony (najstarsze),
+				\item 6 bitów -- kolor zielony,
+				\item 5 bitów -- kolor niebieski.
+			\end{itemize}
+		
+		\imgh{3/PicoRadio-screen-xy}{Układ współrzędnych na ekranie}{0.45}
+		\paragraph{Współrzędne}
+			Na rysunku~\ref{3/PicoRadio-screen-xy} przedstawiono sposób, w jaki na ekranie reprezentowane są współrzędne. Na magistralę szeregową dane wysyłane są linia po linii.
+		
+		\subsection{Rysowanie}
+			Klasa \lstinline|ST7735S| oprócz funkcji do obsługi niskopoziomowej komunikacji wspiera także rysowanie prostokątów, czcionek i ikon.
+			
+			\subsubsection{Prostokąty}
+				\imgh{3/PicoRadio-screen-rect}{Współrzędne prostokąta na ekranie}{0.6}
+				Prostokąty rysowane są poprzez funkcję \lstinline|fill_rect(x, y, w, h, bg)|, gdzie:
+				\begin{itemize}
+					\item \lstinline|x| -- współrzędna kolumny ,
+					\item \lstinline|y| -- współrzędna wiersza,
+					\item \lstinline|w| -- szerokość,
+					\item \lstinline|h| -- wysokość,
+					\item \lstinline|bg| -- kolor tła (24 bitowe RGB).
+				\end{itemize}
+			
+			\subsubsection{Czcionki}
+				Każda czcionka składa się z dwóch tablic \lstinline|ascii_data_H| i \lstinline|utf8_data_H|, gdzie \lstinline|H| to rozmiar czcionki, tj. wysokość w pikselach (szerokość jest połową wysokości). Zostały one opisane strukturą \lstinline|font| w pliku \lstinline|assets/font.hpp|.
+				
+				\paragraph{Mapowanie}
+					Pierwsza tablica zawiera znaki od spacji (kod \lstinline|0x20| ASCII) do tyldy (kod \lstinline|0x7E|). Druga z tablic zapewnia wyświetlanie znaków Unicode. Mapowanie jest tu arbitralne zapewnione funkcją sprawdzającą wartości 2-3 kolejnych bajtów danych. Zawiera ona obecnie 18 polskich znaków (wariant duży i mały) jak również symbol nieskończoności. Istnieje możliwość dodawania dowolnej liczby nowych znaków.
+				
+				\imgh{3/PicoRadio-screen-font}{Kodowanie czcionek (wartości 0x00 zastąpiono pustymi znakami)}{0.8}
+				\paragraph{Kodowanie}
+					Czcionki kodowane są jako bitmapy. Każda z tablic zawiera tyle elementów, ile jest pikseli we wszystkich znakach czcionki w tej tablicy. Każda wartość to jasność piksela (255 -- kolor pierwszoplanowy, 0 -- kolor tła). Dla przykładu czcionka podstawowa ASCII zawierająca 95 znaków o wymiarach 24x12 pikseli będzie miała rozmiar 27360 bajtów. Dodając 19 znaków Unicode otrzymujemy 32832 bajtów. Kodowanie znaku \lstinline|A| z tej czcionki przedstawia rysunek~\ref{3/PicoRadio-screen-font}.
+				
+				$ $\\
+				W projekcie została wykorzystana czcionka Ubuntu\textsuperscript{\cite{ubuntu_font}} w wersji Mono (stała szerokość każdego znaku). Stworzony skrypt w języku Python wygenerował potrzebne bitmapy do projektu. Dostępne rozmiary czcionki to 12 (rozmiar ok. 8kB), 16 (ok. 14kB) i 24 (ok. 32kB). Razem stanowi to 54kB, czyli 2.65\% pamięci ROM. Czcionka została zapisana w pliku \lstinline|assets/ubuntu_mono.cpp| a także utworzono funkcję dostępową \lstinline|ubuntu_font_get_size()|. 
+				
+			\subsubsection{Ikony}
+				Ikony kodowane są w podobny sposób do czcionek. Różnią się tym, że każda ikona może mieć inny rozmiar i jest kodowana swoją własną tablicą. W projekcie znalazły się m.in. ikony:
+				\begin{itemize}
+					\item \lstinline|icon_backspace| -- 15x15, ikona usuwania tekstu,
+					\item \lstinline|icon_back| -- 11x11, ikona wstecz,
+					\item \lstinline|icon_fav_back| -- 15x16, ikona powrotu do listy ulubionych.
+				\end{itemize}
+		
+		\subsection{Menedżer ekranów}
 			
 	
 	\pagebreak
@@ -641,6 +699,9 @@
 		\href{https://en.wikipedia.org/wiki/M3U}{\textit{M3U} -- format zapisu playlist}
 		\bibitem{pls}
 		\href{https://en.wikipedia.org/wiki/PLS_(file_format)}{\textit{PLS} -- format zapisu playlist}
+		
+		\bibitem{ubuntu_font}
+		\href{https://design.ubuntu.com/font}{\textit{Ubuntu font} -- czcionka wykorzystana do wyświetlania znaków}
 		
 	\end{thebibliography}
 	
