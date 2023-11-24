@@ -344,7 +344,7 @@
 %	TODO opisać tutaj co robi player.cpp (zmienna dec, funkcje publcizne)
 	
 	\subsection{Komunikacja z przetwornikiem}
-	W programie zadeklarowany został bufor nieskompresowanego dźwięku PCM \lstinline|audio_pcm|. Ma on konfigurowalny rozmiar wyrażony w jednostkach 32-bitowych (2 kanały * 16-bitowa próbka). Przekazywany jest on do systemu DMA.
+	W programie utworzony został bufor nieskompresowanego dźwięku PCM \lstinline|audio_pcm|. Ma on konfigurowalny rozmiar wyrażony w jednostkach 32-bitowych (2 kanały * 16-bitowa próbka). Przekazywany jest on do systemu DMA.
 	
 	\subsubsection{PIO}
 		\imgcs{3/pio_block}{Pojedynczy blok PIO (dokumentacja RP2040\textsuperscript{\cite{pico_pdf}}, strona 309)}{0.7}
@@ -574,7 +574,11 @@
 				Istnieje powiązanie pomiędzy klasami ładującymi a ekranami. Każdej klasie ładującej przyporządkowany jest ekran, który wyświetla dane pozycje. Zawiera on w sobie referencję klasy ładującej. Przekazuje ją swojej klasie nadrzędnej jako wskaźnik do klasy ogólnej \lstinline|Loader|. Tym sposobem, każdy z ekranów może ustalać szczegółowe parametry ładowania, a ekran nadrzędny implementuje ogólne funkcje związane z wyświetlaniem załadowanych pozycji na ekranie.
 	
 	\section{Ekran}
-		Z uwagi na założenie miniaturyzacji urządzenia wybrany został relatywnie mały ekran. Urządzenie firmy Adafruit o przekątnej 1.8 cala obsługiwane jest poprzez protokół SPI. Moduł wyświetlacza został podzielony na następujące podmoduły:
+		Z uwagi na założenie miniaturyzacji urządzenia wybrany został relatywnie mały ekran. Urządzenie firmy Adafruit zawiera wyświetlacz ciekłokrystaliczny (\textit{LCD}) o przekątnej 1.8 cala oraz sterownik ST7735S obsługiwany poprzez protokół SPI. Na ekranie znajdowała się folia z zieloną zakładką. Jest to istotne ponieważ na rynku występują także wersje oznaczone kolorem czerwonym, posiadające inne opcje programowania.
+		$ $\\
+		
+		\noindent
+		Moduł wyświetlacza został podzielony na następujące podmoduły:
 		\begin{itemize}
 			\item \lstinline|tft| -- niskopoziomowa obsługa komunikacji i rysowania,
 			\item \lstinline|assets| -- zasoby do wyświetlania ikon i czcionek,
@@ -597,7 +601,7 @@
 			Na rysunku~\ref{3/PicoRadio-screen-xy} przedstawiono sposób, w jaki na ekranie reprezentowane są współrzędne. Na magistralę szeregową dane wysyłane są linia po linii.
 		
 		\subsection{Rysowanie}
-			Klasa \lstinline|ST7735S| oprócz funkcji do obsługi niskopoziomowej komunikacji wspiera także rysowanie prostokątów, czcionek i ikon.
+			Aby przesłać kolory dla wybranych pikseli na ekranie, należy ustawić odpowiednie zmienne wskaźnikowe wewnątrz sterownika wyświetlacza. Funkcja \lstinline|ST7735S::setup_write()| pozwala na ich ustawienie i przekazanie początkowych oraz końcowych wartości współrzędnych. Dzięki temu na ekranie tworzony jest prostokąt dla którego należy przesłać zaktualizowane wartości pikseli w formacie podanym powyżej. Jednak oprócz funkcji do obsługi niskopoziomowej komunikacji klasa \lstinline|ST7735S|  wspiera także rysowanie prostokątów, czcionek i ikon.
 			
 			\subsubsection{Prostokąty}
 				\imgh{3/PicoRadio-screen-rect}{Współrzędne prostokąta na ekranie}{0.6}
@@ -616,7 +620,7 @@
 				\paragraph{Mapowanie}
 					Pierwsza tablica zawiera znaki od spacji (kod \lstinline|0x20| ASCII) do tyldy (kod \lstinline|0x7E|). Druga z tablic zapewnia wyświetlanie znaków Unicode. Mapowanie jest tu arbitralne zapewnione funkcją sprawdzającą wartości 2-3 kolejnych bajtów danych. Zawiera ona obecnie 18 polskich znaków (wariant duży i mały) jak również symbol nieskończoności. Istnieje możliwość dodawania dowolnej liczby nowych znaków.
 				
-				\imgh{3/PicoRadio-screen-font}{Kodowanie czcionek (wartości 0x00 zastąpiono pustymi znakami)}{0.8}
+				\imgh{3/PicoRadio-screen-font}{Kodowanie czcionek (wartości 0x00 zastąpiono pustymi znakami)}{0.6}
 				\paragraph{Kodowanie}
 					Czcionki kodowane są jako bitmapy. Każda z tablic zawiera tyle elementów, ile jest pikseli we wszystkich znakach czcionki w tej tablicy. Każda wartość to jasność piksela (255 -- kolor pierwszoplanowy, 0 -- kolor tła). Dla przykładu czcionka podstawowa ASCII zawierająca 95 znaków o wymiarach 24x12 pikseli będzie miała rozmiar 27360 bajtów. Dodając 19 znaków Unicode otrzymujemy 32832 bajtów. Kodowanie znaku \lstinline|A| z tej czcionki przedstawia rysunek~\ref{3/PicoRadio-screen-font}.
 				
@@ -632,7 +636,16 @@
 				\end{itemize}
 		
 		\subsection{Menedżer ekranów}
+			Ekranami użytkownika zarządza plik \lstinline|screenmng.cpp|. Tworzy on szereg konstrukcji wymaganych do poprawnego obsłużenia interfejsu użytkownika. Poniżej zostały opisane wybrane z nich.
 			
+			\paragraph{Semafory}
+				Aby zabezpieczyć dostęp do medium szeregowego, utworzony został semafor binarny \lstinline|mutex_display|. Zapewnia on ciągłość operacji przesyłu danych. Musi ona wystąpić ponieważ w sterowniku został wybrany prostokąt, którego kolory będą aktualizowane. Dodatkowo powstał \lstinline|mutex_ticker|, który zabezpiecza funkcję aktualizacji ekranów. Zadanie \lstinline|screen_tick_task()| jest wywoływane co 50ms i aktualizuje np. położenie ruchomych tekstów na ekranie.
+				
+			\paragraph{Instancje klas}
+				W pliku zdefiniowano także instancje najważniejszych klas. Zdefiniowana jest instancja klasy \lstinline|ST7735S| oraz klas ładujących \lstinline|LoaderSearch|, \lstinline|LoaderFav| i \lstinline|LoaderLocal|. Statyczna definicja pozwala na analizę zużycia pamięci w trakcie kompilacji programu oraz chroni przed niedeterministyczną operacją rezerwowania pamięci w czasie działania programu.
+				
+			\paragraph{Obsługa ekranów użytkownika}
+				Poszczególne ekrany użytkowników także zostały tutaj zainstancjonowane. Plik nagłówkowy \lstinline|screenmng.hpp| eksportuje te definicje, aby ekrany mogły ustawiać parametry innych ekranów, które otwierają. Znalazły się tutaj także funkcje do zmiany aktualnie wyświetlanego ekranu. Domyślnie zmiana ta odbywa się poprzez funkcję \lstinline|screenmng_input()|, do której przekazywane są naciśnięcia przycisków. Klasa bazowa wszystkich ekranów zawiera metodę \lstinline|Screen::input()|, która może zwrócić wskaźnik do ekranu, który ma zostać otworzony jako następny. Jest ona wywoływana przez funkcję zarządcy i jeżeli zwróci niezerowy wskaźnik to otwierany jest nowy ekran. Jednak w trakcie rozwoju oprogramowania, konieczne stało się zdefiniowanie funkcji \lstinline|screenmng_open()|, która może arbitralnie zmieniać otwarty ekran. Jest to używane np. przy zakończeniu odtwarzania. Wskaźnik \lstinline|current_screen| ustawiany jest zawsze na aktualnie otwarty ekran. Jest to użyteczne przy funkcji aktualizacji ekranu.
 	
 	\pagebreak
 	\begin{thebibliography}{9}
