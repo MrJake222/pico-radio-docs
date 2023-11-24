@@ -639,7 +639,7 @@
 			Ekranami użytkownika zarządza plik \lstinline|screenmng.cpp|. Tworzy on szereg konstrukcji wymaganych do poprawnego obsłużenia interfejsu użytkownika. Poniżej zostały opisane wybrane z nich.
 			
 			\paragraph{Semafory}
-				Aby zabezpieczyć dostęp do medium szeregowego, utworzony został semafor binarny \lstinline|mutex_display|. Zapewnia on ciągłość operacji przesyłu danych. Musi ona wystąpić ponieważ w sterowniku został wybrany prostokąt, którego kolory będą aktualizowane. Dodatkowo powstał \lstinline|mutex_ticker|, który zabezpiecza funkcję aktualizacji ekranów. Zadanie \lstinline|screen_tick_task()| jest wywoływane co 50ms i aktualizuje np. położenie ruchomych tekstów na ekranie.
+				Aby zabezpieczyć dostęp do medium szeregowego, utworzony został semafor binarny \lstinline|mutex_display|. Zapewnia on ciągłość operacji przesyłu danych. Musi ona wystąpić ponieważ w sterowniku został wybrany prostokąt, którego kolory będą aktualizowane. Dodatkowo powstał \lstinline|mutex_ticker|, który zabezpiecza funkcję aktualizacji ekranów. Zadanie \lstinline|scr tick| jest wywoływane co 50ms i aktualizuje np. położenie ruchomych tekstów na ekranie.
 				
 			\paragraph{Instancje klas}
 				W pliku zdefiniowano także instancje najważniejszych klas. Zdefiniowana jest instancja klasy \lstinline|ST7735S| oraz klas ładujących \lstinline|LoaderSearch|, \lstinline|LoaderFav| i \lstinline|LoaderLocal|. Statyczna definicja pozwala na analizę zużycia pamięci w trakcie kompilacji programu oraz chroni przed niedeterministyczną operacją rezerwowania pamięci w czasie działania programu.
@@ -647,6 +647,36 @@
 			\paragraph{Obsługa ekranów użytkownika}
 				Poszczególne ekrany użytkowników także zostały tutaj zainstancjonowane. Plik nagłówkowy \lstinline|screenmng.hpp| eksportuje te definicje, aby ekrany mogły ustawiać parametry innych ekranów, które otwierają. Znalazły się tutaj także funkcje do zmiany aktualnie wyświetlanego ekranu. Domyślnie zmiana ta odbywa się poprzez funkcję \lstinline|screenmng_input()|, do której przekazywane są naciśnięcia przycisków. Klasa bazowa wszystkich ekranów zawiera metodę \lstinline|Screen::input()|, która może zwrócić wskaźnik do ekranu, który ma zostać otworzony jako następny. Jest ona wywoływana przez funkcję zarządcy i jeżeli zwróci niezerowy wskaźnik to otwierany jest nowy ekran. Jednak w trakcie rozwoju oprogramowania, konieczne stało się zdefiniowanie funkcji \lstinline|screenmng_open()|, która może arbitralnie zmieniać otwarty ekran. Jest to używane np. przy zakończeniu odtwarzania. Wskaźnik \lstinline|current_screen| ustawiany jest zawsze na aktualnie otwarty ekran. Jest to użyteczne przy funkcji aktualizacji ekranu.
 	
+	\section{Wejście}
+		\noindent
+		Zawartość modułu znajduje się w 3 katalogach:
+		\begin{itemize}
+			\item \lstinline|buttons| -- Przyciski, interakcja z użytkownikiem,
+			\item \lstinline|sd| -- Wykrywanie karty SD,
+			\item \lstinline|analog| -- Odczyt poziomu naładowania baterii.
+		\end{itemize}
+		
+		Katalogi te zawierają po 2 pliki (nagłówkowy i kod źródłowy) realizujące funkcje opisane poniżej.
+		
+		\subsection{Interakcje użytkownika}
+			Dane od użytkownika pobierane są za pomocą przycisków. Każdy z nich dołączony jest bezpośrednio do mikrokontrolera. Naciśnięcie lub zwolnienie przycisku powoduje wywołanie zbocza opadającego lub, odpowiednio, rosnącego. Wykryte przez układ, aktywują one przerwanie. Eliminacja drgań styków została osiągnięta poprzez zastosowanie zewnętrznych kondensatorów i wbudowanych przerzutników Schmitta dostępnych na każdym wejściu RP2040. Przerwanie, zgodnie z dobrymi praktykami, ustawia jedynie odpowiednie flagi, które zostały opisane poniżej.
+			
+			\paragraph{Przekazywanie danych}
+				Podsystem przycisków opiera się o dwie tablice zawierające odpowiednie dane dla każdego przycisku z osobna. Pierwsza z nich, o nazwie \lstinline|b_pressed[]|, zawiera wartości logiczne. Mówią one o tym czy przycisk jest w danej chwili wciśnięty czy nie. Druga, \lstinline|b_pressed_time_us[]|, zawiera informację, w której mikrosekundzie nastąpiło wciśnięcie przycisku. Używa ona wbudowanej funkcji \lstinline|time_us_32()| do pobierania czasu.
+			
+			\imgh{3/PicoRadio-buttons}{Maszyna stanów w module przycisków}{0.8}
+			
+			Przerwanie, oprócz ustawienia odpowiednich wartości w tablicach, wybudza zadanie \lstinline|input handle|. Zawiera ono maszynę stanów, która umożliwia, oprócz podstawowego przekazywania zdarzeń do interfejsu, powtarzanie naciśnięć, tak jak robią to klawiatury komputerowe. Dodatkowo zawarto w niej także obsługę wygaszania ekranu. Na rysunku~\ref{3/PicoRadio-buttons} przedstawiono jej funkcjonowanie.
+			
+			\paragraph{Zmienna \lstinline|timeout|}
+				Czas oczekiwania na ponowne uruchomienie maszyny jest tym mniejszy im częściej dane zdarzenie może wystąpić. To znaczy, gdy żaden z przycisków nie jest naciśnięty, a ekran wygaszony, maszyna oczekuje w nieskończoność na sygnał z przerwania. Gdy ekran nie jest wygaszony, zadanie czeka co najwyżej 30~s. Po tym czasie następuje sprawdzenie warunków do wygaszenia, np. czy odtwarzanie jest uruchomione (pominięte na rysunku). Gdy są one spełnione, ekran zostaje wygaszony. Rozpoczęcie powtarzania następuje po 500~ms ciągłego naciskania. Kiedy użytkownik kliknął i przytrzymuje przycisk, zadanie czeka maksymalnie 500~ms, ponieważ po takim czasie nastąpi akcja wymagająca obsłużenia (wygenerowanie powtórzonego kliknięcia). Gdy przycisk dalej jest trzymany opóźnienie spada do 1/26~sekundy, ponieważ, gdy powtarzane jest naciśnięcie któregokolwiek przycisku, należy skrócić cykl wywoływania maszyny aby osiągnąć zadaną liczbę 26~powtórzeń na sekundę. Wszystkie czasy są konfigurowalne w momencie kompilacji programu.
+		
+		\subsection{Karta SD}
+			Pin \textit{Card Detect} slotu na karty SD również został bezpośrednio podłączony do mikrokontrolera i działa zgodnie z tymi samymi zasadami co piny przycisków. Jednak obsługa wykrywania karty jest znacznie prostsza. Zadanie \lstinline|sd| wykrywa zmianę stanu na odpowiednim pinie i montuje lub odmontowuje kartę SD z wykorzystaniem biblioteki FatFS.
+			
+		\subsection{Bateria}
+			Poziom baterii jest wykrywany poprzez użycie jednego z analogowych wejść procesora. Na wejściu zastosowano dzielnik napięcia, współczynnik podziału wynosi 2. Dzięki niemu maksymalne napięcie ogniwa 4.2V równa się 2.1V, co mieści się w zakresie pomiarowym mikrokontrolera (0V - 3.3V). W pliku \lstinline|analog.cpp| zaimplementowano funkcję \lstinline|battery_voltage()|, która zwraca napięcie ogniwa po wszystkich niezbędnych przekształceniach. Dodatkowo, kod zawiera aproksymację poziomu baterii w procentach. Funkcja \lstinline|battery_percentage()| zwraca liczbę z zakresu 0 - 100, która oznacza poziom naładowania ogniwa. Na podstawie wyniku tej funkcji rysowana jest ikona baterii w górnym pasku ikon statusowych. Ma ona kolor zielony i jest w pełni naładowana gdy bateria posiada 60\% lub więcej energii, 20\% i więcej to kolor żółty, natomiast poniżej 20\% ma ona kolor czerwony.
+		
 	\pagebreak
 	\begin{thebibliography}{9}
 		\bibitem{radio-browser}
