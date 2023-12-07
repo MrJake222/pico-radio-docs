@@ -540,7 +540,7 @@
 		Nad metodą czytającą znak po znaku zaimplementowana została metoda \lstinline|read_line()| czytająca linia po linii. Obsługuje ona zakończenia linii \lstinline|\n| oraz \lstinline|\r\n|. Wykorzystywana jest ona przez moduł list oraz, aby uniknąć duplikacji kodu, przez klienta HTTP do przetwarzania odpowiedzi.
 		
 		\subsection{Listy}
-			Listy implementują wczytywanie różnych formatów. Przechowują także wskaźniki na bufory danych, które są wspólne dla każdej implementacji. Klasa \lstinline|List| jest klasą nadrzędną. Odczytuje ona źródło danych linia po linii, a następnie przekazuje do funkcji \lstinline|List::consume_format()| której implementacja zawarta jest w podklasach opisanych poniżej. Dokonuje ona właściwej interpretacji formatu.
+			Listy implementują wczytywanie różnych formatów. Przechowują także wskaźniki na bufory danych, które są wspólne dla każdej implementacji. Klasa \lstinline|List| jest klasą nadrzędną. Odczytuje ona źródło danych linia po linii, a następnie przekazuje do funkcji \lstinline|List::consume_line_format()| której implementacja zawarta jest w podklasach opisanych poniżej. Dokonuje ona właściwej interpretacji formatu.
 			
 			\paragraph{Statyczna alokacja} Wszystkie klasy list są tworzone statycznie i współdzielą pamięć wpisów. Jest to bardzo istotnie w środowisku o ograniczonej pamięci operacyjnej. Zazwyczaj ładowanie jednego typu wyników nie koliduje z pozostałymi, a jeżeli tak się dzieje to resetowany jest stan programu ładującego który przy następnym użyciu musi przeładować dane listy, bo zostały one nadpisane. Z tego też powodu modyfikowanie listy ulubionych odbywa się bezpośrednio w pamięci stałej, bez ładowania całej listy stacji. Statyczna alokacja ma też swoje pozytywne strony, mianowicie przechowywany jest stan list. Po powrocie z wybranej stacji do wyników ładowania (do listy ulubionych lub wyszukiwania) nie ma potrzeby od nowa ładować danych.
 			
@@ -549,6 +549,8 @@
 			
 			\subsubsection{Format PLS}
 				Niektóre stacje radiowe przed wysłaniem strumienia audio, wysyłają plik w formacie PLS\textsuperscript{\cite{pls}}. Plik taki zawiera różne warianty tego samego strumienia w celu równoważenia obciążenia. Po wykryciu tego formatu ładowane są pierwsze 2 stacje (konfigurowalne) i wybierana jest losowa z nich. Format składa się z par deklaracji postaci \lstinline|FileX| i \lstinline|TitleX|, gdzie \lstinline|X| to kolejne liczby naturalne.
+			
+		% TODO \subsection{Wpis na liście}
 			
 		\subsection{Klasy ładujące}
 			Wczytywanie list z konkretnych źródeł danych implementowane jest przez podklasy klasy \lstinline|Loader|. Prezentuje ona spójny interfejs do ładowania danych. Metody \lstinline|load()| oraz \lstinline|load_abort()| umożliwiają zarządzanie tym procesem. Tworzone jest zadanie systemowe, które wykonuje potrzebne kroki bez blokowania interfejsu użytkownika. Funkcje \lstinline|get_entry_count()| oraz \lstinline|get_entry()| pozwalają na pobieranie informacji o wynikach. Klasa obsługuje także paginację wyników. Podklasy mogą definiować własne funkcje \lstinline|begin()|, które pełnią rolę konstruktora obiektu (przekazują niezbędne parametry, ale bez dynamicznej alokacji pamięci). Mogą one wymagać podania ścieżki lub np. słowa kluczowego do wyszukania.
@@ -559,12 +561,12 @@
 			\subsubsection{Lista ulubionych stacji}
 				Z uwagi na gotową implementację formatu M3U, zdecydowano się na wykorzystane go do przechowywania listy ulubionych stacji. Prostota formy oznaczała że możliwe będzie dodawanie wpisów w miejscu bez konieczności ładowania całego pliku do pamięci. Kolejną zaletą jest fakt, że pliki \lstinline|.m3u| to pliki tekstowe. Przewidziano możliwość zaimplementowania funkcji eksportowania i importowania listy ulubionych na kartę SD. Użytkownik mógłby modyfikować plik we własnym zakresie dodając stacje niebędące w ogólnodostępnym spisie stacji. Na ten moment nie zostało to zaimplementowane.
 			
-				\paragraph{Pamięć Flash -- LittleFS}
-					Aby lista ulubionych stacji była przechowywana pomiędzy wyłączeniami urządzenia, musiała ona być zapisana w pamięci nieulotnej. Mikrokontroler RP2040 przechowuje program w zewnętrznej pamięci typu \textit{flash}. Na płytkach Pi Pico dostarczone zostały układy o rozmiarach 2MB. Środowisko programistyczne umożliwia, oprócz oczywistej operacji odczytu, także zapis do tej pamięci. Wykorzystano tą właściwość do umieszczenia w końcowych 64KB systemu plików LittleFS\textsuperscript{\cite{littlefs}}, specjalnie stworzonego do przechowywania danych w środowiskach wbudowanych i pamięciach typu \textit{flash}.
-			
 			\subsubsection{Lista plików}
 				Interfejs list i klas ładujących okazał się także przydatny przy ładowaniu listy lokalnych plików z karty SD. Klasa \lstinline|LoaderLocal| implementuje również metody poruszania się po strukturze folderów. Metoda \lstinline|go()| powoduje zejście w dół struktury drzewiastej, natomiast \lstinline|up()| umożliwia przejście poziom wyżej.
 %				\paragraph{Karta SD -- FatFS}
+
+		\subsection{Pamięć Flash -- LittleFS}
+			Aby lista ulubionych stacji czy lista zapisanych sieci Wi-Fi były przechowywane pomiędzy wyłączeniami urządzenia, musiały one być zapisane w pamięci nieulotnej. Mikrokontroler RP2040 przechowuje program w zewnętrznej pamięci typu \textit{flash}. Na płytkach Pi Pico dostarczone zostały układy o rozmiarach 2MB. Środowisko programistyczne umożliwia, oprócz oczywistej operacji odczytu, także zapis do tej pamięci. Wykorzystano tą właściwość do umieszczenia w końcowych 64KB systemu plików LittleFS\textsuperscript{\cite{littlefs}}, specjalnie stworzonego do przechowywania danych w środowiskach wbudowanych i pamięciach typu \textit{flash}.
 
 		\subsection{Współpraca klas ze sobą}
 			\imgh{3/PicoRadio-loaders}{Współpraca list z klasami ładującymi i ekranami}{0.8}
