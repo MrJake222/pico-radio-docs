@@ -107,6 +107,13 @@
 	backgroundcolor=\color{lbcolor}
 }
 
+\lstdefinestyle{scad}{
+	basicstyle={\ttfamily \footnotesize},
+	morekeywords={module, color, for, translate},
+	numbers=left,
+	backgroundcolor=\color{lbcolor}
+}
+
 \begin{document}
 	\lstset{inputencoding=utf8, basicstyle=\ttfamily}
 	
@@ -371,7 +378,9 @@
 		
 		Dokumentacja protokołu \isqs{} została zaczerpnięta z dokumentacji układu TDA1543. Przedstawia ją rysunek \ref{3/pio_i2s_docs}. Jak widać zmiana kanału (kodowanego poziomem linii \lstinline|WS|)  musi nastąpić przed wysłaniem ostatniego bitu poprzedniego kanału (\lstinline|LSB|, czyli \textit{Least Significant Bit}, najmniej znaczący bit kanału lewego). Z tego powodu program wydłużył się do 8 instrukcji. Niektóre układy obsługują protokół \textit{left-just}, który nie posiada tego ograniczenia, jednak z uwagi na niewystarczającą dokumentacje i małe wsparcie przez układy, wybrany został klasyczny \isqs{}.
 		
-		\begin{minipage}{\linewidth}
+		\noindent
+		\hspace{0.1\linewidth}
+		\begin{minipage}{0.8\linewidth}
 			\lstinputlisting[style=pio, caption={Kod programu \isqs{}}, label={3/pio_listing}]{lst/3/i2s.pio}
 		\end{minipage}
 		
@@ -740,7 +749,7 @@
 			Gdy urządzenie zostanie uruchomione, użytkownik oczekuje że samo odnajdzie ono najlepszą do połączenia sieć. Zachowanie takie implementuje funkcja \lstinline|connect_best_saved()|. Wykorzystuje ona funkcje \lstinline|scan()| i \lstinline|read()| żeby pojedynczo wczytywać sieci, poczynając od tej o najwyższej sile sygnału. Gdy sieć istnieje w zapisanych sieciach, inicjowane jest połączenie. W przeciwnym wypadku ładowana jest następna sieć i tak aż do skutku, albo do wyczerpania się przeskanowanych sieci.
 		
 	\section{Sprzęt}
-		Radio jest kompletnym projektem, gotowym do odtwarzania bez zewnętrznego wzmacniacza czy głośników. Zadbano także o zasilanie akumulatorowe.
+		Radio jest kompletnym projektem, gotowym do odtwarzania bez zewnętrznego wzmacniacza czy głośników. Zadbano także o zasilanie akumulatorowe. Projekt schematu i płytki PCB powstały w programie KiCAD\textsuperscript{\cite{hw_kicad}}, natomiast obudowa została zaprojektowana w programie OpenSCAD\textsuperscript{\cite{hw_openscad}}.
 	
 		\subsection{Schemat}
 			\imgh{3/hw_kicad_sch}{Schemat elektryczny radia}{1}
@@ -748,26 +757,37 @@
 			Schemat całości systemu został pokazany na rysunku~\ref{3/hw_kicad_sch}. Podzielony został na 6 funkcjonalnych bloków, które zostały opisane poniżej.
 			
 			\subsubsection{Sekcja zasilania}
-				Urządzenie posiada własne zasilanie oparte o dwa ogniwa litowo-jonowe o sumarycznej pojemności 4Ah i znamionowym napięciu 3.6V. Na schemacie ogniwa zaznaczono wspólnym symbolem \lstinline|BT1|. W roli układu ładowania i zabezpieczeń został wykorzystany gotowy moduł z układem TP4056 (\lstinline|B3|). Dzięki niemu, produkt nie wymaga dodatkowej ładowarki. Wyprowadzone zostało złącze USB~C, użytkownik może użyć każdej ładowarki o prądzie minimalnym 1A.
-				
-				Istotnym zadaniem sekcji zasilającej jest przełączanie źródła zasilania. Gdy ogniwa są ładowane, z terminali \lstinline|B+|, \lstinline|B-| oraz \lstinline|OUT+|, \lstinline|OUT-| pozostałe moduły nie mogą pobierać prądu. Może to spowodować przeładowanie ogniw. Tranzystor PMOS \lstinline|Q1|, dioda Schottkiego \lstinline|D1| oraz rezystor \lstinline|R5| tworzą układ\textsuperscript{\cite{hw_load_sw}}, który w trakcie ładowania przełącza  wyjście \lstinline|PWR| z zasilania bateryjnego \lstinline|OUT+| na zasilanie bezpośrednio z portu USB (\lstinline|IN+|).
-				
-				Dalej przetwornica wytwarza napięcie 5V do zasilenia portu USB, który w kolejnych wersjach projektu może posłużyć do podłączenia zewnętrznego modemu sieci komórkowej Obecnie nie jest ona używana. Na końcu zastosowane zostały dzielniki napięcia, aby urządzenie mogło mierzyć kluczowe parametry pracy tej sekcji.
+				Urządzenie posiada własne zasilanie oparte o dwa ogniwa litowo-jonowe o sumarycznej pojemności 4Ah i znamionowym napięciu 3.6V. Na schemacie ogniwa zaznaczono wspólnym symbolem \lstinline|BT1|. W roli układu ładowania i zabezpieczeń został wykorzystany gotowy moduł\textsuperscript{\cite{hw_mod_chg}} z układem TP4056 (\lstinline|B3|). Dzięki niemu, produkt nie wymaga dodatkowej ładowarki. Wyprowadzone zostało złącze USB~C, użytkownik może użyć każdej ładowarki o prądzie minimalnym 1A. Istotnym zadaniem sekcji zasilającej jest przełączanie źródła zasilania. Gdy ogniwa są ładowane, z terminali \lstinline|B+|, \lstinline|B-| oraz \lstinline|OUT+|, \lstinline|OUT-| pozostałe moduły nie mogą pobierać prądu. Może to spowodować przeładowanie ogniw. Tranzystor PMOS \lstinline|Q1|, dioda Schottkiego \lstinline|D1| oraz rezystor \lstinline|R5| tworzą układ\textsuperscript{\cite{hw_load_sw}}, który w trakcie ładowania przełącza  wyjście \lstinline|PWR| z zasilania bateryjnego \lstinline|OUT+| na zasilanie bezpośrednio z portu USB (\lstinline|IN+|). Dalej przetwornica wytwarza napięcie 5V do zasilenia portu USB, który w kolejnych wersjach projektu może posłużyć do podłączenia zewnętrznego modemu sieci komórkowej Obecnie nie jest on używany. Na końcu zastosowane zostały dzielniki napięcia, aby urządzenie mogło mierzyć kluczowe parametry pracy tej sekcji.
 				
 			\subsubsection{Panel LCD, przyciski, karta SD}
 				Te trzy sekcje łączą poszczególne gotowe moduły z główną jednostką. Na uwagę jednak zasługuje zastosowanie kondensatorów w celu wygładzenia drgania styków.
 				
-			\subsubsection{Moduł przetwarzania dźwięków}
-				Najistotniejszy z modułów. Służy do przetworzenia dźwięku cyfrowego na analogowy i regulację jego głośności. Zastosowany gotowy moduł oparty na PCM5102a pełni rolę przetwornika analogowo-cyfrowego. Dalej w torze audio zastosowane zostały dwa potencjometry. Pierwszy z nich, wewnętrzny służy do stałego ograniczenia poziomu dźwięku, aby nie uszkodził on wzmacniacza lub głośników. Drugi, zewnętrzny, operowany jest przez użytkownika.
+			\subsubsection{Moduł przetwarzania dźwięku}
+				Najistotniejszy z modułów. Służy do przetworzenia dźwięku cyfrowego na analogowy i regulację jego głośności. Zastosowany gotowy moduł\textsuperscript{\cite{hw_mod_dac}} oparty na PCM5102a pełni rolę przetwornika analogowo-cyfrowego. Dalej w torze audio zastosowane zostały dwa potencjometry. Pierwszy z nich, wewnętrzny służy do stałego ograniczenia poziomu dźwięku, aby nie uszkodził on wzmacniacza lub głośników. Drugi, zewnętrzny, operowany jest przez użytkownika. Na końcu jest wzmacniacz, również oparty o gotowy moduł\textsuperscript{\cite{hw_mod_amp}}. Wykorzystany układ PAM8403 przy napięciu 3.3V posiada ok. 1W mocy na kanał (głośniki $4 \Omega$). Przy napięciu 3.7V będzie to nieznacznie więcej. Wejście \lstinline|MUTE| pozwala na całkowite wyciszenie wzmacniacza, gdy nie jest on używany. Notka na dole mówi, że do zasilenia modułu konwertera wystarczy napięcie 3.7V (posiada ona własne regulatory napięcia dla minimalizacji szumów).
 				
-				Na końcu jest wzmacniacz, również oparty o gotowy moduł. Wykorzystany układ PAM8403 przy napięciu 3.3V posiada ok. 1W mocy na kanał (głośniki $4 \Omega$). Przy napięciu 3.7V będzie to nieznacznie więcej. Wejście \lstinline|MUTE| pozwala na całkowite wyciszenie wzmacniacza, gdy nie jest on używany.
-				
-				Notka na dole mówi, że do zasilenia modułu konwertera wystarczy napięcie 3.7V (posiada ona własne regulatory napięcia dla minimalizacji szumów).
-%		\subsection{Płytka drukowana}
-%			\imgh{3/hw_kicad_pcb}{Płytka drukowana radia}{0.8}
-%		
-%		\subsection{Obudowa}
-%			\imgh{3/hw_kicad_case}{Obudowa radia}{0.9}
+		\subsection{Płytka drukowana}
+			Na podstawie wyżej opisanego schematu powstała płytka drukowana. Gwarantuje ona dobrą jakość połączeń, w porównaniu do płytki stykowej, na jakiej powstawał prototyp.
+		
+			\imghss{3/hw_kicad_pcb}{Projekt płytki}{3/hw_pcb}{Zmontowana, gotowa płytka (bez modułów)}
+			
+			Na rysunku~\ref{3/hw_kicad_pcb} przedstawiony został projekt płytki. Zaznaczono na nim dwie najważniejsze sekcje. W centrum znajduje się płytka Raspberry Pi Pico W, a w jej sąsiedztwie slot na karty SD, i przyłącza do ekranu LCD (po lewej, 8-pinowe) i przycisków (po prawej, 6-pinowe). Obok, na rysunku~\ref{3/hw_pcb}, przedstawiona została gotowa płytka.
+			
+		\subsection{Obudowa}
+			Po zwymiarowaniu wszystkich komponentów systemu i płytki PCB powstał projekty obudowy do wydruku 3D.
+		
+			\noindent
+			\hspace{0.1\linewidth}
+			\begin{minipage}{0.8\linewidth}
+				\lstinputlisting[style=scad, caption={Kod generujący otwory na przyciski i śruby montażowe}, label={3/scad_listing}]{lst/3/buttons.scad}
+			\end{minipage}
+			
+			Wybór programu jest nieoczywisty ponieważ umożliwia on projektowanie 3D oparte o prosty język skryptowy. Dzięki temu podejście do projektowania może tylko nieznacznie różnić się od pisania oprogramowania. Fragment kodu opisu obudowy został przedstawiony na listingu~\ref{3/scad_listing}. Linie 3-4 generują siatkę 3x3 na której zostaną umieszczone przyciski/otwory na śruby. Operator trójargumentowy w liniach 7-8 powoduje że w rogach siatki otwory będą miały inną średnicę. Warto też zwrócić uwagę na wykorzystanie nazw zamiast wartości, co umożliwia łatwiejszą modyfikację.
+			
+			\imghss{3/hw_scad_case}{Finalny projekt obudowy radia}{3/hw_case}{Efekt końcowy, radio w obudowie}
+			
+			Na rysunku~\ref{3/hw_scad_case} przedstawiono projekt całej obudowy. Obok zaprezentowano efekt finalny, funkcjonalne radio w obudowie (rysunek~\ref{3/hw_case}).
+			
+
 		
 	\pagebreak
 	\begin{thebibliography}{9}
@@ -838,8 +858,18 @@
 		\bibitem{ubuntu_font}
 		\href{https://design.ubuntu.com/font}{\textit{Ubuntu font} -- czcionka wykorzystana do wyświetlania znaków}
 		
+		\bibitem{hw_mod_chg}
+		\href{https://botland.com.pl/moduly-ladowania-lipol-usb-micro-usb/16979-ladowarka-li-pol-tp4056-pojedyncza-cela-1s-37v-usb-typ-c-z-zabezpieczeniami--5904422326708.html}{\textit{Ładowarka Li-Pol TP4056 USB C} -- moduł ładowania ogniw}
 		\bibitem{hw_load_sw}
 		\href{https://www.best-microcontroller-projects.com/tp4056-page2.html}{\textit{TP4056 Power Sharing Problem} -- układ przełączania obciążenia}
+		\bibitem{hw_mod_dac}
+		\href{https://www.aliexpress.com/item/1005002846127078.html}{\textit{Interfejs I2S PCM5102A} -- przetwornik cyfrowo-analogowy}
+		\bibitem{hw_mod_amp}
+		\href{https://botland.com.pl/odtwarzacze-mp3-wav-ogg-midi/6641-wzmacniacz-audio-stereo-pam8403-5v-3w-dwukanalowy-zielony-5904422359850.html}{\textit{Wzmacniacz audio stereo PAM8403} -- dwukanałowy wzmacniacz audio}
+		\bibitem{hw_kicad}
+		\href{https://www.kicad.org/}{\textit{KiCAD} -- program do tworzenia schematów elektrycznych i projektowania płytek PCB}
+		\bibitem{hw_openscad}
+		\href{https://openscad.org/}{\textit{OpenSCAD} -- program do skryptowego projektowania 3D}
 		
 	\end{thebibliography}
 	
