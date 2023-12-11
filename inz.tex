@@ -115,19 +115,19 @@
 }
 
 \begin{document}
-	\lstset{inputencoding=utf8, basicstyle=\ttfamily}
-	
-	\title{Odbiornik internetowych stacji radiowych \\
-		\vspace{0.2cm}
-		\large Praca Inżynierska \\
-		\large ...}
-	\author{Norbert Morawski}
-	
-	\maketitle
-	\tableofcontents
-	\pagebreak
-	
-	\chapter{Cel prac i wizja produktu}
+\lstset{inputencoding=utf8, basicstyle=\ttfamily}
+
+\title{Odbiornik internetowych stacji radiowych \\
+	\vspace{0.2cm}
+	\large Praca Inżynierska \\
+	\large ...}
+\author{Norbert Morawski}
+
+\maketitle
+\tableofcontents
+\pagebreak
+
+\chapter{Cel prac i wizja produktu}
 	W tym rozdziale opisano jak będzie wyglądał końcowy produkt. Zwrócono też uwagę na to jak będzie przebiegała jego realizacja i jakie ryzyka mogą wystąpić.
 	
 	\section{Opis problemu}
@@ -207,26 +207,26 @@
 		Dobre planowanie, rzetelne projektowanie i tworzenie aplikacji powinny umniejszyć rolę w.w. ryzyk.
 	
 	\section{Słownik pojęć}
-		\begin{itemize}
+	\begin{itemize}
 %			\item MP3 (\textit{MPEG-1 Audio Layer 3}) -- popularny format zapisu dźwięku; implementuje stratną kompresję,
-			\item AAC/AAC+ (\textit{Advanced Audio Coding}) -- inny format dźwięku z kompresją stratną
+		\item AAC/AAC+ (\textit{Advanced Audio Coding}) -- inny format dźwięku z kompresją stratną
 %			\item Li-ion -- akumulatory Litowo-jonowe (ładowalne)
-			\item Raspberry Pi -- komputery jednopłytkowe tworzone przez Raspberry Pi Foundation
-			\item Raspberry Pi Pico -- płytki rozwojowe oparte o mikrokontroler RP2040 (produkowane również przez Raspberry Pi Foundation)
-			\item \textit{Cortex M0+}
-			\item PWM
-			\item DMA
-			\item PIO
-			\item DAC
-			\item \isqs{} proto
-			\item PCM
-			\item SIO
-			\item TCP
-			\item TLS
+		\item Raspberry Pi -- komputery jednopłytkowe tworzone przez Raspberry Pi Foundation
+		\item Raspberry Pi Pico -- płytki rozwojowe oparte o mikrokontroler RP2040 (produkowane również przez Raspberry Pi Foundation)
+		\item \textit{Cortex M0+}
+		\item PWM
+		\item DMA
+		\item PIO
+		\item DAC
+		\item \isqs{} proto
+		\item PCM
+		\item SIO
+		\item TCP
+		\item TLS
 %			TODO fill in dict
-		\end{itemize}
-	
-	\chapter{Projekt interfejsu i interakcji z użytkownikiem}
+	\end{itemize}
+
+\chapter{Projekt interfejsu i interakcji z użytkownikiem}
 	W rozdziale drugim skupiono się na aspektach funkcjonalności produktu jak i projekcje interakcji z użytkownikiem.\\
 	
 	Najważniejszym elementem planowania projektu z perspektywy użyteczności dla klienta jest plan wygodnego i intuicyjnego interfejsu użytkownika. Dodatkową komplikacją jest fakt, że urządzenie będzie miało do dyspozycji tylko niewielki wyświetlacz i kilka przycisków. Należy więc zadbać, żeby przy tym niewielkim asortymencie sprzętu dało się przekazać wszystkie informacje i ustalić co użytkownik planuje zrobić w następnej kolejności.
@@ -242,289 +242,289 @@
 		
 		$ $\\
 		Przy wyświetlaniu listy (np. wyników wyszukiwania lub listy ulubionych stacji) kliknięcie w daną pozycję powoduje zaakceptowanie jej i otworzenie następnego ekranu.
-
+	
 		\imgcs{2/interface/all}{Przemieszczanie się pomiędzy ekranami}{0.9}
 		\imgss{2/interface/real1}{Wyszukiwanie stacji}{2/interface/real2}{Wyniki wyszukiwania}
 	
 	\section{Interakcja z użytkownikiem}
-		W trakcie projektowania ekranów konieczne stało się założenie użycia 5 przycisków. Cztery z nich zostaną użyte do nawigacji prawo/lewo/góra/dół, a pozostały (środkowy) do wykonania wybranej akcji. Poniżej przedstawione zostały wybrane scenariusze obsługi radia.
+	W trakcie projektowania ekranów konieczne stało się założenie użycia 5 przycisków. Cztery z nich zostaną użyte do nawigacji prawo/lewo/góra/dół, a pozostały (środkowy) do wykonania wybranej akcji. Poniżej przedstawione zostały wybrane scenariusze obsługi radia.
 %		Nawigacja oparta jest na siatce przycisków, przy czym może być ona nieregularna (różna liczba przycisków w różnych wierszach). 
-		
-		\imgh{2/btn/1}{Krok w dół na liście}{0.7}
-		Na rysunku~\ref{2/btn/1} widać jak użytkownik aby poruszyć się w dół listy stacji naciska dolny przycisk. Powrót do \textit{Radio 1} jest oczywiście możliwy poprzez naciśnięcie górnego przycisku.
-		
-		\imgh{2/btn/2}{Przewinięcie listy stacji do góry}{0.7}
-		Po dojściu do czwartej pozycji na liście, jeżeli na liście jest więcej niż 4 stacje, po naciśnięciu dolnego przycisku, zgodne z rysunkiem~\ref{2/btn/2}, kursor zostanie przeniesiony do piątej stacji. Należy zwrócić uwagę na zmianę położenia paska przewijania (po prawej stronie).
-		
-		\imgh{2/btn/3}{Przejście z listy do ikon akcji}{0.7}
-		Jeżeli wskaźnik znajduje się na końcu listy (pasek przewijania w skrajnie dolnej pozycji), po naciśnięciu przycisku w dół, kursor znajdzie się w pasku ikon akcji. Sytuację tę przedstawia rysunek \ref{2/btn/3}. Powrót na listę stacji jest możliwy przy pomocy górnego przycisku.
-		
-		\imghss{2/btn/4r}{Przejście w prawo}{2/btn/4l}{Przejście w lewo}
-		Poruszanie się w obrębie jednego wiersza zostało zrealizowane poprzez przyciski \mbox{lewo/prawo}. Przedstawiają to rysunki \ref{2/btn/4r} i \ref{2/btn/4l} na przykładzie dwóch ikon akcji.
-		
-		\imgh{2/btn/5}{Akceptacja wyboru}{0.7}
-		Przycisk środkowy służy do wykonania akcji. Jeżeli kursor jest ustawiony na liście, możemy rozpocząć odtwarzanie naciskając go (rysunek \ref{2/btn/5})
-		
-		\imghss{2/err1}{Błąd odtwarzania}{2/err2}{Błąd ładowania stacji z bazy danych}
-		Czasami w komunikacji z serwerem może wystąpić błąd. Takie sytuacje są zgłaszane użytkownikowi poprzez ekrany błędów widoczne na rysunkach \ref{2/err1} i \ref{2/err2} (czerwone tło). Aby wyjść z takiego ekranu nacisnąć dowolny przycisk.
 	
-	\chapter{Wybrane aspekty realizacji}
+	\imgh{2/btn/1}{Krok w dół na liście}{0.7}
+	Na rysunku~\ref{2/btn/1} widać jak użytkownik aby poruszyć się w dół listy stacji naciska dolny przycisk. Powrót do \textit{Radio 1} jest oczywiście możliwy poprzez naciśnięcie górnego przycisku.
+	
+	\imgh{2/btn/2}{Przewinięcie listy stacji do góry}{0.7}
+	Po dojściu do czwartej pozycji na liście, jeżeli na liście jest więcej niż 4 stacje, po naciśnięciu dolnego przycisku, zgodne z rysunkiem~\ref{2/btn/2}, kursor zostanie przeniesiony do piątej stacji. Należy zwrócić uwagę na zmianę położenia paska przewijania (po prawej stronie).
+	
+	\imgh{2/btn/3}{Przejście z listy do ikon akcji}{0.7}
+	Jeżeli wskaźnik znajduje się na końcu listy (pasek przewijania w skrajnie dolnej pozycji), po naciśnięciu przycisku w dół, kursor znajdzie się w pasku ikon akcji. Sytuację tę przedstawia rysunek \ref{2/btn/3}. Powrót na listę stacji jest możliwy przy pomocy górnego przycisku.
+	
+	\imghss{2/btn/4r}{Przejście w prawo}{2/btn/4l}{Przejście w lewo}
+	Poruszanie się w obrębie jednego wiersza zostało zrealizowane poprzez przyciski \mbox{lewo/prawo}. Przedstawiają to rysunki \ref{2/btn/4r} i \ref{2/btn/4l} na przykładzie dwóch ikon akcji.
+	
+	\imgh{2/btn/5}{Akceptacja wyboru}{0.7}
+	Przycisk środkowy służy do wykonania akcji. Jeżeli kursor jest ustawiony na liście, możemy rozpocząć odtwarzanie naciskając go (rysunek \ref{2/btn/5})
+	
+	\imghss{2/err1}{Błąd odtwarzania}{2/err2}{Błąd ładowania stacji z bazy danych}
+	Czasami w komunikacji z serwerem może wystąpić błąd. Takie sytuacje są zgłaszane użytkownikowi poprzez ekrany błędów widoczne na rysunkach \ref{2/err1} i \ref{2/err2} (czerwone tło). Aby wyjść z takiego ekranu nacisnąć dowolny przycisk.
+
+\chapter{Wybrane aspekty realizacji}
 	W tym rozdziale wyjaśnione zostało jak zbudowany został projekt.
 	
 	\section{Moduły projektu}
-	W kodzie starano się zachować porządek. Wydzielone zostały główne funkcjonalne elementy i na podstawie tego podziału stworzona została struktura modularna przedstawiona na rysunku \ref{3/pico-radio-code-block-diagram}.
-	\imgh{3/pico-radio-code-block-diagram}{Schemat blokowy modułów projektu}{0.7}
+		W kodzie starano się zachować porządek. Wydzielone zostały główne funkcjonalne elementy i na podstawie tego podziału stworzona została struktura modularna przedstawiona na rysunku \ref{3/pico-radio-code-block-diagram}.
+		\imgh{3/pico-radio-code-block-diagram}{Schemat blokowy modułów projektu}{0.7}
+		
+		\subsection{Moduły własne}
+			Większość kodu projektu zawiera katalog \lstinline|libs|. W nim znajdują się poszczególne moduły (nazwane odpowiednimi nazwami podfolderów). Wszystkie wypisane w tej sekcji zostały zaimplementowane samodzielnie, chyba, że zaznaczono inaczej. Dla przejrzystości pogrupowano moduły wg ich ról.
+		
+			\paragraph{Wejście}
+				\begin{itemize}
+					\item \lstinline|analog| -- dostęp do pomiaru poziomu naładowania baterii
+					\item \lstinline|buttons| -- funkcje do obsługi przycisków
+					\item \lstinline|sd| -- wykrywanie i montowanie karty SD z systemem plików FAT
+				\end{itemize}
+		
+			\paragraph{Wyjście}
+				\begin{itemize}
+					\item \lstinline|display| -- obsługa wyświetlacza
+					\begin{itemize}
+						\item \lstinline|assets| -- artefakty; takie jak czcionki i ikony
+						\item \lstinline|screens| -- widoki użytkownika
+						\item \lstinline|tft| -- niskopoziomowa obsługa ekranu ze sterownikiem ST7735s. Kod inicjalizacji i przesyłania pikseli zaczerpnięty z \textit{Adafruit-ST7735-Library}\textsuperscript{\cite{adafruit_st7735}}
+					\end{itemize}
+				\end{itemize}
+			
+			\paragraph{Obsługa list}
+				\begin{itemize}
+					\item \lstinline|list| -- obsługa list jak i ich ładowanie (wyszukiwanie/ulubione/listing plików na karcie SD)
+				\end{itemize}
+			
+			\paragraph{Odtwarzanie}
+				\begin{itemize}
+					\item \lstinline|mcorefifo| -- funkcje pomocnicze do przesyłania komunikatów z rdzenia 1 do 0
+					\item \lstinline|player| -- kontrola i odtwarzanie plików/strumieni internetowych
+					\begin{itemize}
+						\item \lstinline|decode| -- abstrakcje/implementacje dekodowania typów i odczytywania źródeł danych
+						\item \lstinline|metadata| -- dekodowanie metadanych w różnych formatach audio
+					\end{itemize}
+				\end{itemize}
+		
+			\paragraph{Źródła danych}
+				\begin{itemize}
+					\item \lstinline|ds| -- interfejs \lstinline|DataSource| łączący różne źródła danych
+					\item \lstinline|httpc| -- klient protokołu HTTP
+					\item \lstinline|lfs| -- kod integrujący system plików LittleFS\textsuperscript{\cite{littlefs}}
+				\end{itemize}
+			
+			\paragraph{Wi-Fi}
+				\begin{itemize}
+					\item \lstinline|wifi| -- obsługa sieci bezprzewodowych
+				\end{itemize}
+		
+			\paragraph{Pliki pomocnicze}
+				\begin{itemize}
+					\item \lstinline|circularbuffer| -- bufor kołowy
+					\item \lstinline|static| -- statycznie alokowane bufory
+					\item \lstinline|util| -- funkcje pomocnicze
+					\item \lstinline|settings| -- wpisy na ekranie ustawień
+				\end{itemize}
 	
-	\subsection{Moduły własne}
-	Większość kodu projektu zawiera katalog \lstinline|libs|. W nim znajdują się poszczególne moduły (nazwane odpowiednimi nazwami podfolderów). Wszystkie wypisane w tej sekcji zostały zaimplementowane samodzielnie, chyba, że zaznaczono inaczej. Dla przejrzystości pogrupowano moduły wg ich ról.
-	
-	\paragraph{Wejście}
-	\begin{itemize}
-		\item \lstinline|analog| -- dostęp do pomiaru poziomu naładowania baterii
-		\item \lstinline|buttons| -- funkcje do obsługi przycisków
-		\item \lstinline|sd| -- wykrywanie i montowanie karty SD z systemem plików FAT
-	\end{itemize}
-
-	\paragraph{Wyjście}
-	\begin{itemize}
-		\item \lstinline|display| -- obsługa wyświetlacza
+		\subsection{Moduły zewnętrzne}
+		W folderze \lstinline|libs/external| umieszczone zostały moduły dostarczone z zewnątrz:
 		\begin{itemize}
-			\item \lstinline|assets| -- artefakty; takie jak czcionki i ikony
-			\item \lstinline|screens| -- widoki użytkownika
-			\item \lstinline|tft| -- niskopoziomowa obsługa ekranu ze sterownikiem ST7735s. Kod inicjalizacji i przesyłania pikseli zaczerpnięty z \textit{Adafruit-ST7735-Library}\textsuperscript{\cite{adafruit_st7735}}
+			\item \lstinline|FreeRTOS-Kernel| -- jądro systemu czasu rzeczywistego FreeRTOS\textsuperscript{\cite{freertos_kernel}}
+			\item \lstinline|helixmp3| -- biblioteka dekodująca format MP3\textsuperscript{\cite{helixmp3_repo}} oryginalnie napisana przez firmę \textit{RealNetworks}\textsuperscript{\cite{realnetworks}}
+			\item \lstinline|littlefs| -- system plików LittleFS\textsuperscript{\cite{littlefs}}
+			\item \lstinline|sd_lib| -- biblioteka FatFS\textsuperscript{\cite{fatfs}} wraz z kodem dostępu do karty SD\textsuperscript{\cite{sdfs}}
 		\end{itemize}
-	\end{itemize}
-	
-	\paragraph{Obsługa list}
-	\begin{itemize}
-		\item \lstinline|list| -- obsługa list jak i ich ładowanie (wyszukiwanie/ulubione/listing plików na karcie SD)
-	\end{itemize}
-	
-	\paragraph{Odtwarzanie}
-	\begin{itemize}
-		\item \lstinline|mcorefifo| -- funkcje pomocnicze do przesyłania komunikatów z rdzenia 1 do 0
-		\item \lstinline|player| -- kontrola i odtwarzanie plików/strumieni internetowych
-		\begin{itemize}
-			\item \lstinline|decode| -- abstrakcje/implementacje dekodowania typów i odczytywania źródeł danych
-			\item \lstinline|metadata| -- dekodowanie metadanych w różnych formatach audio
-		\end{itemize}
-	\end{itemize}
-
-	\paragraph{Źródła danych}
-	\begin{itemize}
-		\item \lstinline|ds| -- interfejs \lstinline|DataSource| łączący różne źródła danych
-		\item \lstinline|httpc| -- klient protokołu HTTP
-		\item \lstinline|lfs| -- kod integrujący system plików LittleFS\textsuperscript{\cite{littlefs}}
-	\end{itemize}
-	
-	\paragraph{Wi-Fi}
-	\begin{itemize}
-		\item \lstinline|wifi| -- obsługa sieci bezprzewodowych
-	\end{itemize}
-
-	\paragraph{Pliki pomocnicze}
-	\begin{itemize}
-		\item \lstinline|circularbuffer| -- bufor kołowy
-		\item \lstinline|static| -- statycznie alokowane bufory
-		\item \lstinline|util| -- funkcje pomocnicze
-		\item \lstinline|settings| -- wpisy na ekranie ustawień
-	\end{itemize}
-
-	\subsection{Moduły zewnętrzne}
-	W folderze \lstinline|libs/external| umieszczone zostały moduły dostarczone z zewnątrz:
-	\begin{itemize}
-		\item \lstinline|FreeRTOS-Kernel| -- jądro systemu czasu rzeczywistego FreeRTOS\textsuperscript{\cite{freertos_kernel}}
-		\item \lstinline|helixmp3| -- biblioteka dekodująca format MP3\textsuperscript{\cite{helixmp3_repo}} oryginalnie napisana przez firmę \textit{RealNetworks}\textsuperscript{\cite{realnetworks}}
-		\item \lstinline|littlefs| -- system plików LittleFS\textsuperscript{\cite{littlefs}}
-		\item \lstinline|sd_lib| -- biblioteka FatFS\textsuperscript{\cite{fatfs}} wraz z kodem dostępu do karty SD\textsuperscript{\cite{sdfs}}
-	\end{itemize}
 
 	\section{Odtwarzanie dźwięku}
-	Zanim radio urosło do rangi pracy inżynierskiej, było ono moim prywatnym projektem. Chciałem poznać mikrokontroler RP2040. Poznać \lstinline|pico-sdk|. Po pierwszym kontakcie na \textit{Systemach Wbudowanych} środowisko stworzone wokół przystępnej cenowo płytki Raspberry Pi Pico wydawało się ciekawe i interesujące. Mikrokontroler ten, bogato wyposażony, stanowił idealną podstawę do stworzenia czegoś, co zawsze chciałem zbudować: odtwarzacza dźwięku. Przy okazji, tworząc taki projekt mogłem zaznajomić się ze wszystkimi ważniejszymi peryferiami układu (wykorzystałem m.in. PWM, DMA, a także później PIO).
-	
-	Szybko jednak okazało się, że odtwarzania dźwięku za pomocą wbudowanego układu PWM jest niewystarczające. Dźwięk był zbyt niskiej jakości aby nadawał się do odtwarzania muzyki. Wykorzystałem układ TDA1543 jako przetwornik cyfrowo-analogowy. Projekt odtwarzał tylko pliki WAV i wyglądał tak, jak na rysunku \ref{3/pr_wav}.
-	
-	Wtedy też wybrałem ten temat pracy inżynierskiej. Lecz zanim mogłem kontynuować, należało szybko zorientować się, czy płytka poradzi sobie z dekodowaniem formatu MP3 w czasie rzeczywistym. Dzięki bibliotece \lstinline|helixmp3| używającej arytmetyki stałoprzecinkowej, było to możliwe.
-	
-	\imgcs{3/pr_wav}{Projekt we wczesnych fazach rozwoju}{0.45}
-	
-	\subsection{Model przetwarzania dźwięku}
-	
-	\imgcs{3/pipeline}{Koncepcja wielowątkowego dekodowania}{0.8}
-	
-	Odtwarzanie dźwięku odbywa się za pomocą zewnętrznego przetwornika DAC. Mikrokontroler wysyła dźwięk w formacie PCM protokołem \isqs{} do specjalizowanego układu z wykorzystaniem DMA. Drugi rdzeń procesora wykorzystywany jest wyłącznie do dekompresji formatów audio.
-	
-%	TODO opisać tutaj co robi player.cpp (zmienna dec, funkcje publcizne)
-	
-	\subsection{Komunikacja z przetwornikiem}
-	W programie utworzony został bufor nieskompresowanego dźwięku PCM \lstinline|audio_pcm|. Ma on konfigurowalny rozmiar wyrażony w jednostkach 32-bitowych (2 kanały * 16-bitowa próbka). Przekazywany jest on do systemu DMA.
-	
-	\subsubsection{PIO}
-		\imgcs{3/pio_block}{Pojedynczy blok PIO (dokumentacja RP2040\textsuperscript{\cite{pico_pdf}}, strona 309)}{0.7}
-		\imgcs{3/pio_instr}{Zestaw instrukcji PIO (dokumentacja RP2040, strona 320)}{0.7}
-		\imgcs{3/pio_i2s_docs}{Przebieg czasowy protokołu \isqs{} (dokumentacja TDA1543\textsuperscript{\cite{tda_pdf}}, strona 9)}{0.9}
+		Zanim radio urosło do rangi pracy inżynierskiej, było ono moim prywatnym projektem. Chciałem poznać mikrokontroler RP2040. Poznać \lstinline|pico-sdk|. Po pierwszym kontakcie na \textit{Systemach Wbudowanych} środowisko stworzone wokół przystępnej cenowo płytki Raspberry Pi Pico wydawało się ciekawe i interesujące. Mikrokontroler ten, bogato wyposażony, stanowił idealną podstawę do stworzenia czegoś, co zawsze chciałem zbudować: odtwarzacza dźwięku. Przy okazji, tworząc taki projekt mogłem zaznajomić się ze wszystkimi ważniejszymi peryferiami układu (wykorzystałem m.in. PWM, DMA, a także później PIO).
 		
-		RP2040 posiada 8 programowalnych maszyn stanów, zgrupowanych w 2 bloki. W ramach jednego bloku (Rys. \ref{3/pio_block}) współdzielą one pamięć 32 instrukcji. Może wydawać się to mało, lecz instrukcje te są bardzo skondensowane.
+		Szybko jednak okazało się, że odtwarzania dźwięku za pomocą wbudowanego układu PWM jest niewystarczające. Dźwięk był zbyt niskiej jakości aby nadawał się do odtwarzania muzyki. Wykorzystałem układ TDA1543 jako przetwornik cyfrowo-analogowy. Projekt odtwarzał tylko pliki WAV i wyglądał tak, jak na rysunku \ref{3/pr_wav}.
 		
-		Język programowania to własnościowy język z rodziny assembler. Do środowiska \lstinline|pico-sdk| dołączony jest assembler \lstinline|picoasm|. Zestaw instrukcji przedstawiono na rysunku \ref{3/pio_instr}. Jak wspomniano wcześniej, instrukcje są skondensowane, to znaczy mogą wykonywać wiele operacji na raz. Na przykład opóźniać wykonanie programu lub ustawiać osobny rodzaj wyjść typu \sset{}.
+		Wtedy też wybrałem ten temat pracy inżynierskiej. Lecz zanim mogłem kontynuować, należało szybko zorientować się, czy płytka poradzi sobie z dekodowaniem formatu MP3 w czasie rzeczywistym. Dzięki bibliotece \lstinline|helixmp3| używającej arytmetyki stałoprzecinkowej, było to możliwe.
 		
-		\paragraph{Wyjścia typu \sset{}}
-			Jest to specjalny rodzaj wyjść, które mogą być ustawiane równocześnie z wykonywaniem innych instrukcji. Są szczególnie przydatne przy ustawianiu linii zegarowych i pozostałych linii kontrolnych. Minusem wykorzystania ustawiania wyjść \textit{na boku} jest konieczność poświęcenia możliwości opóźniania programu. W liście instrukcji pole \sset{} jest współdzielone z polem \lstinline|delay|. Jednak zaimplementowany program nie używa opóźnień.
+		\imgcs{3/pr_wav}{Projekt we wczesnych fazach rozwoju}{0.45}
 		
-		Instrukcja skoku obsługuje także dekrementację zmiennej w warunku. Same maszyny mogą mieć ustawiony dowolny adres wejścia i zapętlenia programu. Oszczędza to kilka instrukcji.
-		$ $\\
+		\subsection{Model przetwarzania dźwięku}
 		
-		Dzięki tym blokom, możliwe jest dodanie do mikrokontrolera dowolnego protokołu danych bez zbytniego obciążenia procesora jego pełną symulacją. W ramach tej pracy został stworzony blok obsługi interfejsu \isqs{}, który serializuje dane dostarczane przez DMA i wysyła do układu DAC.
-		
-		Dokumentacja protokołu \isqs{} została zaczerpnięta z dokumentacji układu TDA1543. Przedstawia ją rysunek \ref{3/pio_i2s_docs}. Jak widać zmiana kanału (kodowanego poziomem linii \lstinline|WS|)  musi nastąpić przed wysłaniem ostatniego bitu poprzedniego kanału (\lstinline|LSB|, czyli \textit{Least Significant Bit}, najmniej znaczący bit kanału lewego). Z tego powodu program wydłużył się do 8 instrukcji. Niektóre układy obsługują protokół \textit{left-just}, który nie posiada tego ograniczenia, jednak z uwagi na niewystarczającą dokumentacje i małe wsparcie przez układy, wybrany został klasyczny \isqs{}.
-		
-		\noindent
-		\hspace{0.1\linewidth}
-		\begin{minipage}{0.8\linewidth}
-			\lstinputlisting[style=pio, caption={Kod programu \isqs{}}, label={3/pio_listing}]{lst/3/i2s.pio}
-		\end{minipage}
-		
-		Kod tego bloku przedstawiony został na listingu \ref{3/pio_listing}. Poniżej omówione zostało jego działanie:
-		\begin{itemize}
-			\item Linia nr 3 ustawia ile bitów jest typu \lstinline|side-set|. Bity \lstinline|side-set| są wykorzystywane odpowiednio do: ustawienia linii \lstinline|WS| i linii \lstinline|BCK|.
+			\imgcs{3/pipeline}{Koncepcja wielowątkowego dekodowania}{0.8}
 			
-			\item punktem wejścia programu jest linia nr 18. Ustawia ona liczbę powtórzeń i inicjalizuje linię \lstinline|WS| na 1 (kanał prawy) oraz linię \lstinline|BCK| na 1. Odwrócenie kolejności kanałów związane jest z kolejnością bajtów typu \textit{little-endian}). Następnie program automatycznie zapętla się do pierwszej instrukcji.
+			Odtwarzanie dźwięku odbywa się za pomocą zewnętrznego przetwornika DAC. Mikrokontroler wysyła dźwięk w formacie PCM protokołem \isqs{} do specjalizowanego układu z wykorzystaniem DMA. Drugi rdzeń procesora wykorzystywany jest wyłącznie do dekompresji formatów audio.
+		
+	%	TODO opisać tutaj co robi player.cpp (zmienna dec, funkcje publcizne)
+		
+		\subsection{Komunikacja z przetwornikiem}
+			W programie utworzony został bufor nieskompresowanego dźwięku PCM \lstinline|audio_pcm|. Ma on konfigurowalny rozmiar wyrażony w jednostkach 32-bitowych (2 kanały * 16-bitowa próbka). Przekazywany jest on do systemu DMA.
+		
+			\subsubsection{PIO}
+				\imgcs{3/pio_block}{Pojedynczy blok PIO (dokumentacja RP2040\textsuperscript{\cite{pico_pdf}}, strona 309)}{0.7}
+				\imgcs{3/pio_instr}{Zestaw instrukcji PIO (dokumentacja RP2040, strona 320)}{0.7}
+				\imgcs{3/pio_i2s_docs}{Przebieg czasowy protokołu \isqs{} (dokumentacja TDA1543\textsuperscript{\cite{tda_pdf}}, strona 9)}{0.9}
+				
+				RP2040 posiada 8 programowalnych maszyn stanów, zgrupowanych w 2 bloki. W ramach jednego bloku (Rys. \ref{3/pio_block}) współdzielą one pamięć 32 instrukcji. Może wydawać się to mało, lecz instrukcje te są bardzo skondensowane.
+				
+				Język programowania to własnościowy język z rodziny assembler. Do środowiska \lstinline|pico-sdk| dołączony jest assembler \lstinline|picoasm|. Zestaw instrukcji przedstawiono na rysunku \ref{3/pio_instr}. Jak wspomniano wcześniej, instrukcje są skondensowane, to znaczy mogą wykonywać wiele operacji na raz. Na przykład opóźniać wykonanie programu lub ustawiać osobny rodzaj wyjść typu \sset{}.
+				
+				\paragraph{Wyjścia typu \sset{}}
+					Jest to specjalny rodzaj wyjść, które mogą być ustawiane równocześnie z wykonywaniem innych instrukcji. Są szczególnie przydatne przy ustawianiu linii zegarowych i pozostałych linii kontrolnych. Minusem wykorzystania ustawiania wyjść \textit{na boku} jest konieczność poświęcenia możliwości opóźniania programu. W liście instrukcji pole \sset{} jest współdzielone z polem \lstinline|delay|. Jednak zaimplementowany program nie używa opóźnień.
+				
+				Instrukcja skoku obsługuje także dekrementację zmiennej w warunku. Same maszyny mogą mieć ustawiony dowolny adres wejścia i zapętlenia programu. Oszczędza to kilka instrukcji.
+				$ $\\
+				
+				Dzięki tym blokom, możliwe jest dodanie do mikrokontrolera dowolnego protokołu danych bez zbytniego obciążenia procesora jego pełną symulacją. W ramach tej pracy został stworzony blok obsługi interfejsu \isqs{}, który serializuje dane dostarczane przez DMA i wysyła do układu DAC.
+				
+				Dokumentacja protokołu \isqs{} została zaczerpnięta z dokumentacji układu TDA1543. Przedstawia ją rysunek \ref{3/pio_i2s_docs}. Jak widać zmiana kanału (kodowanego poziomem linii \lstinline|WS|)  musi nastąpić przed wysłaniem ostatniego bitu poprzedniego kanału (\lstinline|LSB|, czyli \textit{Least Significant Bit}, najmniej znaczący bit kanału lewego). Z tego powodu program wydłużył się do 8 instrukcji. Niektóre układy obsługują protokół \textit{left-just}, który nie posiada tego ograniczenia, jednak z uwagi na niewystarczającą dokumentacje i małe wsparcie przez układy, wybrany został klasyczny \isqs{}.
+				
+				\noindent
+				\hspace{0.1\linewidth}
+				\begin{minipage}{0.8\linewidth}
+					\lstinputlisting[style=pio, caption={Kod programu \isqs{}}, label={3/pio_listing}]{lst/3/i2s.pio}
+				\end{minipage}
+				
+				Kod tego bloku przedstawiony został na listingu \ref{3/pio_listing}. Poniżej omówione zostało jego działanie:
+				\begin{itemize}
+					\item Linia nr 3 ustawia ile bitów jest typu \lstinline|side-set|. Bity \lstinline|side-set| są wykorzystywane odpowiednio do: ustawienia linii \lstinline|WS| i linii \lstinline|BCK|.
+					
+					\item punktem wejścia programu jest linia nr 18. Ustawia ona liczbę powtórzeń i inicjalizuje linię \lstinline|WS| na 1 (kanał prawy) oraz linię \lstinline|BCK| na 1. Odwrócenie kolejności kanałów związane jest z kolejnością bajtów typu \textit{little-endian}). Następnie program automatycznie zapętla się do pierwszej instrukcji.
+					
+					\item Instrukcja \lstinline|out| powoduje wystawienie na linię \lstinline|DATA| jednego bitu z rejestru przesuwnego danych. \textit{Na boku} przełącza linię zegarową w stan niski
+					
+					\item Instrukcja \lstinline|jmp| najpierw sprawdza wartość rejestru \lstinline|X|. Jeżeli jest ona niezerowa to dekrementuje ją i skacze do etykiety \lstinline|right|. Pętla ta wykonuje się 15 razy.
+					
+					\item W linii nr 9 następuje transmisja najmniej znaczącego bitu kanału prawego. Zgodnie z dokumentacją musimy już zmienić stan linii \lstinline|WS| na 0 (kanał lewy). Następnie rejestr \lstinline|X| jest ponownie inicjalizowany na wartość 14.
+					
+					\item Linie 13-18 powtarzają transmisje zgodnie z opisem powyżej, ale tym razem dla kanału lewego.
+				\end{itemize}
+				
+				Instrukcja \lstinline|out| czeka na dane w buforze automatycznie.
 			
-			\item Instrukcja \lstinline|out| powoduje wystawienie na linię \lstinline|DATA| jednego bitu z rejestru przesuwnego danych. \textit{Na boku} przełącza linię zegarową w stan niski
+			\subsubsection{DMA}
+				\imgcs{3/dma_chain}{Kolejkowanie kanałów DMA}{0.55}
+				Podsystem bezpośredniego dostępu do pamięci wysyła dane do maszyn stanu PIO. Aby móc prowadzić nieprzerwaną transmisję, wykorzystane zostały dwa kanały z 12 dostępnych w układzie. Schemat działania przedstawiony został na rysunku \ref{3/dma_chain}. W momencie gdy jeden kanał skończy transfer, automatycznie uruchamiany jest drugi kanał. Taką funkcjonalność oferuje sprzętowo RP2040. Wywoływane jest także przerwanie, które zgłasza procesorowi potrzebę załadowania nowych danych. Ustawiają one flagi \lstinline|a_done_irq| i \lstinline|b_done_irq|.
+				$ $\\
+					
+		%		Rdzeń 0 obsługuje te przerwania. Bardziej korzystnym scenariuszem byłoby, gdyby to rdzeń 1 czekał na przerwanie instrukcją \lstinline|wfi| (\textit{wait-for-interrupt}), ponieważ nie ma on innych zadań. Jest to droga do dalszej opytmalizacji projektu.
+		
+				Wszystko to dzieje się na rdzeniu 0. Taka koncepcja pozwala na odtwarzanie nieskompresowanego dźwięku. Problem powstaje, gdy musimy w czasie rzeczywistym zdekodować nietrywialny format zapisu audio, np. MP3.
+		
+		\subsection{Dekompresja formatów}
+			\imgh{3/rb_chart_new}{Udział kodeków w stacjach radiowych}{0.9}
 			
-			\item Instrukcja \lstinline|jmp| najpierw sprawdza wartość rejestru \lstinline|X|. Jeżeli jest ona niezerowa to dekrementuje ją i skacze do etykiety \lstinline|right|. Pętla ta wykonuje się 15 razy.
+			Wybór padł na format MP3. Jest on popularnym formatem zapisu skompresowanego dźwięku. Wg agregatu stacji radiowych \textit{Radio Browser}\textsuperscript{\cite{radio_browser_codecs}}, około 66\% wszystkich wpisów używa kodeku MP3 (w przypadku polskich stacji jest to około 60\%). Graficznie procentowe udziały przedstawia rysunek \ref{3/rb_chart_new}.
 			
-			\item W linii nr 9 następuje transmisja najmniej znaczącego bitu kanału prawego. Zgodnie z dokumentacją musimy już zmienić stan linii \lstinline|WS| na 0 (kanał lewy). Następnie rejestr \lstinline|X| jest ponownie inicjalizowany na wartość 14.
+			\paragraph{Droga dalszego rozwoju}
+				Najbardziej korzystną drogą rozwoju jest implementacja dekodowania AAC/AAC+. Na ten moment nie zostało to zrobione.
+			$ $\\
+		
+		\subsubsection{Architektura programowa dekodera}
+			\imgh{3/PicoRadio-sound-decoding}{Architektura dekodowania dźwięku}{0.95}
 			
-			\item Linie 13-18 powtarzają transmisje zgodnie z opisem powyżej, ale tym razem dla kanału lewego.
-		\end{itemize}
-		
-		Instrukcja \lstinline|out| czeka na dane w buforze automatycznie.
-	
-	\subsubsection{DMA}
-		\imgcs{3/dma_chain}{Kolejkowanie kanałów DMA}{0.55}
-		Podsystem bezpośredniego dostępu do pamięci wysyła dane do maszyn stanu PIO. Aby móc prowadzić nieprzerwaną transmisję, wykorzystane zostały dwa kanały z 12 dostępnych w układzie. Schemat działania przedstawiony został na rysunku \ref{3/dma_chain}. W momencie gdy jeden kanał skończy transfer, automatycznie uruchamiany jest drugi kanał. Taką funkcjonalność oferuje sprzętowo RP2040. Wywoływane jest także przerwanie, które zgłasza procesorowi potrzebę załadowania nowych danych. Ustawiają one flagi \lstinline|a_done_irq| i \lstinline|b_done_irq|.
-		$ $\\
+			Rysunek \ref{3/PicoRadio-sound-decoding} przedstawia w jaki sposób zorganizowane zostało odtwarzanie i dekodowanie dźwięku. Wszelkie interakcje z pozostałymi komponentami systemu obsługiwane są przez rdzeń 0, natomiast rdzeń 1 obsługuje dekodowanie formatów audio. Droga, jaką obrano, pozwala na łatwe rozszerzanie obsługiwanych formatów. Ważne jest tylko, aby pojedynczy rdzeń \textit{Cortex M0+} poradził sobie z obsłużeniem dekodowania nowego formatu w czasie rzeczywistym.
 			
-%		Rdzeń 0 obsługuje te przerwania. Bardziej korzystnym scenariuszem byłoby, gdyby to rdzeń 1 czekał na przerwanie instrukcją \lstinline|wfi| (\textit{wait-for-interrupt}), ponieważ nie ma on innych zadań. Jest to droga do dalszej opytmalizacji projektu.
-
-	Wszystko to dzieje się na rdzeniu 0. Taka koncepcja pozwala na odtwarzanie nieskompresowanego dźwięku. Problem powstaje, gdy musimy w czasie rzeczywistym zdekodować nietrywialny format zapisu audio, np. MP3.
-	
-	\subsection{Dekompresja formatów}
-	\imgh{3/rb_chart_new}{Udział kodeków w stacjach radiowych}{0.9}
-	
-	Wybór padł na format MP3. Jest on popularnym formatem zapisu skompresowanego dźwięku. Wg agregatu stacji radiowych \textit{Radio Browser}\textsuperscript{\cite{radio_browser_codecs}}, około 66\% wszystkich wpisów używa kodeku MP3 (w przypadku polskich stacji jest to około 60\%). Graficznie procentowe udziały przedstawia rysunek \ref{3/rb_chart_new}.
-	
-	\paragraph{Droga dalszego rozwoju}
-	Najbardziej korzystną drogą rozwoju jest implementacja dekodowania AAC/AAC+. Na ten moment nie zostało to zrobione.
-	$ $\\
-	
-	\subsubsection{Architektura programowa dekodera}
-	\imgh{3/PicoRadio-sound-decoding}{Architektura dekodowania dźwięku}{0.95}
-	
-	Rysunek \ref{3/PicoRadio-sound-decoding} przedstawia w jaki sposób zorganizowane zostało odtwarzanie i dekodowanie dźwięku. Wszelkie interakcje z pozostałymi komponentami systemu obsługiwane są przez rdzeń 0, natomiast rdzeń 1 obsługuje dekodowanie formatów audio. Droga, jaką obrano, pozwala na łatwe rozszerzanie obsługiwanych formatów. Ważne jest tylko, aby pojedynczy rdzeń \textit{Cortex M0+} poradził sobie z obsłużeniem dekodowania nowego formatu w czasie rzeczywistym.
-	
-%	\paragraph{Flagi przerwań}
-%	Jak wcześniej wspomniano, przerwania generowane przez kanały DMA ustawiają dwie flagi \lstinline|a_done_irq| lub \lstinline|b_done_irq|. Poprzez wspólną pamięć są one odczytywane przez rdzeń 1, a ten dekoduje dane i uzupełn
-
-	\paragraph{Część Decode}
-	Komponenty z tej rodziny odpowiedzialne są za dostarczanie nowych danych surowych (w kodzie \lstinline|raw_buf|(\textit{raw buffer}) lub \lstinline|cbuf| (\textit{content buffer})). Klasa bazowa \lstinline|DecodeBase| odpowiada za wspólne elementy obu źródeł danych. Obsługuje ona m.in. zunifikowane funkcje do wysyłania komunikatów o zakończeniu dekodowania, zużyciu danych z bufora, bądź błędach. Umożliwione zostało także odczytywanie statystyk i metadanych. Poszczególne klasy podrzędne skupiają się na dostarczaniu danych z różnych źródeł. \lstinline|DecodeFile| odpowiada za odczyt plików z karty SD, natomiast \lstinline|DecodeStream| odbiera dane ze strumienia internetowego.
-	
-	\paragraph{Część Format}
-	Powstały interfejs \lstinline|Format| służy do abstrakcji dekodowania danych surowych. Jego główną metodą jest \lstinline|decode_up_to_n|, która dekoduje co najwyżej \lstinline|n| jednostek danych. Aby dowiedzieć się ile jednostek należy zdekodować istnieją funkcje \lstinline|units_to_decode_whole| i \lstinline|units_to_decode_half|, zwracające odpowiednio ile jednostek zapełni cały bufor \lstinline|audio_pcm| a ile pół bufora (taka liczba jest dekodowana po otrzymaniu przerwania od DMA, którego jeden kanał transferuje pół bufora). W przypadku formatu WAV jednostki to po prostu bajty, a gdy mówimy o MP3 będą to ramki. Podklasy implementują specjalizowane funkcje do dekodowania poszczególnych formatów.
-	
-	\paragraph{Bufor FIFO}
-	RP2040 posiada wbudowane dwa bufory FIFO do komunikacji między rdzeniami. Jeden z rdzenia 0 do rdzenia 1, drugi w przeciwnym kierunku. Wykorzystany został bufor w kierunku $1 \rightarrow 0$ do przekazywania informacji o stanie dekodowania. Zaimplementowany został moduł \lstinline|mcorefifo| do wysyłania abstrakcyjnych wiadomości. Wykorzystuje on przerwanie SIO do odbioru komunikatów, a następnie przekazuje je do zarejestrowanego odbiorcy. Jednym z takich odbiorców jest moduł odtwarzacza, który w pliku \lstinline|decodebase.cpp| odbiera komunikaty o identyfikatorze \lstinline|PLAYER| w funkcji \lstinline|player_msg()| i przekazuje do swojej głównej pętli w funkcji \lstinline|play()|.
-	
-	\subsubsection{Biblioteka \textit{helixmp3}}
-	Do dekodowania formatu MP3 wykorzystana została biblioteka \lstinline|helixmp3|. Opiera się ona na arytmetyce stałoprzecinkowej. Oryginalnie napisana przez \textit{RealNetworks}\textsuperscript{\cite{realnetworks}} w 2003 roku, znaleziona została w internecie pod postacią repozytoria GitHub\textsuperscript{\cite{helixmp3_repo}}. Do tej biblioteki dodana została obsługa RP2040 jak również integracja ze środowiskiem CMake. Jest to pierwszy wynik w wyszukiwarce Google (fraza \textit{mp3 decoding library fixed point}), dlatego poczynione ulepszenia, zostały zgłoszone autorowi repozytorium\textsuperscript{\cite{helixmp3_pr}}. Umożliwiona została także statyczna alokacja buforów na dane dekodera.
-	
-	Do biblioteki dekodującej odwołuje się tylko \lstinline|FormatMP3|, który funkcją \lstinline|decode_up_to_n|, dekoduje co najwyżej \lstinline|n| ramek MP3. Zwracana jest liczba zdekodowanych ramek. Jeżeli zdekoduje ich mniej, to znaczy, że odtwarzanie zakończyło się pomyślnie (np. koniec pliku). Jeżeli zwrócona zostanie wartość mniejsza od zera, oznacza to błąd. Jeżeli danych w buforze brakuje (np. niestabilna komunikacja sieciowa), rdzeń 1 czeka na dane w nieskończoność. Użytkownik jednak w każdej chwili może przerwać oczekiwanie.
-	
-	\subsection{Rozpoczynanie odtwarzania}
-	\imgcs{3/PicoRadio-start}{Schemat procesu rozpoczynania odtwarzania}{0.7}
-	Użytkownik rozpoczyna odtwarzanie poprzez wybranie pozycji z listy ulubionych lub wyszukanie stacji/wybór pliku na karcie SD. Dowolny widok może zainicjować ekran odtwarzania \lstinline|ScPlay|. Jednym z parametrów inicjalizacyjnych jest ścieżka dostępu. Gdy nastąpi zmiana aktywnego ekranu, wywoływana jest funkcja \lstinline|player_start()|. Więcej na temat widoków i zarządzania ekranem napisano w sekcji \ref{?}. % TODO uzupełnić ref
-	
-	\paragraph{Zadania systemu FreeRTOS}
-		Funkcja \lstinline|player_start()| tworzy dwa osobne zadania w systemie operacyjnym, a sama kończy działanie od razu. Pierwsze z nich, \lstinline|player|, odpowiedzialne jest za uruchomienie procesu odtwarzania i przetwarzanie komunikatów (np. odnośnie konsumpcji bajtów z bufora czy wystąpienia błędów). Ładuje ono także dane do bufora z pliku. Drugie, pomocnicze zadanie \lstinline|player stat| służy do okresowego aktualizowania stanu odtwarzania na ekranie.
-	
-	\paragraph{Wykrywanie formatu}
-		Format audio wykrywany jest na podstawie ścieżki do zasobu. Jeżeli ta zaczyna się od \lstinline|http|, zostanie użyta klasa \lstinline|DecodeStream| i \lstinline|FormatMP3|. Jeżeli początek nie dopasuje się do wzorca, przyjmowane jest odtwarzanie z pliku (klasa \lstinline|DecodeFile|) i na podstawie rozszerzenia pliku definiowane jest użycie klasy \lstinline|FormatWAV| lub \lstinline|FormatMP3|.
+		%	\paragraph{Flagi przerwań}
+		%	Jak wcześniej wspomniano, przerwania generowane przez kanały DMA ustawiają dwie flagi \lstinline|a_done_irq| lub \lstinline|b_done_irq|. Poprzez wspólną pamięć są one odczytywane przez rdzeń 1, a ten dekoduje dane i uzupełn
 		
-	\paragraph{Ograniczenia detekcji plików}
-		Definicja formatu audio przebiega na samym początku co jest poważnym ograniczeniem i nie pozwala na zmianę formatu np. po odczytaniu nagłówka \lstinline|Content-type|. Jednak w obecnej formie projekt obsługuje tylko strumieniowanie plików MP3. Gdyby została dodana obsługa stacji AAC/AAC+ należałoby poprawić ten fragment kodu. Dodatkowo wtedy detekcja formatu plików lokalnych mogłaby zostać przeniesiona do \lstinline|DecodeFile|. Oprócz rozszerzeń, możliwa byłaby detekcja formatów plików na podstawie ich nagłówków. Pliki rozpoczynające się od \lstinline|http| zostaną potraktowane jako strumienie audio. Należy rozważyć użycie prefiksu \lstinline|file://| dla plików lokalnych.
-	
-	\paragraph{Możliwe błędy}
-		Jeden z możliwych błędów występuje, gdy nie zostanie dopasowany żaden znany format audio. Należy wtedy zweryfikować czy pliki posiadają odpowiednie rozszerzenia, a strumienie sieciowe prefiks \lstinline|http|. Inny błąd oznacza że nie udało się rozpocząć odtwarzania, tzn. plik nie istnieje/nie można go odczytać lub serwer strumieniujący nie odpowiada lub też nie udało się określić jego adresu. Przedstawione poniżej zakańczanie odtwarzania nie uwzględnia tych błędów, ponieważ z punktu widzenia programu jeszcze się ono nie rozpoczęło.
-	
-	\subsection{Zatrzymywanie odtwarzania}
-	\imgcs{3/PicoRadio-stop}{Schemat obsługi żądań zakończenia odtwarzania}{1}
-	Zakończenie przetwarzania audio jest nietrywialnym procesem. Sygnał do zatrzymania może pochodzić z trzech różnych źródeł. Na rysunku~\ref{3/PicoRadio-stop} przedstawione zostały kolejne etapy obsługi tych sygnałów. Natomiast poniżej opisano skrótowo jak działa zgłaszanie poszczególnych kategorii zdarzeń. 
-	$ $\\
-	
-	Parametrem funkcji \lstinline|DecodeBase::notify_playback_end(bool error)| jest flaga, która mówi, czy odtwarzanie zakończyło się błędem. Jeżeli jest ona ustawiona, to program wyświetli ekran błędu.
-	
-	\paragraph{Użytkownik}
-		Użytkownik może zakończyć odtwarzanie poprzez naciśnięcie przycisku \textit{Wstecz} na ekranie odtwarzania. Podsystem wyświetlacza wywołuje wtedy funkcje \lstinline|player_stop()|, która rozpoczyna proces zakończenia odtwarzania i czeka aż rzeczywiście się ono zakończy. Ustawiana jest flaga \lstinline|abort|, która powoduje, że wszystkie implementacje \lstinline|decode_up_to_n(int n)|, kończą dekodowanie natychmiast. Dekodowane jest mniej ramek niż zadane \lstinline|n|, co wykrywane jest przez program jako zakończenie odtwarzania.
-	
-	\paragraph{Koniec pliku}
-		Gdy funkcja \lstinline|load_buffer()| w \lstinline|DecodeFile| napotka koniec pliku powiadamia o tym fakcie klasę nadrzędną wywołując \lstinline|notify_eof()|. Nie używa ona bezpośrednio funkcji \lstinline|notify_playback_end()|, ponieważ przy zakończeniu odtwarzania bufor może zawierać jeszcze do 4 sekund dźwięku (bufor 64kB, format MP3 128kbps). Dopiero gdy funkcja oczekiwania na dane wykryje że jest ich za mało, a w pliku nie ma więcej bajtów do odczytania, odtwarzanie jest zakańczane. Dzieje się to w analogiczny sposób jak w przypadku zakończenia go przez użytkownika: dekodowane jest mniej ramek audio.
-	
-	\paragraph{Błąd}
-		Błędy modułu odtwarzacza mogą być dwojakie. Błąd sieciowy występuje przy odtwarzaniu strumieni internetowych, np. radia. Biblioteka \textit{LWIP} zgłasza błąd, który poprzez \lstinline|notify_playback_end()| powoduje natychmiastowe zatrzymanie odtwarzania i wyświetlenie komunikatu o błędzie (flaga \lstinline|error| ustawiona na \lstinline|true|). Błąd odczytu z pliku występuje, gdy funkcja uzupełniająca bufor o dane z pliku zakończy się niepowodzeniem. Oznaczać to może na przykład że użytkownik usunął kartę SD z urządzenia lub wystąpił błąd komunikacji z nią. Analogicznie jak w przypadku błędu sieci odtwarzanie jest zakańczane natychmiast.
+			\paragraph{Część Decode}
+				Komponenty z tej rodziny odpowiedzialne są za dostarczanie nowych danych surowych (w kodzie \lstinline|raw_buf|(\textit{raw buffer}) lub \lstinline|cbuf| (\textit{content buffer})). Klasa bazowa \lstinline|DecodeBase| odpowiada za wspólne elementy obu źródeł danych. Obsługuje ona m.in. zunifikowane funkcje do wysyłania komunikatów o zakończeniu dekodowania, zużyciu danych z bufora, bądź błędach. Umożliwione zostało także odczytywanie statystyk i metadanych. Poszczególne klasy podrzędne skupiają się na dostarczaniu danych z różnych źródeł. \lstinline|DecodeFile| odpowiada za odczyt plików z karty SD, natomiast \lstinline|DecodeStream| odbiera dane ze strumienia internetowego.
+			
+			\paragraph{Część Format}
+				Powstały interfejs \lstinline|Format| służy do abstrakcji dekodowania danych surowych. Jego główną metodą jest \lstinline|decode_up_to_n|, która dekoduje co najwyżej \lstinline|n| jednostek danych. Aby dowiedzieć się ile jednostek należy zdekodować istnieją funkcje \lstinline|units_to_decode_whole| i \lstinline|units_to_decode_half|, zwracające odpowiednio ile jednostek zapełni cały bufor \lstinline|audio_pcm| a ile pół bufora (taka liczba jest dekodowana po otrzymaniu przerwania od DMA, którego jeden kanał transferuje pół bufora). W przypadku formatu WAV jednostki to po prostu bajty, a gdy mówimy o MP3 będą to ramki. Podklasy implementują specjalizowane funkcje do dekodowania poszczególnych formatów.
+			
+			\paragraph{Bufor FIFO}
+				RP2040 posiada wbudowane dwa bufory FIFO do komunikacji między rdzeniami. Jeden z rdzenia 0 do rdzenia 1, drugi w przeciwnym kierunku. Wykorzystany został bufor w kierunku $1 \rightarrow 0$ do przekazywania informacji o stanie dekodowania. Zaimplementowany został moduł \lstinline|mcorefifo| do wysyłania abstrakcyjnych wiadomości. Wykorzystuje on przerwanie SIO do odbioru komunikatów, a następnie przekazuje je do zarejestrowanego odbiorcy. Jednym z takich odbiorców jest moduł odtwarzacza, który w pliku \lstinline|decodebase.cpp| odbiera komunikaty o identyfikatorze \lstinline|PLAYER| w funkcji \lstinline|player_msg()| i przekazuje do swojej głównej pętli w funkcji \lstinline|play()|.
 		
-	\subsection{Metadane}
-	Jednym z wymagań projektu było wyświetlanie aktualnie odtwarzanego utworu. Należało więc co najmniej zdekodować metadane wysyłane przez stacje radiowe. Dodatkowo, zostało zaimplementowane odczytywanie metadanych z plików MP3.
-	
-	\subsubsection{Stacje radiowe -- ICY}
-		Szeroko stosowanym formatem przesyłania danych o utworach w strumieniach radiowych jest format ICY\textsuperscript{\cite{icy_spec}}. Klient może zażądać od serwera metadanych wysyłając do niego nagłówek \lstinline|Icy-Metadata: 1|. Serwer, jeżeli zaakceptował żądanie, odsyła nagłówek \lstinline|icy-metaint: <n>|. Jego wartość oznacza co ile bajtów strumienia będą wysyłane ramki z metadanymi. Zwykle \lstinline|<n>| jest równe 16000, co oznacza, że co każde odebrane 16000 bajtów wystąpią metadane. Jest to 1 sekunda dźwięku MP3 128kbps, czyli nazwy utworów będą aktualizowane raz na sekundę. Występuje też wartość 1000, co oznacza 16 aktualizacji w ciągu sekundy. Inne wartości są możliwe, ale nie są spotykane w praktyce.
+		\subsubsection{Biblioteka \textit{helixmp3}}
+			Do dekodowania formatu MP3 wykorzystana została biblioteka \lstinline|helixmp3|. Opiera się ona na arytmetyce stałoprzecinkowej. Oryginalnie napisana przez \textit{RealNetworks}\textsuperscript{\cite{realnetworks}} w 2003 roku, znaleziona została w internecie pod postacią repozytoria GitHub\textsuperscript{\cite{helixmp3_repo}}. Do tej biblioteki dodana została obsługa RP2040 jak również integracja ze środowiskiem CMake. Jest to pierwszy wynik w wyszukiwarce Google (fraza \textit{mp3 decoding library fixed point}), dlatego poczynione ulepszenia, zostały zgłoszone autorowi repozytorium\textsuperscript{\cite{helixmp3_pr}}. Umożliwiona została także statyczna alokacja buforów na dane dekodera.
+			
+			Do biblioteki dekodującej odwołuje się tylko \lstinline|FormatMP3|, który funkcją \lstinline|decode_up_to_n|, dekoduje co najwyżej \lstinline|n| ramek MP3. Zwracana jest liczba zdekodowanych ramek. Jeżeli zdekoduje ich mniej, to znaczy, że odtwarzanie zakończyło się pomyślnie (np. koniec pliku). Jeżeli zwrócona zostanie wartość mniejsza od zera, oznacza to błąd. Jeżeli danych w buforze brakuje (np. niestabilna komunikacja sieciowa), rdzeń 1 czeka na dane w nieskończoność. Użytkownik jednak w każdej chwili może przerwać oczekiwanie.
 		
-		\paragraph{Abstrakcyjne położenie ramek ICY}
-		Warto zaznaczyć, że miejsce wstawienia metadanych w żaden sposób nie uwzględnia formatu audio. Nie możemy zakładać że nie podzielą one jednej ramki MP3 na dwie części. Dla dźwięku MP3 128kbps ramka ma rozmiar 418 bajtów. Przy wartości \lstinline|icy-metaint| równej 16000, dane dźwiękowe będą podzielone co ok. $38.28$ ramki. Z tego powodu konieczne stało się obsługiwanie ramek ICY w momencie zapisu do bufora, zamiast przy jego odczycie. Odczyt obsługuje odpowiednia instancja \lstinline|Format|, która nie musi obsługiwać odczytywania ramek bajt po bajcie. Na przykład \lstinline|FormatMP3| nie obsługuje dekodowania ramek w częściach. Ramka MP3 musi znaleźć się w ciągłym obszarze pamięci, nie może być rozdzielona ramką ICY.
-		$ $\\
+		\subsection{Rozpoczynanie odtwarzania}
+			\imgcs{3/PicoRadio-start}{Schemat procesu rozpoczynania odtwarzania}{0.7}
+			Użytkownik rozpoczyna odtwarzanie poprzez wybranie pozycji z listy ulubionych lub wyszukanie stacji/wybór pliku na karcie SD. Dowolny widok może zainicjować ekran odtwarzania \lstinline|ScPlay|. Jednym z parametrów inicjalizacyjnych jest ścieżka dostępu. Gdy nastąpi zmiana aktywnego ekranu, wywoływana jest funkcja \lstinline|player_start()|. Więcej na temat widoków i zarządzania ekranem napisano w sekcji \ref{?}. % TODO uzupełnić ref
+			
+			\paragraph{Zadania systemu FreeRTOS}
+				Funkcja \lstinline|player_start()| tworzy dwa osobne zadania w systemie operacyjnym, a sama kończy działanie od razu. Pierwsze z nich, \lstinline|player|, odpowiedzialne jest za uruchomienie procesu odtwarzania i przetwarzanie komunikatów (np. odnośnie konsumpcji bajtów z bufora czy wystąpienia błędów). Ładuje ono także dane do bufora z pliku. Drugie, pomocnicze zadanie \lstinline|player stat| służy do okresowego aktualizowania stanu odtwarzania na ekranie.
+			
+			\paragraph{Wykrywanie formatu}
+				Format audio wykrywany jest na podstawie ścieżki do zasobu. Jeżeli ta zaczyna się od \lstinline|http|, zostanie użyta klasa \lstinline|DecodeStream| i \lstinline|FormatMP3|. Jeżeli początek nie dopasuje się do wzorca, przyjmowane jest odtwarzanie z pliku (klasa \lstinline|DecodeFile|) i na podstawie rozszerzenia pliku definiowane jest użycie klasy \lstinline|FormatWAV| lub \lstinline|FormatMP3|.
+				
+			\paragraph{Ograniczenia detekcji plików}
+				Definicja formatu audio przebiega na samym początku co jest poważnym ograniczeniem i nie pozwala na zmianę formatu np. po odczytaniu nagłówka \lstinline|Content-type|. Jednak w obecnej formie projekt obsługuje tylko strumieniowanie plików MP3. Gdyby została dodana obsługa stacji AAC/AAC+ należałoby poprawić ten fragment kodu. Dodatkowo wtedy detekcja formatu plików lokalnych mogłaby zostać przeniesiona do \lstinline|DecodeFile|. Oprócz rozszerzeń, możliwa byłaby detekcja formatów plików na podstawie ich nagłówków. Pliki rozpoczynające się od \lstinline|http| zostaną potraktowane jako strumienie audio. Należy rozważyć użycie prefiksu \lstinline|file://| dla plików lokalnych.
+			
+			\paragraph{Możliwe błędy}
+				Jeden z możliwych błędów występuje, gdy nie zostanie dopasowany żaden znany format audio. Należy wtedy zweryfikować czy pliki posiadają odpowiednie rozszerzenia, a strumienie sieciowe prefiks \lstinline|http|. Inny błąd oznacza że nie udało się rozpocząć odtwarzania, tzn. plik nie istnieje/nie można go odczytać lub serwer strumieniujący nie odpowiada lub też nie udało się określić jego adresu. Przedstawione poniżej zakańczanie odtwarzania nie uwzględnia tych błędów, ponieważ z punktu widzenia programu jeszcze się ono nie rozpoczęło.
 		
-		Funkcja \lstinline|DecodeStream::play()|, jeżeli dostępny jest nagłówek \lstinline|icy-metaint|, inicjalizuje odbierane danych metodą \lstinline|ICY::start()|. Następnie rejestruje odwołanie, które jest wywoływane po każdym zapisie do bufora oraz przetwarza już odebrane dane. W trakcie tych czynności blokowany jest kontekst biblioteki sieciowej, aby w trakcie przetwarzania danych nie zostały odebrane żadne nowe dane, a po odblokowaniu każde następne były wychwycone przez funkcję \lstinline|cbuf_write_cb()|.
-		
-		W każdym z tych scenariuszy (wstępne i późniejsze przetwarzanie) wywoływana jest w pętli funkcja \lstinline|ICY::read()|. Pętla jest potrzebna, ponieważ w porcji odebranych danych, szczególnie dla niskich wartości \lstinline|icy-metaint|, może wystąpić więcej niż jedna ramka ICY.
-		
-		\imgcs{3/PicoRadio-icy}{Ramka MP3 rozdzielona ramką ICY}{0.9}
-		\paragraph{Format danych ICY}
-			Nagłówek metadanych ICY składa się z jednego bajtu kodującego rozmiar danych (bez nagłówka) podzielony przez 16. Dane dopełniane są zerami do podanego rozmiaru. Wewnątrz ramki kolejne pola oddzielone są od siebie średnikami, a same pola są w formacie \lstinline|klucz='wartosc'|. Dekoder zaimplementowany w projekcie obsługuje tylko klucz \lstinline|StreamTitle|, którego wartość to zazwyczaj tytuł utworu i jego wykonawca. Ramka ICY została przedstawiona na rysunku~\ref{3/PicoRadio-icy}.
+		\subsection{Zatrzymywanie odtwarzania}
+			\imgcs{3/PicoRadio-stop}{Schemat obsługi żądań zakończenia odtwarzania}{1}
+			Zakończenie przetwarzania audio jest nietrywialnym procesem. Sygnał do zatrzymania może pochodzić z trzech różnych źródeł. Na rysunku~\ref{3/PicoRadio-stop} przedstawione zostały kolejne etapy obsługi tych sygnałów. Natomiast poniżej opisano skrótowo jak działa zgłaszanie poszczególnych kategorii zdarzeń. 
 			$ $\\
 			
-		Wywołanie \lstinline|ICY::read()| kopiuje ramkę ICY z bufora audio do bufora tymczasowego, a następnie przesuwa dane za ramką wstecz o rozmiar ramki. Operację można porównać do wycinania tekstu z dokumentu tekstowego. W ten sposób przywracamy ciągłość ramce MP3. Dane w buforze tymczasowym nie są interpretowane aby zaoszczędzić cenny czas. Przypomnijmy, cała ta operacja odbywa się przy zablokowanej komunikacji sieciowej. Dane interpretowane są dopiero gdy zadanie \lstinline|player stat| wywoła \lstinline|DecodeBase::get_meta_str()|, która w implementacji \lstinline|DecodeStream| odwołuje się do metody \lstinline|ICY::get_stream_title()|. Funkcja ta blokuje mutex bufora tymczasowego i kopiuje dane do swojego buforu na stosie. Dopiero wtedy rozpoczyna potencjalnie kosztowną czasowo interpretację danych.
-	
-	\subsubsection{Lokalne pliki MP3 -- ID3v2}
-		Tagowanie MP3 obsługiwane jest zupełnie różnie od ramek ICY. Mogą one występować na początku plików MP3. Sygnalizuje to fakt, że pliki te rozpoczynają się 3 bajtami równymi \lstinline|ID3|. Funkcje do obsługi tego typu tagowań zostały zaimplementowane w klasach pochodnych \lstinline|Format|. Wykorzystana została już wcześniej istniejąca funkcja \lstinline|Format::decode_header()|. Obsługiwała ona dekodowanie nagłówków WAVE. Wywoływana jest ona po pierwszym załadowaniu bufora, tylko raz na dany plik/strumień. Implementacja \lstinline|FormatMP3| wywołuje wtedy funkcję \lstinline|ID3::try_parse()|.
+			Parametrem funkcji \lstinline|DecodeBase::notify_playback_end(bool error)| jest flaga, która mówi, czy odtwarzanie zakończyło się błędem. Jeżeli jest ona ustawiona, to program wyświetli ekran błędu.
+			
+			\paragraph{Użytkownik}
+				Użytkownik może zakończyć odtwarzanie poprzez naciśnięcie przycisku \textit{Wstecz} na ekranie odtwarzania. Podsystem wyświetlacza wywołuje wtedy funkcje \lstinline|player_stop()|, która rozpoczyna proces zakończenia odtwarzania i czeka aż rzeczywiście się ono zakończy. Ustawiana jest flaga \lstinline|abort|, która powoduje, że wszystkie implementacje \lstinline|decode_up_to_n(int n)|, kończą dekodowanie natychmiast. Dekodowane jest mniej ramek niż zadane \lstinline|n|, co wykrywane jest przez program jako zakończenie odtwarzania.
+			
+			\paragraph{Koniec pliku}
+				Gdy funkcja \lstinline|load_buffer()| w \lstinline|DecodeFile| napotka koniec pliku powiadamia o tym fakcie klasę nadrzędną wywołując \lstinline|notify_eof()|. Nie używa ona bezpośrednio funkcji \lstinline|notify_playback_end()|, ponieważ przy zakończeniu odtwarzania bufor może zawierać jeszcze do 4 sekund dźwięku (bufor 64kB, format MP3 128kbps). Dopiero gdy funkcja oczekiwania na dane wykryje że jest ich za mało, a w pliku nie ma więcej bajtów do odczytania, odtwarzanie jest zakańczane. Dzieje się to w analogiczny sposób jak w przypadku zakończenia go przez użytkownika: dekodowane jest mniej ramek audio.
+			
+			\paragraph{Błąd}
+				Błędy modułu odtwarzacza mogą być dwojakie. Błąd sieciowy występuje przy odtwarzaniu strumieni internetowych, np. radia. Biblioteka \textit{LWIP} zgłasza błąd, który poprzez \lstinline|notify_playback_end()| powoduje natychmiastowe zatrzymanie odtwarzania i wyświetlenie komunikatu o błędzie (flaga \lstinline|error| ustawiona na \lstinline|true|). Błąd odczytu z pliku występuje, gdy funkcja uzupełniająca bufor o dane z pliku zakończy się niepowodzeniem. Oznaczać to może na przykład że użytkownik usunął kartę SD z urządzenia lub wystąpił błąd komunikacji z nią. Analogicznie jak w przypadku błędu sieci odtwarzanie jest zakańczane natychmiast.
+			
+		\subsection{Metadane}
+		Jednym z wymagań projektu było wyświetlanie aktualnie odtwarzanego utworu. Należało więc co najmniej zdekodować metadane wysyłane przez stacje radiowe. Dodatkowo, zostało zaimplementowane odczytywanie metadanych z plików MP3.
 		
-		\paragraph{Standard ID3v2}
-		Ramki ID3 w wersji drugiej mają znacznie bardziej rozbudowane kodowanie od np. ramek ICY czy starszego formatu ID3v1. Dokumentacja oryginalnie dostępna była pod adresem \href{id3.org}{id3.org} lecz w trakcie pisania pracy była ona niedostępna. Skorzystano z alternatywnej strony\textsuperscript{\cite{id3_spec_mutagen}}.
+		\subsubsection{Stacje radiowe -- ICY}
+			Szeroko stosowanym formatem przesyłania danych o utworach w strumieniach radiowych jest format ICY\textsuperscript{\cite{icy_spec}}. Klient może zażądać od serwera metadanych wysyłając do niego nagłówek \lstinline|Icy-Metadata: 1|. Serwer, jeżeli zaakceptował żądanie, odsyła nagłówek \lstinline|icy-metaint: <n>|. Jego wartość oznacza co ile bajtów strumienia będą wysyłane ramki z metadanymi. Zwykle \lstinline|<n>| jest równe 16000, co oznacza, że co każde odebrane 16000 bajtów wystąpią metadane. Jest to 1 sekunda dźwięku MP3 128kbps, czyli nazwy utworów będą aktualizowane raz na sekundę. Występuje też wartość 1000, co oznacza 16 aktualizacji w ciągu sekundy. Inne wartości są możliwe, ale nie są spotykane w praktyce.
+			
+			\paragraph{Abstrakcyjne położenie ramek ICY}
+				Warto zaznaczyć, że miejsce wstawienia metadanych w żaden sposób nie uwzględnia formatu audio. Nie możemy zakładać że nie podzielą one jednej ramki MP3 na dwie części. Dla dźwięku MP3 128kbps ramka ma rozmiar 418 bajtów. Przy wartości \lstinline|icy-metaint| równej 16000, dane dźwiękowe będą podzielone co ok. $38.28$ ramki. Z tego powodu konieczne stało się obsługiwanie ramek ICY w momencie zapisu do bufora, zamiast przy jego odczycie. Odczyt obsługuje odpowiednia instancja \lstinline|Format|, która nie musi obsługiwać odczytywania ramek bajt po bajcie. Na przykład \lstinline|FormatMP3| nie obsługuje dekodowania ramek w częściach. Ramka MP3 musi znaleźć się w ciągłym obszarze pamięci, nie może być rozdzielona ramką ICY.
+			$ $\\
+			
+			Funkcja \lstinline|DecodeStream::play()|, jeżeli dostępny jest nagłówek \lstinline|icy-metaint|, inicjalizuje odbierane danych metodą \lstinline|ICY::start()|. Następnie rejestruje odwołanie, które jest wywoływane po każdym zapisie do bufora oraz przetwarza już odebrane dane. W trakcie tych czynności blokowany jest kontekst biblioteki sieciowej, aby w trakcie przetwarzania danych nie zostały odebrane żadne nowe dane, a po odblokowaniu każde następne były wychwycone przez funkcję \lstinline|cbuf_write_cb()|.
+			
+			W każdym z tych scenariuszy (wstępne i późniejsze przetwarzanie) wywoływana jest w pętli funkcja \lstinline|ICY::read()|. Pętla jest potrzebna, ponieważ w porcji odebranych danych, szczególnie dla niskich wartości \lstinline|icy-metaint|, może wystąpić więcej niż jedna ramka ICY.
+			
+			\imgcs{3/PicoRadio-icy}{Ramka MP3 rozdzielona ramką ICY}{0.9}
+			\paragraph{Format danych ICY}
+				Nagłówek metadanych ICY składa się z jednego bajtu kodującego rozmiar danych (bez nagłówka) podzielony przez 16. Dane dopełniane są zerami do podanego rozmiaru. Wewnątrz ramki kolejne pola oddzielone są od siebie średnikami, a same pola są w formacie \lstinline|klucz='wartosc'|. Dekoder zaimplementowany w projekcie obsługuje tylko klucz \lstinline|StreamTitle|, którego wartość to zazwyczaj tytuł utworu i jego wykonawca. Ramka ICY została przedstawiona na rysunku~\ref{3/PicoRadio-icy}.
+				$ $\\
+				
+			Wywołanie \lstinline|ICY::read()| kopiuje ramkę ICY z bufora audio do bufora tymczasowego, a następnie przesuwa dane za ramką wstecz o rozmiar ramki. Operację można porównać do wycinania tekstu z dokumentu tekstowego. W ten sposób przywracamy ciągłość ramce MP3. Dane w buforze tymczasowym nie są interpretowane aby zaoszczędzić cenny czas. Przypomnijmy, cała ta operacja odbywa się przy zablokowanej komunikacji sieciowej. Dane interpretowane są dopiero gdy zadanie \lstinline|player stat| wywoła \lstinline|DecodeBase::get_meta_str()|, która w implementacji \lstinline|DecodeStream| odwołuje się do metody \lstinline|ICY::get_stream_title()|. Funkcja ta blokuje mutex bufora tymczasowego i kopiuje dane do swojego buforu na stosie. Dopiero wtedy rozpoczyna potencjalnie kosztowną czasowo interpretację danych.
 		
-		\paragraph{Format ramek}
-		\imgcs{3/PicoRadio-id3}{Format danych ID3v2}{0.8}
-		Budowa formatu ID3v2 została przedstawiona na rysunku~\ref{3/PicoRadio-id3}. Podstawową jednostką budowy są tagi. Może być ich w pliku dowolna liczba. Są one opakowane dodatkowymi informacjami, takimi jak np. nagłówki. Z głównego nagłówka pobierany jest rozmiar i flaga czy nagłówek rozszerzony jest obecny. Jeżeli tak, to jest on ignorowany. Padding i stopka również są ignorowane.
-		$ $\\
-		
-		Parser rozpoznaje ramki o kodach \lstinline|TPE1|(artysta) i \lstinline|TIT2|(tytuł). Są to ramki tekstowe, dlatego wyszczególniono taki format ramek na rysunku. Pierwszy bajt oznacza jakie kodowanie wykorzystano do zapisania tekstu. Możliwe formaty to ISO-8859-1, UTF-16, UTF-16BE i UTF-8. Wszystkie zostały zaimplementowane i przetestowane.
+		\subsubsection{Lokalne pliki MP3 -- ID3v2}
+			Tagowanie MP3 obsługiwane jest zupełnie różnie od ramek ICY. Mogą one występować na początku plików MP3. Sygnalizuje to fakt, że pliki te rozpoczynają się 3 bajtami równymi \lstinline|ID3|. Funkcje do obsługi tego typu tagowań zostały zaimplementowane w klasach pochodnych \lstinline|Format|. Wykorzystana została już wcześniej istniejąca funkcja \lstinline|Format::decode_header()|. Obsługiwała ona dekodowanie nagłówków WAVE. Wywoływana jest ona po pierwszym załadowaniu bufora, tylko raz na dany plik/strumień. Implementacja \lstinline|FormatMP3| wywołuje wtedy funkcję \lstinline|ID3::try_parse()|.
+			
+			\paragraph{Standard ID3v2}
+			Ramki ID3 w wersji drugiej mają znacznie bardziej rozbudowane kodowanie od np. ramek ICY czy starszego formatu ID3v1. Dokumentacja oryginalnie dostępna była pod adresem \href{id3.org}{id3.org} lecz w trakcie pisania pracy była ona niedostępna. Skorzystano z alternatywnej strony\textsuperscript{\cite{id3_spec_mutagen}}.
+			
+			\paragraph{Format ramek}
+			\imgcs{3/PicoRadio-id3}{Format danych ID3v2}{0.8}
+			Budowa formatu ID3v2 została przedstawiona na rysunku~\ref{3/PicoRadio-id3}. Podstawową jednostką budowy są tagi. Może być ich w pliku dowolna liczba. Są one opakowane dodatkowymi informacjami, takimi jak np. nagłówki. Z głównego nagłówka pobierany jest rozmiar i flaga czy nagłówek rozszerzony jest obecny. Jeżeli tak, to jest on ignorowany. Padding i stopka również są ignorowane.
+			$ $\\
+			
+			Parser rozpoznaje ramki o kodach \lstinline|TPE1|(artysta) i \lstinline|TIT2|(tytuł). Są to ramki tekstowe, dlatego wyszczególniono taki format ramek na rysunku. Pierwszy bajt oznacza jakie kodowanie wykorzystano do zapisania tekstu. Możliwe formaty to ISO-8859-1, UTF-16, UTF-16BE i UTF-8. Wszystkie zostały zaimplementowane i przetestowane.
 	
 	\section{Bufor kołowy}
-	\imgcs{3/PicoRadio-buffer}{Schemat wykorzystania bufora kołowego}{0.8}
-	Małym, lecz kluczowym modułem w projekcie jest bufor kołowy \lstinline|CircularBuffer|. Używany jest on przede wszystkim przy odtwarzaniu dźwięku. Schematyczne wykorzystanie przedstawiono na rysunku~\ref{3/PicoRadio-buffer}. Poniżej zostały opisane najważniejsze jego funkcje.
-	
-	\paragraph{Zapis i odczyt danych przez różne wątki}
-		Dzięki zastosowaniu osobnych liczników do zapisu i odczytu danych, nie występuje problem wyścigu. Każda operacja może być wykonywana niezależnie przez co najwyżej jeden wątek.
+		\imgcs{3/PicoRadio-buffer}{Schemat wykorzystania bufora kołowego}{0.8}
+		Małym, lecz kluczowym modułem w projekcie jest bufor kołowy \lstinline|CircularBuffer|. Używany jest on przede wszystkim przy odtwarzaniu dźwięku. Schematyczne wykorzystanie przedstawiono na rysunku~\ref{3/PicoRadio-buffer}. Poniżej zostały opisane najważniejsze jego funkcje.
 		
-	\paragraph{Funkcje zgłaszające}
-		Moduł umożliwia zarejestrowanie funkcji, które zostaną wywołane po odczytaniu lub zapisaniu danych. Wykorzystywane są np. do potwierdzenia odbioru w komunikacji sieciowej lub do wycięcia metadanych ICY.
-	
-	\paragraph{Sprawdzanie stanu zapełnienia i czekanie}
-		Udostępniony jest szereg funkcji określających stan bufora. Można odczytać pozycje odczytu/zapisu bezpośrednio, lecz poza procesem tworzenia oprogramowania, nie jest to przydatna metryka, ponieważ bufor "zapętla się". Istotniejszą metryką jest natomiast to, ile danych zostało zapisane do bufora a ile odczytane od początku komunikacji. Dzięki tym danym możliwe jest jednoznaczne określenie, ile danych jest gotowych do odczytania w danej chwili, oraz ile jest to procent całkowitej pojemności bufora.
-	
-	\paragraph{Zapętlanie}
-		Najważniejszą funkcją bufora jest jego zapętlanie. Problem pojawił się w chwili implementacji dekodera MP3, ponieważ rozmiar bufora nie dzielił się całkowicie przez długość ramki. To znaczy, ostatnia ramka w buforze była nieciągła. Pierwsza część mogła znaleźć się na końcu bufora, a druga na jego początku. Problem rozwiązano poprzez dołożenie przed początkiem kilku kilobajtów pamięci, do której kopiowane są nieciągłe dane. Wskaźnik odczytu staje się wtedy ujemny. Poszczególne sekcje bufora zostały również pokazane na rysunku~\ref{3/PicoRadio-buffer}. Część normalna \lstinline|buffer| rozpoczyna się zerowym wskaźnikiem odczytu \lstinline|read_at|. Część ukryta \lstinline|buffer_hidden| znajduje się bezpośrednio przed nią.
-	
-	\paragraph{Wycinanie zapisanych danych}
-		Implementacja wycinania stała się konieczna w momencie kiedy w środku niepodzielnej jednostki przy odczycie (np. ramki MP3) pojawiają się metadane jak np. ICY. Trzeba je wtedy przetworzyć i usunąć, zapełniając powstałą lukę danymi występującymi dalej w buforze.
+		\paragraph{Zapis i odczyt danych przez różne wątki}
+			Dzięki zastosowaniu osobnych liczników do zapisu i odczytu danych, nie występuje problem wyścigu. Każda operacja może być wykonywana niezależnie przez co najwyżej jeden wątek.
+			
+		\paragraph{Funkcje zgłaszające}
+			Moduł umożliwia zarejestrowanie funkcji, które zostaną wywołane po odczytaniu lub zapisaniu danych. Wykorzystywane są np. do potwierdzenia odbioru w komunikacji sieciowej lub do wycięcia metadanych ICY.
+		
+		\paragraph{Sprawdzanie stanu zapełnienia i czekanie}
+			Udostępniony jest szereg funkcji określających stan bufora. Można odczytać pozycje odczytu/zapisu bezpośrednio, lecz poza procesem tworzenia oprogramowania, nie jest to przydatna metryka, ponieważ bufor "zapętla się". Istotniejszą metryką jest natomiast to, ile danych zostało zapisane do bufora a ile odczytane od początku komunikacji. Dzięki tym danym możliwe jest jednoznaczne określenie, ile danych jest gotowych do odczytania w danej chwili, oraz ile jest to procent całkowitej pojemności bufora.
+		
+		\paragraph{Zapętlanie}
+			Najważniejszą funkcją bufora jest jego zapętlanie. Problem pojawił się w chwili implementacji dekodera MP3, ponieważ rozmiar bufora nie dzielił się całkowicie przez długość ramki. To znaczy, ostatnia ramka w buforze była nieciągła. Pierwsza część mogła znaleźć się na końcu bufora, a druga na jego początku. Problem rozwiązano poprzez dołożenie przed początkiem kilku kilobajtów pamięci, do której kopiowane są nieciągłe dane. Wskaźnik odczytu staje się wtedy ujemny. Poszczególne sekcje bufora zostały również pokazane na rysunku~\ref{3/PicoRadio-buffer}. Część normalna \lstinline|buffer| rozpoczyna się zerowym wskaźnikiem odczytu \lstinline|read_at|. Część ukryta \lstinline|buffer_hidden| znajduje się bezpośrednio przed nią.
+		
+		\paragraph{Wycinanie zapisanych danych}
+			Implementacja wycinania stała się konieczna w momencie kiedy w środku niepodzielnej jednostki przy odczycie (np. ramki MP3) pojawiają się metadane jak np. ICY. Trzeba je wtedy przetworzyć i usunąć, zapełniając powstałą lukę danymi występującymi dalej w buforze.
 	
 	\section{Klient protokołu HTTP}
 		Potrzeba stworzenia własnej implementacji klienta HTTP stała się konieczna, aby zintegrować go z buforem kołowym i biblioteką sieciową. Obsługuje on przekierowania i podstawowe nagłówki. Wystarczająco, aby z powodzeniem pobierać wyniki wyszukiwań stacji oraz odtwarzać je. Implementacja jest dwuczęściowa. Nadrzędny moduł \lstinline|HttpClient| obsługuje wysokopoziomowy standard HTTP. Zajmuje się komponowaniem żądań, ich nagłówków, a także przetwarzaniem odpowiedzi. Podrzędny moduł obsługuje niskopoziomową komunikację sieciową. Taka budowa modułowa pozwoliła na testowanie serwera w środowisku PC ze stosowną implementacją modułu podrzędnego. Urządzenie zawiera moduł \lstinline|HttpClientPico|, który współpracuje z zasobami dostępnymi na mikrokontrolerze.
