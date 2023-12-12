@@ -1,0 +1,13 @@
+Most memory-intensive files:
+   70152 libs/liblibs.a(static.cpp.obj)
+   48770 lwip/src/core/memp.c.obj
+   44750 libs/liblibs.a(player.cpp.obj)
+   28700 libs/external/FreeRTOS-Kernel/libfreertos_kernel.a
+    9656 libs/liblibs.a(screenmng.cpp.obj)
+    4035 lwip/src/core/mem.c.obj
+    3077 libs/liblibs.a(lfs.cpp.obj)
+    2472 lib/cyw43-driver/src/cyw43_ctrl.c.obj
+    1392 libs/liblibs.a(m3u.cpp.obj)
+    1162 lwip/src/core/dns.c.obj
+
+RAM consumed (static): 212.65kB / 264kB:   80.55%

@@ -100,19 +100,43 @@
 % side-set
 \newcommand{\sset}{\lstinline|side-set|}
 
+% Listingi kodu
+% Style
+\lstdefinestyle{default}{
+	basicstyle={\ttfamily \footnotesize},
+	morekeywords={},
+	numbers=left,
+	backgroundcolor=\color{lbcolor}
+}
 \lstdefinestyle{pio}{
 	basicstyle={\ttfamily \footnotesize},
 	morekeywords={out, side, jmp, set},
 	numbers=left,
 	backgroundcolor=\color{lbcolor}
 }
-
 \lstdefinestyle{scad}{
 	basicstyle={\ttfamily \footnotesize},
 	morekeywords={module, color, for, translate},
 	numbers=left,
 	backgroundcolor=\color{lbcolor}
 }
+\lstdefinestyle{c}{
+	basicstyle={\ttfamily \footnotesize},
+	morekeywords={while, if, false, DBG_ON, f_read, DBG_OFF},
+	numbers=left,
+	backgroundcolor=\color{lbcolor}
+}
+
+% input listing {style}{caption}{path}
+\newcommand{\lstfile}[3]{
+	\noindent
+	\hspace{0.1\linewidth}
+	\begin{minipage}{0.8\linewidth}
+		\lstinputlisting[style=#1, caption={#2}, label={#3}]{#3}
+	\end{minipage}
+	\vspace{0.3cm}
+}
+
 
 \begin{document}
 \lstset{inputencoding=utf8, basicstyle=\ttfamily}
@@ -340,19 +364,19 @@
 		\end{itemize}
 
 	\section{Odtwarzanie dźwięku}
-		Zanim radio urosło do rangi pracy inżynierskiej, było ono moim prywatnym projektem. Chciałem poznać mikrokontroler RP2040. Poznać \lstinline|pico-sdk|. Po pierwszym kontakcie na \textit{Systemach Wbudowanych} środowisko stworzone wokół przystępnej cenowo płytki Raspberry Pi Pico wydawało się ciekawe i interesujące. Mikrokontroler ten, bogato wyposażony, stanowił idealną podstawę do stworzenia czegoś, co zawsze chciałem zbudować: odtwarzacza dźwięku. Przy okazji, tworząc taki projekt mogłem zaznajomić się ze wszystkimi ważniejszymi peryferiami układu (wykorzystałem m.in. PWM, DMA, a także później PIO).
+%		Zanim radio urosło do rangi pracy inżynierskiej, było ono moim prywatnym projektem. Chciałem poznać mikrokontroler RP2040. Poznać \lstinline|pico-sdk|. Po pierwszym kontakcie na \textit{Systemach Wbudowanych} środowisko stworzone wokół przystępnej cenowo płytki Raspberry Pi Pico wydawało się ciekawe i interesujące. Mikrokontroler ten, bogato wyposażony, stanowił idealną podstawę do stworzenia czegoś, co zawsze chciałem zbudować: odtwarzacza dźwięku. Przy okazji, tworząc taki projekt mogłem zaznajomić się ze wszystkimi ważniejszymi peryferiami układu (wykorzystałem m.in. PWM, DMA, a także później PIO).
+%		
+%		Szybko jednak okazało się, że odtwarzania dźwięku za pomocą wbudowanego układu PWM jest niewystarczające. Dźwięk był zbyt niskiej jakości aby nadawał się do odtwarzania muzyki. Wykorzystałem układ TDA1543 jako przetwornik cyfrowo-analogowy. Projekt odtwarzał tylko pliki WAV i wyglądał tak, jak na rysunku \ref{3/pr_wav}.
+%		
+%		Wtedy też wybrałem ten temat pracy inżynierskiej. Lecz zanim mogłem kontynuować, należało szybko zorientować się, czy płytka poradzi sobie z dekodowaniem formatu MP3 w czasie rzeczywistym. Dzięki bibliotece \lstinline|helixmp3| używającej arytmetyki stałoprzecinkowej, było to możliwe.
+%		
+%		\imgcs{3/pr_wav}{Projekt we wczesnych fazach rozwoju}{0.45}
 		
-		Szybko jednak okazało się, że odtwarzania dźwięku za pomocą wbudowanego układu PWM jest niewystarczające. Dźwięk był zbyt niskiej jakości aby nadawał się do odtwarzania muzyki. Wykorzystałem układ TDA1543 jako przetwornik cyfrowo-analogowy. Projekt odtwarzał tylko pliki WAV i wyglądał tak, jak na rysunku \ref{3/pr_wav}.
+%		\subsection{Model przetwarzania dźwięku}
 		
-		Wtedy też wybrałem ten temat pracy inżynierskiej. Lecz zanim mogłem kontynuować, należało szybko zorientować się, czy płytka poradzi sobie z dekodowaniem formatu MP3 w czasie rzeczywistym. Dzięki bibliotece \lstinline|helixmp3| używającej arytmetyki stałoprzecinkowej, było to możliwe.
-		
-		\imgcs{3/pr_wav}{Projekt we wczesnych fazach rozwoju}{0.45}
-		
-		\subsection{Model przetwarzania dźwięku}
-		
-			\imgcs{3/pipeline}{Koncepcja wielowątkowego dekodowania}{0.8}
+%			\imgcs{3/pipeline}{Koncepcja wielowątkowego dekodowania}{0.8}
 			
-			Odtwarzanie dźwięku odbywa się za pomocą zewnętrznego przetwornika DAC. Mikrokontroler wysyła dźwięk w formacie PCM protokołem \isqs{} do specjalizowanego układu z wykorzystaniem DMA. Drugi rdzeń procesora wykorzystywany jest wyłącznie do dekompresji formatów audio.
+		Odtwarzanie dźwięku odbywa się za pomocą zewnętrznego przetwornika DAC. Mikrokontroler wysyła dźwięk w formacie PCM protokołem \isqs{} do specjalizowanego układu z wykorzystaniem DMA. Drugi rdzeń procesora wykorzystywany jest wyłącznie do dekompresji formatów audio.
 		
 	%	TODO opisać tutaj co robi player.cpp (zmienna dec, funkcje publcizne)
 		
@@ -360,31 +384,24 @@
 			W programie utworzony został bufor nieskompresowanego dźwięku PCM \lstinline|audio_pcm|. Ma on konfigurowalny rozmiar wyrażony w jednostkach 32-bitowych (2 kanały * 16-bitowa próbka). Przekazywany jest on do systemu DMA.
 		
 			\subsubsection{PIO}
-				\imgcs{3/pio_block}{Pojedynczy blok PIO (dokumentacja RP2040\textsuperscript{\cite{pico_pdf}}, strona 309)}{0.7}
-				\imgcs{3/pio_instr}{Zestaw instrukcji PIO (dokumentacja RP2040, strona 320)}{0.7}
-				\imgcs{3/pio_i2s_docs}{Przebieg czasowy protokołu \isqs{} (dokumentacja TDA1543\textsuperscript{\cite{tda_pdf}}, strona 9)}{0.9}
+				\imgh{3/pio_block}{Pojedynczy blok PIO (dokumentacja RP2040\textsuperscript{\cite{pico_pdf}}, strona 309)}{0.7}
 				
 				RP2040 posiada 8 programowalnych maszyn stanów, zgrupowanych w 2 bloki. W ramach jednego bloku (Rys. \ref{3/pio_block}) współdzielą one pamięć 32 instrukcji. Może wydawać się to mało, lecz instrukcje te są bardzo skondensowane.
 				
+				\imgh{3/pio_instr}{Zestaw instrukcji PIO (dokumentacja RP2040, strona 320)}{0.7}
 				Język programowania to własnościowy język z rodziny assembler. Do środowiska \lstinline|pico-sdk| dołączony jest assembler \lstinline|picoasm|. Zestaw instrukcji przedstawiono na rysunku \ref{3/pio_instr}. Jak wspomniano wcześniej, instrukcje są skondensowane, to znaczy mogą wykonywać wiele operacji na raz. Na przykład opóźniać wykonanie programu lub ustawiać osobny rodzaj wyjść typu \sset{}.
+				Instrukcja skoku obsługuje także dekrementację zmiennej w warunku. Same maszyny mogą mieć ustawiony dowolny adres wejścia i zapętlenia programu. Oszczędza to kilka instrukcji.
 				
 				\paragraph{Wyjścia typu \sset{}}
 					Jest to specjalny rodzaj wyjść, które mogą być ustawiane równocześnie z wykonywaniem innych instrukcji. Są szczególnie przydatne przy ustawianiu linii zegarowych i pozostałych linii kontrolnych. Minusem wykorzystania ustawiania wyjść \textit{na boku} jest konieczność poświęcenia możliwości opóźniania programu. W liście instrukcji pole \sset{} jest współdzielone z polem \lstinline|delay|. Jednak zaimplementowany program nie używa opóźnień.
 				
-				Instrukcja skoku obsługuje także dekrementację zmiennej w warunku. Same maszyny mogą mieć ustawiony dowolny adres wejścia i zapętlenia programu. Oszczędza to kilka instrukcji.
-				$ $\\
-				
-				Dzięki tym blokom, możliwe jest dodanie do mikrokontrolera dowolnego protokołu danych bez zbytniego obciążenia procesora jego pełną symulacją. W ramach tej pracy został stworzony blok obsługi interfejsu \isqs{}, który serializuje dane dostarczane przez DMA i wysyła do układu DAC.
-				
+				\imgh{3/pio_i2s_docs}{Przebieg czasowy protokołu \isqs{} (dokumentacja TDA1543\textsuperscript{\cite{tda_pdf}}, strona 9)}{0.9}
+				Dzięki tym blokom, możliwe jest dodanie do mikrokontrolera dowolnego protokołu danych bez zbytniego obciążenia procesora jego pełną symulacją. W ramach pracy został stworzony blok obsługi interfejsu \isqs{}, który serializuje dane dostarczane przez DMA i wysyła do układu DAC.
 				Dokumentacja protokołu \isqs{} została zaczerpnięta z dokumentacji układu TDA1543. Przedstawia ją rysunek \ref{3/pio_i2s_docs}. Jak widać zmiana kanału (kodowanego poziomem linii \lstinline|WS|)  musi nastąpić przed wysłaniem ostatniego bitu poprzedniego kanału (\lstinline|LSB|, czyli \textit{Least Significant Bit}, najmniej znaczący bit kanału lewego). Z tego powodu program wydłużył się do 8 instrukcji. Niektóre układy obsługują protokół \textit{left-just}, który nie posiada tego ograniczenia, jednak z uwagi na niewystarczającą dokumentacje i małe wsparcie przez układy, wybrany został klasyczny \isqs{}.
 				
-				\noindent
-				\hspace{0.1\linewidth}
-				\begin{minipage}{0.8\linewidth}
-					\lstinputlisting[style=pio, caption={Kod programu \isqs{}}, label={3/pio_listing}]{lst/3/i2s.pio}
-				\end{minipage}
+				\lstfile{pio}{Kod programu \isqs{}}{lst/3/i2s.pio}
 				
-				Kod tego bloku przedstawiony został na listingu \ref{3/pio_listing}. Poniżej omówione zostało jego działanie:
+				Kod tego bloku przedstawiony został na listingu \ref{lst/3/i2s.pio}. Poniżej omówione zostało jego działanie:
 				\begin{itemize}
 					\item Linia nr 3 ustawia ile bitów jest typu \lstinline|side-set|. Bity \lstinline|side-set| są wykorzystywane odpowiednio do: ustawienia linii \lstinline|WS| i linii \lstinline|BCK|.
 					
@@ -403,23 +420,19 @@
 			
 			\subsubsection{DMA}
 				\imgcs{3/dma_chain}{Kolejkowanie kanałów DMA}{0.55}
-				Podsystem bezpośredniego dostępu do pamięci wysyła dane do maszyn stanu PIO. Aby móc prowadzić nieprzerwaną transmisję, wykorzystane zostały dwa kanały z 12 dostępnych w układzie. Schemat działania przedstawiony został na rysunku \ref{3/dma_chain}. W momencie gdy jeden kanał skończy transfer, automatycznie uruchamiany jest drugi kanał. Taką funkcjonalność oferuje sprzętowo RP2040. Wywoływane jest także przerwanie, które zgłasza procesorowi potrzebę załadowania nowych danych. Ustawiają one flagi \lstinline|a_done_irq| i \lstinline|b_done_irq|.
-				$ $\\
-					
-		%		Rdzeń 0 obsługuje te przerwania. Bardziej korzystnym scenariuszem byłoby, gdyby to rdzeń 1 czekał na przerwanie instrukcją \lstinline|wfi| (\textit{wait-for-interrupt}), ponieważ nie ma on innych zadań. Jest to droga do dalszej opytmalizacji projektu.
-		
-				Wszystko to dzieje się na rdzeniu 0. Taka koncepcja pozwala na odtwarzanie nieskompresowanego dźwięku. Problem powstaje, gdy musimy w czasie rzeczywistym zdekodować nietrywialny format zapisu audio, np. MP3.
+				Podsystem bezpośredniego dostępu do pamięci wysyła dane do maszyn stanu PIO. Aby móc prowadzić nieprzerwaną transmisję, wykorzystane zostały dwa kanały z 12 dostępnych w układzie. Schemat działania przedstawiony został na rysunku \ref{3/dma_chain}. W momencie gdy jeden kanał skończy transfer, automatycznie uruchamiany jest drugi kanał. Taką funkcjonalność oferuje sprzętowo RP2040. Wywoływane jest także przerwanie, które zgłasza procesorowi potrzebę załadowania nowych danych.
 		
 		\subsection{Dekompresja formatów}
-			\imgh{3/rb_chart_new}{Udział kodeków w stacjach radiowych}{0.9}
-			
-			Wybór padł na format MP3. Jest on popularnym formatem zapisu skompresowanego dźwięku. Wg agregatu stacji radiowych \textit{Radio Browser}\textsuperscript{\cite{radio_browser_codecs}}, około 66\% wszystkich wpisów używa kodeku MP3 (w przypadku polskich stacji jest to około 60\%). Graficznie procentowe udziały przedstawia rysunek \ref{3/rb_chart_new}.
-			
-			\paragraph{Droga dalszego rozwoju}
-				Najbardziej korzystną drogą rozwoju jest implementacja dekodowania AAC/AAC+. Na ten moment nie zostało to zrobione.
-			$ $\\
+			\label{sec:decode}
+%			\imgh{3/rb_chart_new}{Udział kodeków w stacjach radiowych}{0.9}
+%			
+%			Wybór padł na format MP3. Jest on popularnym formatem zapisu skompresowanego dźwięku. Wg agregatu stacji radiowych \textit{Radio Browser}\textsuperscript{\cite{radio_browser_codecs}}, około 66\% wszystkich wpisów używa kodeku MP3 (w przypadku polskich stacji jest to około 60\%). Graficznie procentowe udziały przedstawia rysunek \ref{3/rb_chart_new}.
+%			
+%			\paragraph{Droga dalszego rozwoju}
+%				Najbardziej korzystną drogą rozwoju jest implementacja dekodowania AAC/AAC+. Na ten moment nie zostało to zrobione.
+%			$ $\\
 		
-		\subsubsection{Architektura programowa dekodera}
+%		\subsubsection{Architektura programowa dekodera}
 			\imgh{3/PicoRadio-sound-decoding}{Architektura dekodowania dźwięku}{0.95}
 			
 			Rysunek \ref{3/PicoRadio-sound-decoding} przedstawia w jaki sposób zorganizowane zostało odtwarzanie i dekodowanie dźwięku. Wszelkie interakcje z pozostałymi komponentami systemu obsługiwane są przez rdzeń 0, natomiast rdzeń 1 obsługuje dekodowanie formatów audio. Droga, jaką obrano, pozwala na łatwe rozszerzanie obsługiwanych formatów. Ważne jest tylko, aby pojedynczy rdzeń \textit{Cortex M0+} poradził sobie z obsłużeniem dekodowania nowego formatu w czasie rzeczywistym.
@@ -428,7 +441,7 @@
 		%	Jak wcześniej wspomniano, przerwania generowane przez kanały DMA ustawiają dwie flagi \lstinline|a_done_irq| lub \lstinline|b_done_irq|. Poprzez wspólną pamięć są one odczytywane przez rdzeń 1, a ten dekoduje dane i uzupełn
 		
 			\paragraph{Część Decode}
-				Komponenty z tej rodziny odpowiedzialne są za dostarczanie nowych danych surowych (w kodzie \lstinline|raw_buf|(\textit{raw buffer}) lub \lstinline|cbuf| (\textit{content buffer})). Klasa bazowa \lstinline|DecodeBase| odpowiada za wspólne elementy obu źródeł danych. Obsługuje ona m.in. zunifikowane funkcje do wysyłania komunikatów o zakończeniu dekodowania, zużyciu danych z bufora, bądź błędach. Umożliwione zostało także odczytywanie statystyk i metadanych. Poszczególne klasy podrzędne skupiają się na dostarczaniu danych z różnych źródeł. \lstinline|DecodeFile| odpowiada za odczyt plików z karty SD, natomiast \lstinline|DecodeStream| odbiera dane ze strumienia internetowego.
+				Komponenty z tej rodziny odpowiedzialne są za dostarczanie nowych danych surowych (w kodzie \lstinline|raw_buf| (\textit{raw buffer}) lub \lstinline|cbuf| (\textit{content buffer})). Klasa bazowa \lstinline|DecodeBase| odpowiada za wspólne elementy obu źródeł danych. Obsługuje ona m.in. zunifikowane funkcje do wysyłania komunikatów o zakończeniu dekodowania, zużyciu danych z bufora, bądź błędach. Umożliwione zostało także odczytywanie statystyk i metadanych. Poszczególne klasy podrzędne skupiają się na dostarczaniu danych z różnych źródeł. \lstinline|DecodeFile| odpowiada za odczyt plików z karty SD, natomiast \lstinline|DecodeStream| odbiera dane ze strumienia internetowego.
 			
 			\paragraph{Część Format}
 				Powstały interfejs \lstinline|Format| służy do abstrakcji dekodowania danych surowych. Jego główną metodą jest \lstinline|decode_up_to_n|, która dekoduje co najwyżej \lstinline|n| jednostek danych. Aby dowiedzieć się ile jednostek należy zdekodować istnieją funkcje \lstinline|units_to_decode_whole| i \lstinline|units_to_decode_half|, zwracające odpowiednio ile jednostek zapełni cały bufor \lstinline|audio_pcm| a ile pół bufora (taka liczba jest dekodowana po otrzymaniu przerwania od DMA, którego jeden kanał transferuje pół bufora). W przypadku formatu WAV jednostki to po prostu bajty, a gdy mówimy o MP3 będą to ramki. Podklasy implementują specjalizowane funkcje do dekodowania poszczególnych formatów.
@@ -443,7 +456,7 @@
 		
 		\subsection{Rozpoczynanie odtwarzania}
 			\imgcs{3/PicoRadio-start}{Schemat procesu rozpoczynania odtwarzania}{0.7}
-			Użytkownik rozpoczyna odtwarzanie poprzez wybranie pozycji z listy ulubionych lub wyszukanie stacji/wybór pliku na karcie SD. Dowolny widok może zainicjować ekran odtwarzania \lstinline|ScPlay|. Jednym z parametrów inicjalizacyjnych jest ścieżka dostępu. Gdy nastąpi zmiana aktywnego ekranu, wywoływana jest funkcja \lstinline|player_start()|. Więcej na temat widoków i zarządzania ekranem napisano w sekcji \ref{?}. % TODO uzupełnić ref
+			Użytkownik rozpoczyna odtwarzanie poprzez wybranie pozycji z listy ulubionych lub wyszukanie stacji/wybór pliku na karcie SD. Dowolny widok może zainicjować ekran odtwarzania \lstinline|ScPlay|. Jednym z parametrów inicjalizacyjnych jest ścieżka dostępu. Gdy nastąpi zmiana aktywnego ekranu, wywoływana jest funkcja \lstinline|player_start()|. Więcej na temat widoków i zarządzania ekranem napisano w sekcji~\ref{sec:screen}.
 			
 			\paragraph{Zadania systemu FreeRTOS}
 				Funkcja \lstinline|player_start()| tworzy dwa osobne zadania w systemie operacyjnym, a sama kończy działanie od razu. Pierwsze z nich, \lstinline|player|, odpowiedzialne jest za uruchomienie procesu odtwarzania i przetwarzanie komunikatów (np. odnośnie konsumpcji bajtów z bufora czy wystąpienia błędów). Ładuje ono także dane do bufora z pliku. Drugie, pomocnicze zadanie \lstinline|player stat| służy do okresowego aktualizowania stanu odtwarzania na ekranie.
@@ -508,6 +521,7 @@
 			Parser rozpoznaje ramki o kodach \lstinline|TPE1|(artysta) i \lstinline|TIT2|(tytuł). Są to ramki tekstowe, dlatego wyszczególniono taki format ramek na rysunku. Pierwszy bajt oznacza jakie kodowanie wykorzystano do zapisania tekstu. Możliwe formaty to ISO-8859-1, UTF-16, UTF-16BE i UTF-8. Wszystkie zostały zaimplementowane i przetestowane.
 	
 	\section{Bufor kołowy}
+		\label{sec:circular_buffer}
 		\imgcs{3/PicoRadio-buffer}{Schemat wykorzystania bufora kołowego}{0.8}
 		Małym, lecz kluczowym modułem w projekcie jest bufor kołowy \lstinline|CircularBuffer|. Używany jest on przede wszystkim przy odtwarzaniu dźwięku. Schematyczne wykorzystanie przedstawiono na rysunku~\ref{3/PicoRadio-buffer}. Poniżej zostały opisane najważniejsze jego funkcje.
 		
@@ -611,6 +625,7 @@
 				Istnieje powiązanie pomiędzy klasami ładującymi a ekranami. Każdej klasie ładującej przyporządkowany jest ekran, który wyświetla dane pozycje. Zawiera on w sobie referencję klasy ładującej. Przekazuje ją swojej klasie nadrzędnej jako wskaźnik do klasy ogólnej \lstinline|Loader|. Tym sposobem, każdy z ekranów może ustalać szczegółowe parametry ładowania, a ekran nadrzędny implementuje ogólne funkcje związane z wyświetlaniem załadowanych pozycji na ekranie.
 	
 	\section{Ekran}
+		\label{sec:screen}
 		Z uwagi na założenie miniaturyzacji urządzenia wybrany został relatywnie mały ekran. Urządzenie firmy Adafruit zawiera wyświetlacz ciekłokrystaliczny (\textit{LCD}) o przekątnej 1.8 cala oraz sterownik ST7735S obsługiwany poprzez protokół SPI. Na ekranie znajdowała się folia z zieloną zakładką. Jest to istotne ponieważ na rynku występują także wersje oznaczone kolorem czerwonym, posiadające inne opcje programowania.
 		$ $\\
 		
@@ -677,7 +692,7 @@
 				\end{itemize}
 		
 		\subsection{Ekrany}
-			\imgh{3/PicoRadio-screens}{Hierarchia ekranów}{0.55}
+			\imgh{3/PicoRadio-screens}{Hierarchia ekranów}{0.55} % TODO opisać te ekrany na rysunku np ScPlay -- odtwarzacz
 			Na rysunku \ref{3/PicoRadio-screens} przedstawiono hierarchię ekranów. Klasą nadrzędną wszystkich ekranów jest klasa \lstinline|Screen|. Implementuje ona podstawową siatkę przycisków, przechodzenie pomiędzy nimi, jak również rysowanie i aktualizację ruchomych tekstów. Bezpośrednimi potomkami tej klasy są ekrany o niestandardowym układzie (np. ekran odtwarzania). Jednak większość ekranów jest podklasami dwóch innych potomnych klas: \lstinline|ScreenList| i \lstinline|ScreenKb|. Są to klasy wirtualne (znajdują się w katalogu \lstinline|screenvirt|), niemogące istnieć bezpośrednio. Standaryzują one układ potomnych ekranów. Pierwsza z nich implementuje widok listy, a druga, widok klawiatury. \lstinline|ScreenKb| implementowana jest przez ekran wyszukiwania stacji i ekran wprowadzania hasła Wi-Fi.
 			
 		\subsection{Menedżer ekranów}
@@ -774,20 +789,138 @@
 			
 		\subsection{Obudowa}
 			Po zwymiarowaniu wszystkich komponentów systemu i płytki PCB powstał projekty obudowy do wydruku 3D.
-		
-			\noindent
-			\hspace{0.1\linewidth}
-			\begin{minipage}{0.8\linewidth}
-				\lstinputlisting[style=scad, caption={Kod generujący otwory na przyciski i śruby montażowe}, label={3/scad_listing}]{lst/3/buttons.scad}
-			\end{minipage}
 			
-			Wybór programu jest nieoczywisty ponieważ umożliwia on projektowanie 3D oparte o prosty język skryptowy. Dzięki temu podejście do projektowania może tylko nieznacznie różnić się od pisania oprogramowania. Fragment kodu opisu obudowy został przedstawiony na listingu~\ref{3/scad_listing}. Linie 3-4 generują siatkę 3x3 na której zostaną umieszczone przyciski/otwory na śruby. Operator trójargumentowy w liniach 7-8 powoduje że w rogach siatki otwory będą miały inną średnicę. Warto też zwrócić uwagę na wykorzystanie nazw zamiast wartości, co umożliwia łatwiejszą modyfikację.
+			\lstfile{scad}{Kod generujący otwory na przyciski i śruby montażowe}{lst/3/buttons.scad}
+			
+			Wybór programu jest nieoczywisty ponieważ umożliwia on projektowanie 3D oparte o prosty język skryptowy. Dzięki temu podejście do projektowania może tylko nieznacznie różnić się od pisania oprogramowania. Fragment kodu opisu obudowy został przedstawiony na listingu~\ref{lst/3/buttons.scad}. Linie 3-4 generują siatkę 3x3 na której zostaną umieszczone przyciski/otwory na śruby. Operator trójargumentowy w liniach 7-8 powoduje że w rogach siatki otwory będą miały inną średnicę. Warto też zwrócić uwagę na wykorzystanie nazw zamiast wartości, co umożliwia łatwiejszą modyfikację.
 			
 			\imghss{3/hw_scad_case}{Finalny projekt obudowy radia}{3/hw_case}{Efekt końcowy, radio w obudowie}
 			
 			Na rysunku~\ref{3/hw_scad_case} przedstawiono projekt całej obudowy. Obok zaprezentowano efekt finalny, funkcjonalne radio w obudowie (rysunek~\ref{3/hw_case}).
 			
+\chapter{Organizacja pracy}
+	W tym rozdziale opisane zostały etapy pracy nad projektem jak również organizacja pracy w trakcie jego trwania.
+	
+	\section{Przebieg prac}
+		Projekt realizowany był etapami. Zostały one opisane poniżej.
+		
+		\subsection{Określenie wymagań sprzętowych}
+			Propozycja wykorzystania układu RP2040 była względnie ryzykowna. Rdzenie Cortex M0+ mogły okazać się niewystarczające, zwłaszcza, że brak im jednostki obliczeń zmiennoprzecinkowych. Należało więc jak najszybciej określić czy poradzą sobie one z najważniejszym i najbardziej wymagającym zadaniem jakim jest dekodowanie formatu MP3.
+			
+			\imgh{4/prototype}{Pierwszy prototyp do testów odtwarzania dźwięku}{0.6}
+			
+			W krótkim czasie powstał prototyp przedstawiony na rysunku~\ref{4/prototype}. Zmontowany na płytce stykowej, zawierał minimum elementów wymaganych do testów audio. Znalazły się tam układy przetwornika cyfrowo-analogowego i wzmacniacza, oraz slot na kartę SD.
+			
+			% commit: https://github.com/MrJake222/pico-radio/commit/f74a7883a8a824952876943f6f33ca1d82e739dd
+			\lstfile{c}{Realizacja podstawowego ładowania bufora}{lst/4/prototype.c}
+			
+			Początkowo projekt odtwarzał tylko nieskompresowane pliki WAV. Na listingu~\ref{lst/4/prototype.c} przedstawiono jak odbywało się doładowywanie bufora danymi z karty SD. Flagi \lstinline|a_done_irq| i \lstinline|b_done_irq| były ustawianie w przerwaniach DMA. Główna pętla programu oczekiwała na te przerwania i ładowała dodatkowe dane. Dostęp do karty SD, jak i komunikacja \isqs{} z przetwornikiem działały poprawnie. Dzięki makrom \lstinline|DBG_ON| i \lstinline|DBG_OFF| ustawiającym pin mikrokontrolera w odpowiedni sposób, możliwa była zewnętrzna kontrola czasu wykonania odczytu i (później) dekodowania.
+			
+			% commit: https://github.com/MrJake222/pico-radio/commit/798cda3f2b81ec04788e7fbe123bc1dbff969250
+			\lstfile{c}{Pomiar czasu dekodowania ramki MP3}{lst/4/benchmark.c}
+			
+			Dalej, przy wykorzystaniu biblioteki \lstinline|minimp3|\textsuperscript{\cite{minimp3}}, dodana została obsługa dekodowania MP3. Krótki fragment kodu na listingu~\ref{lst/4/benchmark.c} przedstawia w jaki sposób badano czas dekodowania pojedynczej ramki audio. Niestety czas przetworzenia jednej ramki wynosił ok. 90ms, co stanowiło znacząco za dużo, gdyż jedna taka ramka odtwarzana jest przez 26ms.
+			$ $\\
+			
+			% commit: https://github.com/MrJake222/pico-radio/commit/ede28044f02faab5ef6a6204bf7e402d5687e736
+			Dopiero, gdy wykorzystana została biblioteka \lstinline|helixmp3| pracująca na reprezentacji stałopozycyjnej liczb, czas dekodowania spadł do 20ms. Oznaczało to zielone światło na dalsze prace nad projektem przy wykorzystaniu tego modelu mikroprocesora.
+			
+		\subsection{Standaryzacja interfejsu i radio internetowe}
+			Droga do działającego odtwarzacza trwała około miesiąca. Pod koniec kwietnia 2023 roku, odtwarzanie działało, jednak stan repozytorium pozostawiał wiele do życzenia. Istniało wiele niepowiązanych ze sobą fragmentów kodu. Odtwarzanie formatów MP3 i WAV stanowiło dwie oddzielne funkcje. Następny miesiąc minał pod szyldem refaktoryzacji kodu. Powstały wtedy takie koncepcje jak bufor kołowy dekompresja formatów (opisane w sekcjach odpowiednio \ref{sec:circular_buffer} oraz \ref{sec:decode}).
+			$ $\\
+			
+			Podczas refaktoryzacji pliki WAV zostały zintegrowane z istniejącą obsługą plików MP3. Zaimplementowany i zintegrowany został także klient HTTP. Pod koniec maja odtwarzacz plików MP3 zamienił się w radio, zdolne odtwarzać internetowe strumienie MP3.
+%			Jednak do kompletnego produktu brakowało jeszcze interfejsu użytkownika.
+			
+		\subsection{System operacyjny}
+			Po podłączeniu przycisków jasnym stało się, że projekt bez systemu operacyjnego może okazać się wyzwaniem. Wykorzystano zatem projekt FreeRTOS. System czasu rzeczywistego pozwolił na asynchroniczne obsługiwanie zdarzeń takich jak np. wciśnięcia klawiszy. Po refaktoryzacji z wykorzystaniem nowych możliwości, takich jak kolejki i powiadomienia oraz wykorzystaniu drugiego rdzenia do dekodowania, koncepcja projektu zaczęła się krystalizować.
+			
+			\subsubsection{Problemy z pamięcią RAM}
+				Po dodaniu systemu FreeRTOS z domyślną konfiguracją okazało się, że w czasie uruchomienia, brakuje pamięci RAM.
+				Postanowiono wtedy używać jedynie statycznej alokacji pamięci, żeby zauważyć i naprawić tego typu błędy w czasie kompilacji.
 
+				\lstfile{default}{Zajętość pamięci RAM}{lst/4/memory}
+
+				Powstało także narzędzie do analizy zużycia pamięci na podstawie pliku \lstinline|.elf.map|. Zawiera on informacje w której części oraz ile pamięci zajmują wszystkie zmienne w projekcie. Skrypt \lstinline|read-elf-map.py| w języku Python analizuje ten plik. Wyświetla przyjazne dla użytkownika podsumowanie największych obiektów oraz procentową zajętość pamięci. Na listingu~\ref{lst/4/memory} że pamięć w finalnej wersji produktu została użyta w 80\%, a najwięcej pamięci alokują:
+				\begin{itemize}
+					\item 70kB \lstinline|static.cpp| -- bufor kołowy, pamięć wpisów list, instancja klienta HTTP,
+					\item 49kB stos sieciowy
+					\item 45kB \lstinline|player.cpp| -- bufor nieskompresowanego dźwięku, instancje dekoderów.
+					\item 29kB system operacyjny FreeRTOS.
+				\end{itemize}
+			
+		\subsection{Interfejs użytkownika}
+			Koniec czerwca to implementacja architektury ekranów użytkownika. Na początku została dodana obsługa ekranów klawiatury, wyników wyszukiwania i odtwarzacza. Wraz z końcem miesiąca radio było gotowe do znajdowania i odtwarzania stacji.
+			
+		\subsection{Problem z oknem TCP}
+			Niestety, urządzenie zaczęło wykazywać nieokreślone problemy. W nieregularnych odstępach czasu odtwarzanie przestawało być płynne. Wypełnienie bufora spadało do zera, dźwięk zapętlał się.
+			
+			\imgh{4/tcp_fail}{Wykres ogłaszanego okna klienta TCP}{0.85}
+			
+			Na rysunku~\ref{4/tcp_fail} przedstawiono jak prezentuje się ogłaszane przez radio okno TCP. Jest ono z góry ograniczone jako 12kB. Od czasu ok. 1:24 rozpoczęły się wspomniane problemy. Okazało się, że gdy bufor zaczyna się wyczerpywać, nie może on zostać wystarczająco szybko uzupełniony, ponieważ ilość danych na łączu ograniczona jest przez okno TCP i opóźnienie sieci. Z tego wniosku, maksymalne ogłaszane okno zostało zwiększone do 56kB.
+			$ $\\
+			
+			Została dobrana specjalna stacja z największym opóźnieniem (nadająca z Nowej Zelandii) wynoszącym średnio 322ms. Wykres ogłaszanego okna przedstawia rysunek~\ref{4/tcp_good}.
+			
+			\imgh{4/tcp_good}{Ogłaszane okno TCP maks. 56kB}{0.6}
+
+			Jak widać podobny problem zacząłby występować ok. 40 sekundy, lecz okno mogło urosnąć do ponad 40kB i serwer szybko dostarczył brakujące dane. Problem został rozwiązany. Na uznanie zasługuje sugestia z listy mailingowej projektu LwIP. %TODO https://lists.nongnu.org/archive/html/lwip-users/2023-07/msg00001.html
+			
+		\subsection{Proces przyrostowy}
+			Po pozbyciu się uciążliwego problemu z niewystarczającym oknem TCP, skupiono się na nowych funkcjonalnościach. W lipcu powstały m.in:
+			\begin{itemize}
+				\item Wyświetlanie statystyk odtwarzania,
+				\item Interpretacja metadanych ICY i wyświetlanie tytułów utworów na ekranie,
+				\item Lista ulubionych
+			\end{itemize}
+			
+			Oprócz powyższych funkcjonalnych ulepszeń, odnaleziono i naprawiono szereg błędów takich jak nieprawidłowe zakańczanie odtwarzania i w konsekwencji zawieszanie się programu, niemożność wyjścia z ekranu ładowania wyników wyszukiwania czy dereferencja zerowego wskaźnika w zadaniu wypisywania statystyk po zakończeniu odtwarzania.
+			
+		\subsection{Schemat, płytka i obudowa}
+			Gdy wymagane funkcje były już gotowe przystąpiono do stworzenia finalnego urządzenia na podstawie wyżej wspomnianego prototypu wzbogaconego o ekran i przyciski, przedstawionego na rysunku~\ref{4/prototype_2}.
+		
+			\imgh{4/prototype_2}{Prototyp z wyświetlaczem i klawiaturą}{0.8}
+			
+			Najpierw powstał schemat połączeń elektrycznych. Uwzględnił on połączenia prototypu oraz sekcje dźwiękową. Ostatecznie nie obyło się bez poprawek. Były one nanoszone na bieżąco na schemat. Oto niektóre z nich:
+			\begin{itemize}
+				\item Prąd chwilowy pobierany przez wzmacniacz przekroczył możliwości przetwornicy, układ zasilony został z niższego napięcia bezpośrednio z ogniw,
+				\item Dodany został pomiar napięcia baterii,
+				\item Do wzmacniacza doprowadzony został sygnał wyciszający, nieodpowiednie filtrowanie zasilania powoduje szumy szczególnie słyszalne przy braku innych dźwięków,
+			\end{itemize}
+			
+			Następna powstała płytka PCB, wytworzona domową metodą termotransferu przy użyciu żelazka\textsuperscript{\cite{ch4_pcb_method}}. Po przeniesieniu wydruku ścieżek na laminat pokryty warstwą miedzi, zostały one wytrawione roztworem nadsiarczanu sodu. Następnie zostały wywiercone otwory pod montaż przewlekany. Na rysunku~\ref{4/pcb} przedstawiono laminat po wywierceniu kilku pierwszych otworów.
+			
+			\imghss{4/pcb}{Płytka PCB po wytrawieniu, początek procesu wiercenia otworów}{4/whole}{Kompletny prototyp na płytce}
+			
+			Po przetestowaniu kompletnego prototypu zmontowanego na płytce PCB (rysunek~\ref{4/whole}), zaprojektowana została obudowa. Wydrukowana została na drukarce 3D. Panel frontowy pokazany został na rysunku~\ref{4/case1}.
+			$ $\\
+			
+			Powstały dwie wersje obudowy. Druga poprawiła największy mankament wersji pierwszej, mianowicie bardzo słabo trzymające gwinty. Na podstawie wydruków testowych stwierdzono, że otwór o średnicy 2.8mm jest najlepiej dopasowany do wkrętów 3x12 (3mm szerokości). Dodatkowo zaprojektowano uchwyt do podnoszenia radia. Kompletna obudowa w wersji drugiej widoczna jest na rysunku~\ref{4/case2}.
+			
+			\imghss{4/case1}{Panel frontowy obudowy}{4/case2}{Kompletna obudowa}
+			
+			W sierpniu radio było już gotowe. Po nieznacznych korektach w oprogramowaniu (np. zmiana numerów wyprowadzeń) było produktem gotowym do testowania przez osoby postronne.
+
+		\subsection{Testowanie}
+			Pierwszym z zauważonych problemów był niewystarczający czas oczekiwania na połączenie i odbieranie danych z serwera. Radio dotychczas było testowane w bezpośrednim sąsiedztwie routera Wi-Fi. Po przeniesieniu do innego pomieszczenia radio nie mogło połączyć się z większością stacji z powodu zbyt szybkiego zgłaszania błędu przekroczenia czasu oczekiwania na dane. Czas ten nie został zaktualizowany po powiększeniu buforu okna TCP. Został on ustalony na 4 sekundy, ponieważ ostatecznie bufor ma 64kB, a większość stacji nadaje z przepływnością 128kb/s.
+			$ $\\
+			
+			Użytkowanie radia jako kompletnego produktu szybko dostarczyło nowych danych o błędach. Dodana została obsługa MPEG2 (obsługa niższej jakości dźwięku), ponieważ niektóre stacje nie odtwarzały się poprawnie. Ograniczona została liczba przekierowań, na które odpowiada klient HTTP, ponieważ następowało zawieszanie się urządzenia. Długość metadanych ICY była zapisywana do zmiennej 8-bitowej co w przypadku stacji nadającej więcej informacji niż tylko tytuł utworu powodowała zawieszanie się odtwarzania. Ten błąd również został naprawiony.
+			$ $\\
+			
+			To tylko niektóre z błędów napotkanych przeze mnie i osoby z najbliższego otoczenia. Wszystkie odnalezione były niezwłocznie zapisywane w systemie do śledzenia zadań i później naprawiane. Sierpień upłynął, radio zyskiwało na użyteczności.
+			
+		\subsection{Odtwarzanie plików lokalnych}
+			Jako że obsługa kart SD była wymaganiem opcjonalnym, zrealizowana została pod koniec prac nad urządzeniem. We wrześniu został dodany ekran listowania plików. Za ekran wykonawczy posłużył ekran radia z pomniejszymi zmianami. Dodano pasek postępu informujący użytkownika jaka część utworu została już odtworzona. Znalazło się też miejsce na informacje o czasie trwania całości. Oba ekrany przedstawiono na rysunkach \ref{4/scr_1} oraz \ref{4/scr_2}.
+			
+			\imghss{4/scr_1}{Ekran radia}{4/scr_2}{Ekran odtwarzacza lokalnego}
+			
+			Zaimplementowana została także obsługa formatu metadanych ID3v2, aby móc wyświetlać autora i tytuł utworu zamiast nazwy pliku. Radio w pierwszej połowie września zyskało interfejs do odtwarzania plików lokalnych. Dalej, aż do przełomu listopada i grudnia tworzona była niniejsza dokumentacja.
+			
+		\subsection{Automatyczne połączenie Wi-Fi}
+			Funkcjonalność niewymagana w żaden sposób do testów była gotowa w pierwszej połowie grudnia. Do tej pory jedyna sieć Wi-Fi była zapisana na stałe w kodzie programu. Dodana została funkcjonalność połączenia się z dowolną siecią. Powstała także lista zapisanych sieci, z której przy starcie urządzenie automatycznie wybiera najlepszą sieć do połączenia się.
+			
+	% TODO instrukcja obsługi
 		
 	\pagebreak
 	\begin{thebibliography}{9}
@@ -870,6 +1003,9 @@
 		\href{https://www.kicad.org/}{\textit{KiCAD} -- program do tworzenia schematów elektrycznych i projektowania płytek PCB}
 		\bibitem{hw_openscad}
 		\href{https://openscad.org/}{\textit{OpenSCAD} -- program do skryptowego projektowania 3D}
+		
+		\bibitem{ch4_pcb_method}
+		\href{http://mikrokontrolery.blogspot.com/2011/03/wykonanie-plytki-pcb-metoda-termotransferu.html}{\textit{PCB: Metoda termotransferu} -- domowa metoda wytworzenia płytki PCB}
 		
 	\end{thebibliography}
 	
