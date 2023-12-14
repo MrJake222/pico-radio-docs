@@ -802,14 +802,14 @@
 	W tym rozdziale opisane zostały etapy pracy nad projektem jak również organizacja pracy w trakcie jego trwania.
 	
 	\section{Przebieg prac}
-		Projekt realizowany był etapami. Zostały one opisane poniżej.
+		Prace nad projektem rozpoczęły się w kwietniu 2023 roku. Projekt realizowany był etapami. Zostały one opisane poniżej.
 		
 		\subsection{Określenie wymagań sprzętowych}
 			Propozycja wykorzystania układu RP2040 była względnie ryzykowna. Rdzenie Cortex M0+ mogły okazać się niewystarczające, zwłaszcza, że brak im jednostki obliczeń zmiennoprzecinkowych. Należało więc jak najszybciej określić czy poradzą sobie one z najważniejszym i najbardziej wymagającym zadaniem jakim jest dekodowanie formatu MP3.
 			
-			\imgh{4/prototype}{Pierwszy prototyp do testów odtwarzania dźwięku}{0.6}
+			\imgh{4/prototype_1}{Pierwszy prototyp do testów odtwarzania dźwięku}{0.6}
 			
-			W krótkim czasie powstał prototyp przedstawiony na rysunku~\ref{4/prototype}. Zmontowany na płytce stykowej, zawierał minimum elementów wymaganych do testów audio. Znalazły się tam układy przetwornika cyfrowo-analogowego i wzmacniacza, oraz slot na kartę SD.
+			W krótkim czasie powstał prototyp przedstawiony na rysunku~\ref{4/prototype_1}. Zmontowany na płytce stykowej, zawierał minimum elementów wymaganych do testów audio. Znalazły się tam układy przetwornika cyfrowo-analogowego i wzmacniacza, oraz slot na kartę SD.
 			
 			% commit: https://github.com/MrJake222/pico-radio/commit/f74a7883a8a824952876943f6f33ca1d82e739dd
 			\lstfile{c}{Realizacja podstawowego ładowania bufora}{lst/4/prototype.c}
@@ -826,14 +826,16 @@
 			Dopiero, gdy wykorzystana została biblioteka \lstinline|helixmp3| pracująca na reprezentacji stałopozycyjnej liczb, czas dekodowania spadł do 20ms. Oznaczało to zielone światło na dalsze prace nad projektem przy wykorzystaniu tego modelu mikroprocesora.
 			
 		\subsection{Standaryzacja interfejsu i radio internetowe}
-			Droga do działającego odtwarzacza trwała około miesiąca. Pod koniec kwietnia 2023 roku, odtwarzanie działało, jednak stan repozytorium pozostawiał wiele do życzenia. Istniało wiele niepowiązanych ze sobą fragmentów kodu. Odtwarzanie formatów MP3 i WAV stanowiło dwie oddzielne funkcje. Następny miesiąc minał pod szyldem refaktoryzacji kodu. Powstały wtedy takie koncepcje jak bufor kołowy dekompresja formatów (opisane w sekcjach odpowiednio \ref{sec:circular_buffer} oraz \ref{sec:decode}).
+			Droga do działającego odtwarzacza trwała około miesiąca. Pod koniec kwietnia, odtwarzanie działało, jednak stan repozytorium pozostawiał wiele do życzenia. Istniało wiele niepowiązanych ze sobą fragmentów kodu. Odtwarzanie formatów MP3 i WAV stanowiło dwie oddzielne funkcje. Następny miesiąc minał pod szyldem refaktoryzacji kodu. Powstały wtedy takie koncepcje jak bufor kołowy dekompresja formatów (opisane w sekcjach odpowiednio \ref{sec:circular_buffer} oraz \ref{sec:decode}).
 			$ $\\
 			
 			Podczas refaktoryzacji pliki WAV zostały zintegrowane z istniejącą obsługą plików MP3. Zaimplementowany i zintegrowany został także klient HTTP. Pod koniec maja odtwarzacz plików MP3 zamienił się w radio, zdolne odtwarzać internetowe strumienie MP3.
 %			Jednak do kompletnego produktu brakowało jeszcze interfejsu użytkownika.
 			
 		\subsection{System operacyjny}
-			Po podłączeniu przycisków jasnym stało się, że projekt bez systemu operacyjnego może okazać się wyzwaniem. Wykorzystano zatem projekt FreeRTOS. System czasu rzeczywistego pozwolił na asynchroniczne obsługiwanie zdarzeń takich jak np. wciśnięcia klawiszy. Po refaktoryzacji z wykorzystaniem nowych możliwości, takich jak kolejki i powiadomienia oraz wykorzystaniu drugiego rdzenia do dekodowania, koncepcja projektu zaczęła się krystalizować.
+			\imgh{4/prototype_2}{Prototyp z wyświetlaczem i klawiaturą}{0.8}
+		
+			Po podłączeniu przycisków (rys.~\ref{4/prototype_2}) jasnym stało się, że projekt bez systemu operacyjnego może okazać się wyzwaniem. Wykorzystano zatem projekt FreeRTOS. System czasu rzeczywistego pozwolił na asynchroniczne obsługiwanie zdarzeń takich jak np. wciśnięcia klawiszy. Po refaktoryzacji z wykorzystaniem nowych możliwości, takich jak kolejki i powiadomienia oraz wykorzystaniu drugiego rdzenia do dekodowania, koncepcja projektu zaczęła się krystalizować.
 			
 			\subsubsection{Problemy z pamięcią RAM}
 				Po dodaniu systemu FreeRTOS z domyślną konfiguracją okazało się, że w czasie uruchomienia, brakuje pamięci RAM.
@@ -850,7 +852,9 @@
 				\end{itemize}
 			
 		\subsection{Interfejs użytkownika}
-			Koniec czerwca to implementacja architektury ekranów użytkownika. Na początku została dodana obsługa ekranów klawiatury, wyników wyszukiwania i odtwarzacza. Wraz z końcem miesiąca radio było gotowe do znajdowania i odtwarzania stacji.
+			\imghss{4/first_screen_search}{Ekran wyszukiwania z klawiaturą}{4/first_screen_res}{Ekran wyników wyszukiwania}
+		
+			Koniec czerwca to implementacja architektury ekranów użytkownika. Na początku została dodana obsługa ekranów klawiatury (rys.~\ref{4/first_screen_search}), wyników wyszukiwania (rys.~\ref{4/first_screen_res}) i odtwarzacza. Wraz z końcem miesiąca radio było gotowe do znajdowania i odtwarzania stacji.
 			
 		\subsection{Problem z oknem TCP}
 			Niestety, urządzenie zaczęło wykazywać nieokreślone problemy. W nieregularnych odstępach czasu odtwarzanie przestawało być płynne. Wypełnienie bufora spadało do zera, dźwięk zapętlał się.
@@ -877,9 +881,8 @@
 			Oprócz powyższych funkcjonalnych ulepszeń, odnaleziono i naprawiono szereg błędów takich jak nieprawidłowe zakańczanie odtwarzania i w konsekwencji zawieszanie się programu, niemożność wyjścia z ekranu ładowania wyników wyszukiwania czy dereferencja zerowego wskaźnika w zadaniu wypisywania statystyk po zakończeniu odtwarzania.
 			
 		\subsection{Schemat, płytka i obudowa}
-			Gdy wymagane funkcje były już gotowe przystąpiono do stworzenia finalnego urządzenia na podstawie wyżej wspomnianego prototypu wzbogaconego o ekran i przyciski, przedstawionego na rysunku~\ref{4/prototype_2}.
-		
-			\imgh{4/prototype_2}{Prototyp z wyświetlaczem i klawiaturą}{0.8}
+			Gdy wymagane funkcje były już gotowe przystąpiono do stworzenia finalnego urządzenia na podstawie wyżej wspomnianego prototypu wzbogaconego o ekran i przyciski.
+			$ $\\
 			
 			Najpierw powstał schemat połączeń elektrycznych. Uwzględnił on połączenia prototypu oraz sekcje dźwiękową. Ostatecznie nie obyło się bez poprawek. Były one nanoszone na bieżąco na schemat. Oto niektóre z nich:
 			\begin{itemize}
@@ -890,9 +893,9 @@
 			
 			Następna powstała płytka PCB, wytworzona domową metodą termotransferu przy użyciu żelazka\textsuperscript{\cite{ch4_pcb_method}}. Po przeniesieniu wydruku ścieżek na laminat pokryty warstwą miedzi, zostały one wytrawione roztworem nadsiarczanu sodu. Następnie zostały wywiercone otwory pod montaż przewlekany. Na rysunku~\ref{4/pcb} przedstawiono laminat po wywierceniu kilku pierwszych otworów.
 			
-			\imghss{4/pcb}{Płytka PCB po wytrawieniu, początek procesu wiercenia otworów}{4/whole}{Kompletny prototyp na płytce}
+			\imghss{4/pcb}{Płytka PCB po wytrawieniu, początek procesu wiercenia otworów}{4/prototype_3}{Kompletny prototyp na płytce}
 			
-			Po przetestowaniu kompletnego prototypu zmontowanego na płytce PCB (rysunek~\ref{4/whole}), zaprojektowana została obudowa. Wydrukowana została na drukarce 3D. Panel frontowy pokazany został na rysunku~\ref{4/case1}.
+			Po przetestowaniu kompletnego prototypu zmontowanego na płytce PCB (rysunek~\ref{4/prototype_3}), zaprojektowana została obudowa. Wydrukowana została na drukarce 3D. Panel frontowy pokazany został na rysunku~\ref{4/case1}.
 			$ $\\
 			
 			Powstały dwie wersje obudowy. Druga poprawiła największy mankament wersji pierwszej, mianowicie bardzo słabo trzymające gwinty. Na podstawie wydruków testowych stwierdzono, że otwór o średnicy 2.8mm jest najlepiej dopasowany do wkrętów 3x12 (3mm szerokości). Dodatkowo zaprojektowano uchwyt do podnoszenia radia. Kompletna obudowa w wersji drugiej widoczna jest na rysunku~\ref{4/case2}.
@@ -913,14 +916,23 @@
 		\subsection{Odtwarzanie plików lokalnych}
 			Jako że obsługa kart SD była wymaganiem opcjonalnym, zrealizowana została pod koniec prac nad urządzeniem. We wrześniu został dodany ekran listowania plików. Za ekran wykonawczy posłużył ekran radia z pomniejszymi zmianami. Dodano pasek postępu informujący użytkownika jaka część utworu została już odtworzona. Znalazło się też miejsce na informacje o czasie trwania całości. Oba ekrany przedstawiono na rysunkach \ref{4/scr_1} oraz \ref{4/scr_2}.
 			
-			\imghss{4/scr_1}{Ekran radia}{4/scr_2}{Ekran odtwarzacza lokalnego}
+			\imghss{4/scr_radio}{Ekran radia}{4/scr_player}{Ekran odtwarzacza lokalnego}
 			
 			Zaimplementowana została także obsługa formatu metadanych ID3v2, aby móc wyświetlać autora i tytuł utworu zamiast nazwy pliku. Radio w pierwszej połowie września zyskało interfejs do odtwarzania plików lokalnych. Dalej, aż do przełomu listopada i grudnia tworzona była niniejsza dokumentacja.
 			
 		\subsection{Automatyczne połączenie Wi-Fi}
-			Funkcjonalność niewymagana w żaden sposób do testów była gotowa w pierwszej połowie grudnia. Do tej pory jedyna sieć Wi-Fi była zapisana na stałe w kodzie programu. Dodana została funkcjonalność połączenia się z dowolną siecią. Powstała także lista zapisanych sieci, z której przy starcie urządzenie automatycznie wybiera najlepszą sieć do połączenia się.
+			Funkcjonalność ta nie była wymagana w żaden sposób do testów, stąd jej priorytet podczas prac nad projektem był relatywnie niski. 
+			$ $\\
+
+			 Do tej pory sieć Wi-Fi była zapisana na stałe w kodzie programu.  Jednak aby projekt mógł dostosowywać się do różnych miejsc pracy (różnych sieci Wi-Fi), konieczne było zaimplementowanie przechowywania wielu znanych sieci, wyszukiwania i dodawania ich przez użytkownika oraz automatyzacja procesu łączenia się z najlepszą siecią podczas startu urządzenia.
+			 $ $\\
+			 
+			 W pierwszej połowie grudnia w.w. funkcjonalność była gotowa.
+			 
+	 \section{Organizacja pracy}
+	 	% TODO jira
 			
-	% TODO instrukcja obsługi
+	% TODO instrukcja obsługi (rozdział 5)
 		
 	\pagebreak
 	\begin{thebibliography}{9}
