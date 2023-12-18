@@ -932,9 +932,63 @@
 			 W pierwszej połowie grudnia w.w. funkcjonalność była gotowa.
 			 
 	 \section{Organizacja pracy}
-	 	% TODO jira
+	 	% TODO jira (git stash)
+	 	
+\chapter{Wyniki projektu}
+	W tym rozdziale skupiono się na finalnym efekcie projektu.
+	
+	\section{Przegląd zrealizowanych funkcji}
+	
+		\subsection{Odtwarzacz radiowy}
+			\imghss{5/radio}{Ekran \textit{Radio} (włączone z listy ulubionych)}{5/radio_search}{Ekran \textit{Radio} (wyszukane)}
+			
+			Główną funkcją produktu jest odtwarzanie radia internetowego. Zrealizowane w postaci dedykowanego ekranu (rys.~\ref{5/radio}), prezentuje na nim podstawowe informacje na temat stacji radiowej oraz stanu urządzenia. Obsługa metadanych ICY pozwala na wyświetlanie tytułu granego w danej chwili. Poniżej wyświetlane są statystyki działanie dekodera. \textit{CPU} odnosi się do procentu wykorzystania rdzenia dekodującego, natomiast \textit{Bufor} informuje użytkownika o poziomie wypełnienia bufora (przydatne, gdy występują problemy z odtwarzaniem spowodowane niską jakością połączenia internetowego).
+			$ $\\
+			
+			Na dole ekranu dostępne są 2 lub 3 ikony. Pierwsza z nich zakańcza odtwarzanie i powraca do poprzedniego ekranu. Druga, ikona gwiazdy, pozwala dodawać/usuwać stację z listy ulubionych. Jeśli jest ona wypełniona, oznacza to że stacja jest zapisana i kliknięcie jej spowoduje jej usunięcie. Natomiast pusta ikona wskazuje, że jest to nowa stacja i pozwala na dodanie jej do listy ulubionych. Trzecia ikona jest dostępna tylko w przypadku uruchomienia radia z poziomu wyników wyszukiwania (rys.~\ref{5/radio_search}). Pozwala ona wrócić bezpośrednio do ekranu listy ulubionych stacji.
+		
+			\paragraph{Dalszy rozwój}
+				Implementacja dekodowania formatu AAC/AAC+ znacząco podniosłaby użyteczność produktu.
+			
+		\subsection{Lista ulubionych stacji}
+			\imgh{5/fav}{Ekran \textit{Ulubione stacje}}{0.5}
+			Przechowywana w pamięci urządzenia lista ulubionych stacji zawiera znalezione i zapisane przez użytkownika stacje (rys.~\ref{5/fav}).
+			Ekran obsługuje stronicowanie wpisów. Domyślnie wyświetlanych jest 16 wpisów na stronę. Na dole ekranu wyświetlona jest aktualna strona i liczba wszystkich stron.
+			W górnym pasku zawiera się nazwa ekranu oraz ikony statusowe (Wi-Fi, karta SD, bateria).
+			$ $\\
+			
+			Jest to także ekran startowy. Wyświetla się on jako pierwszy po starcie programu. Dlatego jest też traktowany jako ekran główny i posiada najwięcej ikon akcji na dole ekranu.
+			Ikona najbardziej po lewej to ikona folderu i uruchamia listing plików lokalnych. Zaraz obok znajduje się ikona ustawień. Po prawej użytkownik może uruchomić wyszukiwarkę stacji.
+			
+			\paragraph{Dalszy rozwój}
+				Warto zwrócić uwagę, że stacje są zawsze dodawane na koniec listy ulubionych. Nie ma żadnej możliwości zmiany ich ustawienia. Opcja taka znacząco podniosłaby komfort użytkowania produktu. Możliwość importu/eksportu listy ulubionych stacji z/na kartę SD umożliwiłaby tworzenie kopii zapasowych listy ulubionych stacji lub też ręczne dodawanie strumieni których nie ma w obsługiwanych wyszukiwarkach stacji internetowych.
+			
+		\subsection{Wyszukiwarka stacji radiowych}
+			\imghss{5/search}{Ekran wyszukiwania stacji}{5/searchres}{Ekran wyników wyszukiwania}
+			Wyszukiwanie stacji jest dwuetapowe. Najpierw użytkownik na ekranie z klawiaturą (rys.~\ref{5/search}) podaje fragment nazwy stacji, którą chciałby wyszukać. Po kliknięciu ikony lupy w prawym dolnym rogu ekranu, ładowane są stacje pasujące do wyszukiwania. Pojawia się nowy ekran przedstawiony na rysunku~\ref{5/searchres}. Są na nim zawarte wyszukane stacje.
+			$ $\\
+			
+			Analogicznie do ekranu ulubionych, tutaj też zawarto obsługę stronicowania wyników. Jednak nie jest dostępna liczba wszystkich wyników, stąd ikona nieskończoności na dole ekranu.
+			
+			\paragraph{Dalszy rozwój}
+				Obecnie obsługiwany jest tylko jeden dostawca wyszukiwania. Istnieje infrastruktura do obsługi wielu takich serwerów, lecz żaden inny nie został dodany.
+			
+		\subsection{Przeglądarka i odtwarzacz plików lokalnych}
+			\imghss{5/local}{Ekran \textit{Pliki lokalne}}{5/local_play}{Odtwarzacz plików lokalnych}
+			Listing plików tworzony jest na podstawie plików znajdujących się na karcie SD (rys.~\ref{5/local}). Zapewnione jest sortowanie wpisów (foldery sortowane są jako pierwsze). Możliwe jest rekurencyjne przeglądanie drzewa katalogów. Nazwa ekranu jest dynamicznie aktualizowana i wyświetla nazwę aktualnego folderu. Jak widać obsługiwane jest także przewijanie długich tekstów poziomo na ekranie oraz dekodowanie metadanych ID3v2. Utwory w ramach jednego folderu są automatycznie odtwarzane jeden po drugim. Interfejs lokalnego odtwarzacza można zobaczyć na rysunku~\ref{5/local_play}.
+			
+			\paragraph{Dalszy rozwój}
+				Przydatnym dodatkiem byłaby możliwość randomizacji kolejności automatycznego odtwarzania utworów oraz opcja odtworzenia całego folderu rekurencyjnie. Pozwoliłoby to np. na losowe odtworzenie całej dyskografii jednego zespołu. Implementacja bezstratnego kodowania plików FLAC umożliwiłaby podniesienie jakości odtwarzanego dźwięku.
+		
+		\subsection{Połączenie z internetem}
+			% Wi-Fi
+			
+	\section{Zrealizowana warstwa sprzętowa}
+	\section{Scenariusze użytkowania}
+	% TODO minijack
 			
 	% TODO instrukcja obsługi (rozdział 5)
+	% TODO podsumowanie
 		
 	\pagebreak
 	\begin{thebibliography}{9}
