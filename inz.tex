@@ -802,10 +802,12 @@
 	W tym rozdziale opisane zostały etapy pracy nad projektem jak również organizacja pracy w trakcie jego trwania.
 	
 	\section{Przebieg prac}
-		Prace nad projektem rozpoczęły się w kwietniu 2023 roku. Projekt realizowany był etapami. Zostały one opisane poniżej.
+		\imgh{4/PicoRadio-steps}{Etapy projektu}{1}
+	
+		Prace nad projektem rozpoczęły się w kwietniu 2023 roku. Projekt realizowany był etapami. Zostały one pokazane na rysunku~\ref{4/PicoRadio-steps} oraz opisane poniżej.
 		
 		\subsection{Określenie wymagań sprzętowych}
-			Propozycja wykorzystania układu RP2040 była względnie ryzykowna. Rdzenie Cortex M0+ mogły okazać się niewystarczające, zwłaszcza, że brak im jednostki obliczeń zmiennoprzecinkowych. Należało więc jak najszybciej określić czy poradzą sobie one z najważniejszym i najbardziej wymagającym zadaniem jakim jest dekodowanie formatu MP3.
+			Propozycja wykorzystania układu RP2040 była względnie ryzykowna. Rdzenie Cortex M0+ mogły okazać się niewystarczające do obsłużenia wszystkich zadań, zwłaszcza, że brak im jednostki obliczeń zmiennoprzecinkowych. Należało więc jak najszybciej określić czy poradzą sobie one z najważniejszym i najbardziej wymagającym aspektem jakim jest dekodowanie formatu MP3.
 			
 			\imgh{4/prototype_1}{Pierwszy prototyp do testów odtwarzania dźwięku}{0.6}
 			
@@ -843,11 +845,11 @@
 
 				\lstfile{default}{Zajętość pamięci RAM}{lst/4/memory}
 
-				Powstało także narzędzie do analizy zużycia pamięci na podstawie pliku \lstinline|.elf.map|. Zawiera on informacje w której części oraz ile pamięci zajmują wszystkie zmienne w projekcie. Skrypt \lstinline|read-elf-map.py| w języku Python analizuje ten plik. Wyświetla przyjazne dla użytkownika podsumowanie największych obiektów oraz procentową zajętość pamięci. Na listingu~\ref{lst/4/memory} że pamięć w finalnej wersji produktu została użyta w 80\%, a najwięcej pamięci alokują:
+				Powstało także narzędzie do analizy zużycia pamięci na podstawie pliku \lstinline|.elf.map|. Zawiera on informacje w której części przestrzeni adresowej znajdują się wszystkie zmienne w projekcie oraz ile bajtów zajmują. Skrypt \lstinline|read-elf-map.py| w języku Python analizuje ten plik. Wyświetla przyjazne dla użytkownika podsumowanie największych obiektów oraz procentową zajętość pamięci. Na listingu~\ref{lst/4/memory} że pamięć w finalnej wersji produktu została użyta w 80\%, a najwięcej pamięci alokują:
 				\begin{itemize}
-					\item 70kB \lstinline|static.cpp| -- bufor kołowy, pamięć wpisów list, instancja klienta HTTP,
+					\item 70kB (\lstinline|static.cpp|) -- bufor kołowy, pamięć wpisów list, instancja klienta HTTP,
 					\item 49kB stos sieciowy
-					\item 45kB \lstinline|player.cpp| -- bufor nieskompresowanego dźwięku, instancje dekoderów.
+					\item 45kB (\lstinline|player.cpp|) -- bufor nieskompresowanego dźwięku, instancje dekoderów.
 					\item 29kB system operacyjny FreeRTOS.
 				\end{itemize}
 			
@@ -905,7 +907,7 @@
 			W sierpniu radio było już gotowe. Po nieznacznych korektach w oprogramowaniu (np. zmiana numerów wyprowadzeń) było produktem gotowym do testowania przez osoby postronne.
 
 		\subsection{Testowanie}
-			Pierwszym z zauważonych problemów był niewystarczający czas oczekiwania na połączenie i odbieranie danych z serwera. Radio dotychczas było testowane w bezpośrednim sąsiedztwie routera Wi-Fi. Po przeniesieniu do innego pomieszczenia radio nie mogło połączyć się z większością stacji z powodu zbyt szybkiego zgłaszania błędu przekroczenia czasu oczekiwania na dane. Czas ten nie został zaktualizowany po powiększeniu buforu okna TCP. Został on ustalony na 4 sekundy, ponieważ ostatecznie bufor ma 64kB, a większość stacji nadaje z przepływnością 128kb/s.
+			Pierwszym z zauważonych problemów był niewystarczający czas oczekiwania na połączenie i odbieranie danych z serwera. Radio dotychczas było testowane w bezpośrednim sąsiedztwie routera Wi-Fi. Po przeniesieniu do innego pomieszczenia radio nie mogło połączyć się z większością stacji z powodu zbyt szybkiego zgłaszania błędu przekroczenia czasu oczekiwania na dane. Został on powiększony do 4 sekund, ponieważ bufor ma 64kB, a większość stacji nadaje z przepływnością 128kb/s.
 			$ $\\
 			
 			Użytkowanie radia jako kompletnego produktu szybko dostarczyło nowych danych o błędach. Dodana została obsługa MPEG2 (obsługa niższej jakości dźwięku), ponieważ niektóre stacje nie odtwarzały się poprawnie. Ograniczona została liczba przekierowań, na które odpowiada klient HTTP, ponieważ następowało zawieszanie się urządzenia. Długość metadanych ICY była zapisywana do zmiennej 8-bitowej co w przypadku stacji nadającej więcej informacji niż tylko tytuł utworu powodowała zawieszanie się odtwarzania. Ten błąd również został naprawiony.
@@ -914,7 +916,7 @@
 			To tylko niektóre z błędów napotkanych przeze mnie i osoby z najbliższego otoczenia. Wszystkie odnalezione były niezwłocznie zapisywane w systemie do śledzenia zadań i później naprawiane. Sierpień upłynął, radio zyskiwało na użyteczności.
 			
 		\subsection{Odtwarzanie plików lokalnych}
-			Jako że obsługa kart SD była wymaganiem opcjonalnym, zrealizowana została pod koniec prac nad urządzeniem. We wrześniu został dodany ekran listowania plików. Za ekran wykonawczy posłużył ekran radia z pomniejszymi zmianami. Dodano pasek postępu informujący użytkownika jaka część utworu została już odtworzona. Znalazło się też miejsce na informacje o czasie trwania całości. Oba ekrany przedstawiono na rysunkach \ref{4/scr_1} oraz \ref{4/scr_2}.
+			Jako że obsługa kart SD była wymaganiem opcjonalnym, zrealizowana została pod koniec prac nad urządzeniem. We wrześniu został dodany ekran listowania plików. Za ekran wykonawczy posłużył ekran radia z pomniejszymi zmianami. Dodano pasek postępu informujący użytkownika jaka część utworu została już odtworzona. Znalazło się też miejsce na informacje o czasie trwania całości. Oba ekrany przedstawiono na rysunkach \ref{4/scr_radio} oraz \ref{4/scr_player}.
 			
 			\imghss{4/scr_radio}{Ekran radia}{4/scr_player}{Ekran odtwarzacza lokalnego}
 			
