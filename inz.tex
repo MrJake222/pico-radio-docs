@@ -767,6 +767,7 @@
 		Radio jest kompletnym projektem, gotowym do odtwarzania bez zewnętrznego wzmacniacza czy głośników. Zadbano także o zasilanie akumulatorowe. Projekt schematu i płytki PCB powstały w programie KiCAD\textsuperscript{\cite{hw_kicad}}, natomiast obudowa została zaprojektowana w programie OpenSCAD\textsuperscript{\cite{hw_openscad}}.
 	
 		\subsection{Schemat}
+			\label{sec:schematics}
 			\imgh{3/hw_kicad_sch}{Schemat elektryczny radia}{1}
 			
 			Schemat całości systemu został pokazany na rysunku~\ref{3/hw_kicad_sch}. Podzielony został na 6 funkcjonalnych bloków, które zostały opisane poniżej.
@@ -980,12 +981,20 @@
 			\paragraph{Dalszy rozwój}
 				Przydatnym dodatkiem byłaby możliwość randomizacji kolejności automatycznego odtwarzania utworów oraz opcja odtworzenia całego folderu rekurencyjnie. Pozwoliłoby to np. na losowe odtworzenie całej dyskografii jednego zespołu. Implementacja bezstratnego kodowania plików FLAC umożliwiłaby podniesienie jakości odtwarzanego dźwięku.
 		
-		\subsection{Połączenie z internetem}
-			% Wi-Fi
+		\subsection{Połączenie z Internetem}
+			Urządzenie do odtwarzania radia i wyszukiwania nowych stacji wymaga połączenia z Internetem. W projekcie zostały zaimplementowane funkcje wyszukiwania, zapisywania oraz łączenia się z sieciami Wi-Fi.
+			$ $\\
 			
-	\section{Zrealizowana warstwa sprzętowa}
+			Sieci po wyszukaniu, wprowadzeniu hasła i poprawnym ustanowieniu połączenia są zapisywane w pamięci nieulotnej. Urządzenie po uruchomieniu automatycznie wyszukuje najlepszą sieć, do której hasło zostało wcześniej zapisane. Dzięki temu, użytkownik od razu może rozpocząć odtwarzanie radia.
+			
+	\section{Warstwa sprzętowa}
+		Projekt od strony sprzętowej został udokumentowany na schemacie przedstawionym w sekcji~\ref{sec:schematics}. Powstała także płytka PCB, oraz obudowa wydrukowana przy użyciu drukarki~3D. Całość widoczna jest na rysunku~\ref{5/hw_result}.
+		
+		\imgh{5/hw_result}{Gotowy produkt w obudowie}{0.7}
+		
+		Od strony funkcjonalnej urządzenie posiada wbudowane ogniwa, dzięki czemu nie potrzebuje zewnętrznego zasilania. Zintegrowany układ ładowania ze złączem USB~C pozwala na wykorzystanie praktycznie dowolnej ładowarki z tym złączem (prąd wykorzystany do ładowania to 1A). Produkt posiada analogową regulację głośności potencjometrem wyprowadzonym na lewą stronę urządzenia. Lokalizacja została dobrana ze względu na bliskość sekcji audio na płytce i chęć minimalizacji długości ścieżek, które im dłuższe tym większe zakłócenia wprowadzają do systemu. Obok gałki potencjometru znajduje się także złącze JACK~3.5mm do podłączenia zewnętrznego wzmacniacza.
+	
 	\section{Scenariusze użytkowania}
-	% TODO minijack
 			
 	% TODO instrukcja obsługi (rozdział 5)
 	% TODO podsumowanie
