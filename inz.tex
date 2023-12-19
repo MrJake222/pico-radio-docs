@@ -995,7 +995,58 @@
 		Od strony funkcjonalnej urządzenie posiada wbudowane ogniwa, dzięki czemu nie potrzebuje zewnętrznego zasilania. Zintegrowany układ ładowania ze złączem USB~C pozwala na wykorzystanie praktycznie dowolnej ładowarki z tym złączem (prąd wykorzystany do ładowania to 1A). Produkt posiada analogową regulację głośności potencjometrem wyprowadzonym na lewą stronę urządzenia. Lokalizacja została dobrana ze względu na bliskość sekcji audio na płytce i chęć minimalizacji długości ścieżek, które im dłuższe tym większe zakłócenia wprowadzają do systemu. Obok gałki potencjometru znajduje się także złącze JACK~3.5mm do podłączenia zewnętrznego wzmacniacza.
 	
 	\section{Scenariusze użytkowania}
+		W tej sekcji przedstawione zostały scenariusze użytkowania urządzenia.
+	
+		\subsection{Wyszukanie i zapisanie stacji}
+			\imgh{5/PicoRadio-fl-add}{Użytkownik dodaje stację do ulubionych}{0.9}
+			\newcommand{\rfladd}[1]{\ref{5/PicoRadio-fl-add}#1}
 			
+			Na rysunku~\rfladd{} przedstawiono podstawowy scenariusz wyszukania stacji i dodania jej do listy ulubionych.
+			
+			\begin{itemize}
+				\item Rys.~\rfladd{a} -- użytkownik uruchomił radio i zmienił pozycję kursora na przycisk akcji odpowiedzialny za wyszukiwanie,
+				\item Rys.~\rfladd{b} -- po naciśnięciu środkowego przycisku, wyświetlony został ekran wyszukiwania z klawiaturą i wpisana została fraza filtrująca,
+				\item Rys.~\rfladd{c} -- na 3. stronie odnaleziona została żądana stacja
+				\item Rys.~\rfladd{d} -- po akceptacji wyboru (środkowy przycisk), rozpoczęło się odtwarzanie; użytkownik przeniósł kursor na przycisk gwiazdki,
+			\end{itemize}
+			Warto nadmienić, że w każdej chwili możliwa jest korekta wyboru. Gdy jednak znaleziona stacja nie jest odpowiednia lub popełniono błąd we frazie wyszukiwania, użytkownik może cofnąć się przy użyciu skrajnie lewej ikony akcji do poprzedniego ekranu.
+			\begin{itemize}
+				\item Rys.~\rfladd{e} -- po kliknięciu przycisku dodania do ulubionych zmienia on wypełnienie (stacja została zapisana),
+				\item Rys.~\rfladd{f} -- użytkownik chce szybko powrócić do listy ulubionych stacji, więc przy pomocy prawego przycisku zmienia pozycję kursora na przycisk szybkiego powrotu,
+				\item Rys.~\rfladd{g} -- nowo dodana stacja automatycznie jest wyświetlona i zaznaczona; użytkownik dostaje potwierdzenie, że zapis powiódł się.
+			\end{itemize}
+			
+		\subsection{Odtwarzanie plików lokalnych}
+			\imgh{5/PicoRadio-fl-local}{Użytkownik odtwarza lokalny plik MP3}{0.9}
+			\newcommand{\rflocal}[1]{\ref{5/PicoRadio-fl-local}#1}
+			
+			Na rysunku~\rflocal{} przedstawiono scenariusz otwierania kolejnych lokalnych folderów i odtworzenia zapisanego na karcie SD pliku MP3.
+			
+			\begin{itemize}
+				\item Rys.~\rflocal{a} -- użytkownik ustawił kursor na ikonie akcji odtwarzacza lokalnego,
+				\item Rys.~\rflocal{b} -- po przewinięciu w dół (pasek przewijania widoczny po prawej stronie ekranu) wskazano żądany podfolder,
+				\item Rys.~\rflocal{c} i \rflocal{d} -- zatwierdzając wybór użytkownik przechodzi do podfolderu; jego nazwa wyświetla się na górze ekranu,
+				\item Rys.~\rflocal{e} -- klikając w plik, odtwarzanie rozpoczyna się.
+			\end{itemize}
+			
+			Co ciekawe, pliki lokalne traktowane analogicznie do stacji radiowych, to znaczy można je dodawać do listy ulubionych.
+			
+		\subsection{Połączenie z nową siecią Wi-Fi}
+			\imgh{5/PicoRadio-fl-wifi}{Użytkownik łączy się z nową siecią}{0.9}
+			\newcommand{\rflwifi}[1]{\ref{5/PicoRadio-fl-wifi}#1}
+			
+			Na rysunku~\rflwifi{} przedstawiono scenariusz łączenia się z nową siecią Wi-Fi i zapisanie jej do znanych sieci.
+			
+			\begin{itemize}
+				\item Rys.~\rflwifi{a}, \rflwifi{b}, \rflwifi{c} i \rflwifi{d} -- użytkownik przechodzi do wyszukiwania nowych sieci i znajduję tą, z którą chce się połączyć,
+				\item Rys.~\rflwifi{e}, \rflwifi{f} -- otwiera się ekran wprowadzania hasła; rysunki prezentują działanie pierwszego z dwóch trybów działania przycisku \textit{Shift} (tymczasowe działanie),
+				\item Rys.~\rflwifi{g}, \rflwifi{h} -- tutaj, poprzez podwójne naciśnięcie, został wybrany drugi tryb \textit{Shift} (stałe działanie),
+				\item Rys.~\rflwifi{i}, \rflwifi{j} -- po wprowadzeniu hasła, otwiera się ekran połączenia, na którym prezentowany jest aktualny status połączenia i ewentualne błędy,
+				\item Rys.~\rflwifi{k} -- gdy połączenie się powiedzie, przycisk wstecz przenosi użytkownika do listy zapisanych sieci (zamiast do poprzedniego ekranu),
+				\item Rys.~\rflwifi{l} -- użytkownik może teraz z powodzeniem słuchać radia korzystając z nowej sieci Wi-Fi.
+			\end{itemize}
+			
+	% TODO warnings
 	% TODO instrukcja obsługi (rozdział 5)
 	% TODO podsumowanie
 		
