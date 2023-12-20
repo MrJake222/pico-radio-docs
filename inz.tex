@@ -541,7 +541,7 @@
 			Implementacja wycinania stała się konieczna w momencie kiedy w środku niepodzielnej jednostki przy odczycie (np. ramki MP3) pojawiają się metadane jak np. ICY. Trzeba je wtedy przetworzyć i usunąć, zapełniając powstałą lukę danymi występującymi dalej w buforze.
 	
 	\section{Klient protokołu HTTP}
-		Potrzeba stworzenia własnej implementacji klienta HTTP stała się konieczna, aby zintegrować go z buforem kołowym i biblioteką sieciową. Obsługuje on przekierowania i podstawowe nagłówki. Wystarczająco, aby z powodzeniem pobierać wyniki wyszukiwań stacji oraz odtwarzać je. Implementacja jest dwuczęściowa. Nadrzędny moduł \lstinline|HttpClient| obsługuje wysokopoziomowy standard HTTP. Zajmuje się komponowaniem żądań, ich nagłówków, a także przetwarzaniem odpowiedzi. Podrzędny moduł obsługuje niskopoziomową komunikację sieciową. Taka budowa modułowa pozwoliła na testowanie serwera w środowisku PC ze stosowną implementacją modułu podrzędnego. Urządzenie zawiera moduł \lstinline|HttpClientPico|, który współpracuje z zasobami dostępnymi na mikrokontrolerze.
+		Potrzeba stworzenia własnej implementacji klienta HTTP stała się konieczna, aby zintegrować go z buforem kołowym i biblioteką sieciową. Obsługuje on przekierowania i podstawowe nagłówki. Wystarczająco, aby z powodzeniem pobierać wyniki wyszukiwań stacji oraz odtwarzać je. Implementacja jest dwuczęściowa. Nadrzędny moduł \lstinline|HttpClient| obsługuje wysokopoziomowy standard HTTP. Zajmuje się komponowaniem żądań, ich nagłówków, a także przetwarzaniem odpowiedzi. Podrzędny moduł obsługuje niskopoziomową komunikację sieciową. Taka budowa modułowa pozwoliła na testowanie klienta w środowisku PC ze stosowną implementacją modułu podrzędnego. Urządzenie zawiera moduł \lstinline|HttpClientPico|, który współpracuje z zasobami dostępnymi na mikrokontrolerze.
 		$ $\\
 		
 		Obsługiwane nagłówki są ograniczone z uwagi na chęć statycznej alokacji pamięci. Żądanie wysyłane jest z nagłówkami:
@@ -558,7 +558,7 @@
 			\item \lstinline|Icy-Metaint| -- używane przy przetwarzaniu metadanych ICY.
 		\end{itemize}
 		
-		Niestety brak jest obsługi szyfrowania. Środowisko zawiera implementację TLS, lecz nie została ona wykorzystana z uwagi na prawdopodobnie niewystarczającą moc obliczeniową mikrokontrolera. Wiele stacji transmituje z użyciem protokołu HTTP, tylko niewielka część z nich wymuszała przekierowania na szyfrowaną transmisję. Serwer musi je obsługiwać ponieważ wiele stacji wykorzystuje je do geolokalizacji serwera transmitującego. W konfiguracji zawarta została opcja \lstinline|HTTP_MAX_REDIRECTS| (domyślnie 2), która mówi, ile razy maksymalnie przekierowań chcemy obsłużyć. Zwykle jeżeli jest to więcej niż jedno, serwer próbuje wymusić transmisję szyfrowaną.
+		Niestety brak jest obsługi szyfrowania. Środowisko zawiera implementację TLS, lecz nie została ona wykorzystana z uwagi na prawdopodobnie niewystarczającą moc obliczeniową mikrokontrolera. Wiele stacji transmituje z użyciem protokołu HTTP, tylko niewielka część z nich wymuszała przekierowania na szyfrowaną transmisję. Klient musi je obsługiwać ponieważ wiele stacji wykorzystuje je do geolokalizacji serwera transmitującego. W konfiguracji zawarta została opcja \lstinline|HTTP_MAX_REDIRECTS| (domyślnie 2), która mówi, ile razy maksymalnie przekierowań chcemy obsłużyć. Zwykle jeżeli jest to więcej niż jedno, serwer próbuje wymusić transmisję szyfrowaną.
 		
 	\section{Dane}
 		Główną jednostką informacji w projekcie jest stacja radiowa. Na potrzeby unifikacji dostępu do danych o stacjach powstał interfejs \lstinline|DataSource|. Zawiera on dwie metody:
@@ -1039,18 +1039,27 @@
 				\item Rys.~\rflwifi{l} -- użytkownik może teraz z powodzeniem słuchać radia korzystając z nowej sieci Wi-Fi.
 			\end{itemize}
 			
-	% nazwy akapitów do zmiany
-	\section{Stan projektu (software)}
-		...
+	\section{Podsumowanie wytworzonego oprogramowania}
+		Produkt końcowy posiada wiele funkcji. Przeważająca większość z nich jest kompletna.
+		% TODO dopisać coś
 		
-		\subsection{title}
-			% co działa, co fajne, co niefajne w tej wersji 1.0
+		\subsection{Ocena obecnej wersji produktu}
+			Udało się zaimplementować dekodowanie MP3 z każdą przepływnością, nawet 320 kbps, w wariantach MPEG1 oraz MPEG2. Ponad to obsługiwane są pliki WAV. Udało się także odczytać metadane zarówno strumieni internetowych (ICY) jak i lokalnych plików MP3 (ID3v2). Dekoder potrafi uwzględniać i korygować wiele nieprawidłowości w strumieniu danych. Obsługiwane jest także wykrywanie i zgłaszanie błędów dekodowania. Klient HTTP obsługuje minimum funkcji, lecz jest to wystarczające do poprawnego strumieniowania radia internetowego.
+			$ $\\
+			
+			Należałoby poprawić dokładność wyliczania procentu pozostałej energii w ogniwach. Aproksymacja zgrubnie jest poprawna lecz do pełnej poprawności brakuje wielogodzinnych testów i poprawek. Podczas ładowania, wskazanie poziomu baterii jest znacznie zawyżone.
+			$ $\\
+			
+			Błędy zgłaszane użytkownikowi są zbyt ogólne. Konieczna jest unifikacja kodów błędów w projekcie i wyświetlanie adekwatnej wiadomości zamiast ogólnikowego \textit{Wystąpił błąd}. Brak jest także ekranu potwierdzenia usunięcia wpisu z ulubionych oraz edycji nazwy zapisanej stacji.
 		
-		\subsection{title}
-			% co do wersji 2.0
-			% "grubsze" kwestie software?
-			%   większy wyświetlacz, TTF, dotykowy ekran??
-			%   modem USB (to dobre)
+		\subsection{Perspektywa nowej generacji projektu}
+			Swoista wersja 2.0 mogłaby zawierać przykładowo obsługę modemów USB. Dzięki temu, użytkownik mógłby podłączyć do płytki modem sieci komórkowej i używać urządzenia bez dostępu do sieci Wi-Fi (np. w miejscu pracy). Taki produkt nie wymagałby żadnej konfiguracji początkowej ani ingerencji w istniejącą infrastrukturę sieciową. Jest to duża zaleta tradycyjnego radia.
+			$ $\\
+			
+			Część stacji internetowych próbuje wymusić połączenie szyfrowane TLS. Obecnie radio odrzuca takie próby i zgłasza błąd. Dołączenie do projektu obsługi takich połączeń podniosłoby jego użyteczność. Powstały jednak obawy czy urządzenie poradzi sobie z deszyfrowaniem danych w czasie rzeczywistym, więc kwestia TLS nie została poruszona w obecnej wersji projektu.
+			$ $\\
+			
+			Istniejąca infrastruktura pozwala na zaimplementowanie tworzenia wielu list ulubionych, jednak tak funkcjonalność nie została utworzona. Gdyby ją zaimplementowano, użytkownik mógłby grupować swoje utwory według własnego uznania. Odtwarzanie np. konkretnych gatunków muzycznych stałoby się o wiele prostsze.
 			
 	\section{Warstwa sprzętowa}
 		Projekt od strony sprzętowej został udokumentowany w sekcji~\ref{sec:hw}. Oprócz schematu, powstała także płytka PCB, oraz obudowa wydrukowana przy użyciu drukarki~3D. Całość widoczna jest na rysunku~\ref{5/hw_result}.
@@ -1059,12 +1068,49 @@
 		
 		Od strony funkcjonalnej urządzenie posiada wbudowane ogniwa, dzięki czemu nie potrzebuje zewnętrznego zasilania. Zintegrowany układ ładowania ze złączem USB~C pozwala na wykorzystanie praktycznie dowolnej ładowarki z tym złączem (prąd wykorzystany do ładowania to 1A). Produkt posiada analogową regulację głośności potencjometrem wyprowadzonym na lewą stronę urządzenia. Lokalizacja została dobrana ze względu na bliskość sekcji audio na płytce i chęć minimalizacji długości ścieżek, które im dłuższe tym większe zakłócenia wprowadzają do systemu. Obok gałki potencjometru znajduje się także złącze JACK~3.5mm do podłączenia zewnętrznego wzmacniacza.
 		
-		% analogicznie do software
-		\subsection{title}
-			% co wyszło, co nie wyszło w obecnej wersji sprzętu 1.0
+		\subsection{Ocena wyników}
+			Natura sprzętowej realizacji tej części projektu powoduje, że znacznie ciężej jest korygować powstałe błędy. Dlatego ta sekcja zawiera dużo niedociągnięć. Jednak wszystkie te mankamenty mogą zostać naprawione w nowej wersji sprzętu.
+			
+			\subsubsection{Schemat}
+				\noindent
+				Podczas tworzenia pierwszej wersji schematu popełniono szereg drobnych błędów:
+				\begin{itemize}
+					\item brak kondensatorów filtrujących, które mogłyby poprawić parametry pracy niektórych elementów takich jak wzmacniacz,
+					\item RP2040 mierzy napięcie \lstinline|VCC| a nie napięcie ogniw, co powoduje, że podczas ładowania nie ma on możliwości pomiaru poziomu naładowania,
+					\item niedokładne rezystory pomiarowe w dzielnikach napięć, powodują one niedokładności w pomiarze napięć \lstinline|VCC| i ogniw,
+					\item brak ochrony przed drganiem styków (kondensatorów) pinów detekcji karty SD,
+					\item zastosowana przetwornica nie jest przystosowana do wysokiego, skokowego poboru prądu przez wzmacniacz,
+					\item wzmacniacz powinien mieć pin wyciszający lub wyłączający, aby obniżyć pobór prądu i ukrywać szumy przy braku odtwarzania dźwięków,
+				\end{itemize}
+				
+				W przedstawionym finalnym schemacie powyższe pomyłki zostały naprawione. Na płytce brakujące połączenia były wykonywane przy użyciu przewodów lutowanych bezpośrednio do płytki od strony miedzi.
+				$ $\\
+				
+				Dodatkowo wykryte zostały problemy, które nie zostały poprawione w tej wersji produktu. Parametr $\text{RDS}_{\text{(on)}}$ tranzystora \lstinline|Q1| przy małych napięciach jest relatywnie duży, co przy znacznym poborze prądu przez wzmacniacz powoduje odkładanie się na nim nietrywialnej mocy. Przykładowym rozwiązaniem tego problemu może być zastosowanie tranzystora o lepszych parametrach, lub zrezygnowanie wbudowanej ładowarki ogniw.
+				$ $\\
+				
+				Niewystarczające filtrowanie zasilania powoduje słyszalne szumy, szczególnie wtedy, kiedy nic nie jest odtwarzane. Komunikacja Wi-Fi powoduje znaczny chwilowy wzrost prądu pobieranego przez płytkę Pi~Pico~W, co powoduje zakłócenia w zasilaniu wzmacniacza. Częściowo zostało to naprawione przez wyciszanie wzmacniacza, lecz nie jest to rozwiązanie idealne. Należałoby odseparować od siebie te dwa obwody zasilające.
+				
+			\subsubsection{Płytka PCB}
+				Przy projektowaniu płytki PCB również wystąpiły niedopatrzenia:
+				\begin{itemize}
+					\item brak otworów montażowych w obrębie głównej części płytki, przez co posiada ona dość niestandardowy kształt,
+					\item brak miejsca na elementy spajające obudowę, tam gdzie płytka dotyka ścianek nie ma wkrętów mocujących, co powoduje niestabilność obudowy,
+					\item moduły są wpinane w złącza typu \textit{goldpin}, co w przypadku obecności na nich złącz zewnętrznych (JACK, port USB~C), powoduje że wpinanie wtyków w te złącza odchyla je i w konsekwencji moduł wypada lub traci kontakt. Zostało to częściowo naprawione przy module ładowania. Wlutowany na stałe, stał się stabilniejszy.
+				\end{itemize}
+				
+				Domowa metoda termotransferu nie zapewnia najlepszych parametrów produkcyjnych. Niektóre ścieżki są cieńsze niż w projekcie, a część padów jest tak cienka, że montaż był znacząco utrudniony. Znacznie lepszym i powtarzalnym sposobem na wytworzenie płytki byłoby zlecenie jej wykonania zewnętrznej firmie, jednak znacznie opóźnia to prototypowanie.
 		
-		\subsection{title}
-			% co można rozważyc do wersji sprzętowej 2.0
+		\subsection{Radio nowej generacji}
+			Pierwszym ulepszeniem powinna być nowa płytka, zaprojektowana od podstaw z uwzględnieniem powyższych uwag. Wykonana profesjonalnie, dwuwarstwowo, pozwoliłaby na miniaturyzację urządzenia i poprawienie parametrów pracy, głównie obniżenie szumów sekcji zasilającej. Powinny zostać uwzględnione wszystkie otwory montażowe samej płytki jak i elementy obudowy z którymi nie może kolidować. Moduły powinny zostać odsunięte od krawędzi płytki, ponieważ (jak napisano wyżej) i tak nie nadają się do bezpośredniego wpinania zewnętrznych złączy. Za to powinny zostać wyprowadzone dedykowane, lutowane lub przykręcane złącza.
+			$ $\\
+
+			Należałoby się zastanowić także, czy jakość i poziom głośności dźwięku odpowiada użytkownikowi. Jeżeli nie, istnieje możliwość wykorzystania mocniejszego wzmacniacza w celu obniżenia zniekształceń przy cichym słuchaniu lub zwiększenia mocy maksymalnej. Jednak układy o większej mocy wymagają wyższego napięcia.
+			Przykładowo PAM8610\textsuperscript{\cite{ch5_pam8610}} przy napięciu 7V (przybliżone napięcie 2 ogniw połączonych szeregowo) jest w stanie oddać moc 4W na kanał (obecnie użyty wzmacniacz posiada moc ok. 1W na kanał). Nowszy PAM8006a\textsuperscript{\cite{ch5_pam8006a}} jest w stanie wysterować głośniki mocą aż 8W na kanał, lecz wiąże się to z napięciem zasilania 12V (3 ogniwa szeregowo) i zmianą głośników na takie o impedancji $8 \Omega$.
+			Jednak pociąga to za sobą komplikacje sekcji zasilającej. Ogniwa szeregowe musiałyby być ładowane wyższym napięciem i prawdopodobnie poskutkowałoby to zrezygnowaniem z wysokiej kompatybilności USB~C. Dostarcza ono zbyt niskiego napięcia. Istnieje opcja wykorzystania protokołu USB~PD (ang. \textit{power delivery}), który, może poinformować ładowarkę, że urządzenie obsługuje napięcie wyższe niż 5V, np. 9V czy 12V.
+			$ $\\
+			
+			Dodatkowym modułem poprawiającym jakość dźwięku mógłby być prosty \textit{equalizer}. Dwa pokrętła do wyrównania pasma akustycznego (bas i treble), zrealizowane z wykorzystaniem pasywnych elementów elektronicznych.
 			
 	\section{Podsumowanie}
 			
@@ -1155,6 +1201,11 @@
 		
 		\bibitem{ch4_pcb_method}
 		\href{http://mikrokontrolery.blogspot.com/2011/03/wykonanie-plytki-pcb-metoda-termotransferu.html}{\textit{PCB: Metoda termotransferu} -- domowa metoda wytworzenia płytki PCB}
+		
+		\bibitem{ch5_pam8610}
+		\href{https://www.diodes.com/assets/Datasheets/products_inactive_data/PAM8610.pdf}{\textit{PAM8610} -- 2x10W wzmacniacz audio}
+		\bibitem{ch5_pam8006a}
+		\href{https://www.diodes.com/assets/Datasheets/PAM8006A.pdf}{\textit{PAM8006A} -- 2x15W wzmacniacz audio}
 		
 	\end{thebibliography}
 	
