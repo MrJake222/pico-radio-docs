@@ -25,6 +25,7 @@
 	urlcolor=magenta
 }
 \usepackage{caption} % link przenosi do góry obrazka
+\usepackage{svg}
 
 % bez odstępu w itemize
 \let\tempone\itemize
@@ -934,7 +935,42 @@
 			 W pierwszej połowie grudnia w.w. funkcjonalność była gotowa.
 			 
 	 \section{Organizacja pracy}
-	 	% TODO jira (git stash)
+	 	% TODO fix jira
+		Do planowania i organizacji pracy nad projektem użyto oprogramowania Jira. Główną wykorzystaną funkcjonalnością było tworzenie zadań i dzielenie ich na funkcjonalne bloki. Zawierały one implementacje podstawowych funkcjonalności takich jak: odtwarzanie lokalnych plików, automatyczne połączenia Wi-Fi.
+		
+		\imghss{4/plan1}{Blok ulepszeń}{4/plan2}{Zgrubny zarys dokumentacji, lokalnego odtwarzania i części sprzętowej}
+		
+		Bloki te zazwyczaj były następnie uruchamiane jako 1-2 tygodniowe sprinty. Przykłady takich bloków zostały przedstawione na rysunku~\ref{4/plan2}. Bloki ulepszeń (rys.~\ref{4/plan1}) czy błędów, istniały ciągle, dopisywane były do nich nowe pomysły czy zauważone błędy. Następnie mogły być one przenoszone do innych bloków.
+		W ramach jednego sprintu wykorzystywana była tablica Kanban.
+		 $ $\\
+		 
+		 Utworzono szereg własnych typów zadań. Zostały one przedstawione w tabeli~\ref{jicons}.
+		 
+		 \begin{table}[H]
+		 	\centering
+		 	\caption{Typy zadań w oprogramowaniu Jira}
+		 	\label{jicons}
+			 \newcommand{\jicon}[1]{\includesvg[width=12px]{img/4/jira/#1}}
+			 \begin{tabular}{l|l|l}
+			 	\jicon{bug}&\textit{Bug}&niedziałająca funkcjonalność\\
+			 	\jicon{ref}&\textit{Refactor}&głębokie zmiany w strukturze projektu\\
+			 	&&\\
+			 	
+			 	\jicon{docs_story}&\textit{[Docs] Story}&blok dokumentacji\\
+			 	\jicon{research}&\textit{Research}&konieczność zbadania sytuacji\\
+			 	\jicon{doc}&\textit{Documentation}&udokumentowanie działania\\
+			 	&&\\
+			 	
+			 	\jicon{story}&\textit{Story}&blok zadań\\
+			 	\jicon{impr}&\textit{Improvement}&ulepszenie istniejącej funkcjonalności\\
+			 	\jicon{task}&\textit{Task}&nowe funkcje\\
+			 	&&\\
+			 	
+			 	\jicon{hw}&\textit{Hardware}&poprawka sprzętowa\\
+			 \end{tabular}
+	 \end{table}
+		 
+		 Jak widać proces inspirowany był metodyką Scrum. Została ona jednak znacznie uproszczona.
 	 	
 \chapter{Wyniki projektu}
 	W tym rozdziale skupiono się na finalnym efekcie projektu.
