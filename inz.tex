@@ -1,10 +1,11 @@
 % !TeX spellcheck = pl_PL
-\documentclass[12pt]{report}
+%\documentclass[12pt]{report}
+\documentclass[polish]{aghengthesis}
 
 \usepackage{amssymb} % symbol kąta
 \usepackage[polish]{babel} % polskie nazwy
 \usepackage[T1]{fontenc} % polskie znaki
-\usepackage[margin=1.0in]{geometry} % marginesy
+%\usepackage[margin=1.0in]{geometry} % marginesy
 \usepackage[utf8]{inputenc}
 \usepackage{listingsutf8} % bloki kodu
 \usepackage{lmodern} % font
@@ -138,20 +139,22 @@
 	\vspace{0.3cm}
 }
 
+\author{Norbert Morawski}
+\titlePL{Odbiornik internetowych stacji radiowych}
+\titleEN{Receiver of Internet radio stations}
+
+\fieldofstudy{Informatyka}
+\supervisor{dr inż. Wojciech Zaborowski}
+\date{\the\year}
+
+\setcounter{tocdepth}{1}
 
 \begin{document}
 \lstset{inputencoding=utf8, basicstyle=\ttfamily}
 
-\title{Odbiornik internetowych stacji radiowych \\
-	\vspace{0.2cm}
-	\large Praca Inżynierska \\
-	\large ...}
-\author{Norbert Morawski}
-
 \maketitle
-\setcounter{tocdepth}{1}
-\tableofcontents
-\pagebreak
+
+%\tableofcontents
 
 \chapter{Cel prac i wizja produktu}
 	W tym rozdziale opisano jak będzie wyglądał końcowy produkt. Zwrócono też uwagę na to jak będzie przebiegała jego realizacja i jakie ryzyka mogą wystąpić.
