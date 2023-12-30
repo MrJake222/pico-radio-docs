@@ -370,11 +370,13 @@
 		\imghss{2/err1}{Błąd odtwarzania}{2/err2}{Błąd ładowania stacji}
 
 \chapter{Wybrane aspekty realizacji}
-	W tym rozdziale wyjaśnione zostało jak zbudowany został projekt.
+	W tym rozdziale opisano ukończony produkt.
+	Skupiono się na przedstawieniu programowych modułów projektu. Na końcu opisano jak funkcjonuje część sprzętowa.
+%	wyjaśnione zostało jak zbudowany został projekt.
 	
 	\section{Moduły projektu}
-		W kodzie starano się zachować porządek. Wydzielone zostały główne funkcjonalne elementy i na podstawie tego podziału stworzona została struktura modularna przedstawiona na rysunku \ref{3/pico-radio-code-block-diagram}.
-		\imgh{3/pico-radio-code-block-diagram}{Schemat blokowy modułów projektu}{0.7}
+		W kodzie starano się zachować porządek. Wydzielone zostały główne funkcjonalne elementy i na podstawie tego podziału stworzona została struktura modularna przedstawiona na rysunku \ref{3/PicoRadio-code-block-diagram}.
+		\imgh{3/PicoRadio-code-block-diagram}{Schemat blokowy modułów projektu}{0.75}
 		
 		\subsection{Moduły własne}
 			Większość kodu projektu zawiera katalog \lstinline|libs|. W nim znajdują się poszczególne moduły (nazwane odpowiednimi nazwami podfolderów). Wszystkie wypisane w tej sekcji zostały zaimplementowane samodzielnie, chyba, że zaznaczono inaczej. Dla przejrzystości pogrupowano moduły wg ich ról.
@@ -458,46 +460,63 @@
 	%	TODO opisać tutaj co robi player.cpp (zmienna dec, funkcje publcizne)
 		
 		\subsection{Komunikacja z przetwornikiem}
-			W programie utworzony został bufor nieskompresowanego dźwięku PCM \lstinline|audio_pcm|. Ma on konfigurowalny rozmiar wyrażony w jednostkach 32-bitowych (2 kanały * 16-bitowa próbka). Przekazywany jest on do systemu DMA.
+			Komunikacja ze sprzętową częścią audio odbywa się poprzez podsystem DMA i bloki programowalne PIO.
+			W programie utworzony został bufor nieskompresowanego dźwięku PCM \lstinline|audio_pcm|. Ma on konfigurowalny rozmiar wyrażony w jednostkach 32-bitowych (2 kanały * 16-bitowa próbka). Przekazywany jest on do systemu DMA, który następnie transmituje go poprzez PIO zaprogramowane do symulowania interfejsu \isqs{}. Oba etapy transmisji zostały opisane poniżej.
 		
-			\subsubsection{PIO}
-				\imgh{3/pio_block}{Pojedynczy blok PIO (dokumentacja RP2040\textsuperscript{\cite{pico_pdf}}, strona 309)}{0.7}
-				
-				RP2040 posiada 8 programowalnych maszyn stanów, zgrupowanych w 2 bloki. W ramach jednego bloku (Rys. \ref{3/pio_block}) współdzielą one pamięć 32 instrukcji. Może wydawać się to mało, lecz instrukcje te są bardzo skondensowane.
-				
-				\imgh{3/pio_instr}{Zestaw instrukcji PIO (dokumentacja RP2040, strona 320)}{0.7}
-				Język programowania to własnościowy język z rodziny assembler. Do środowiska \lstinline|pico-sdk| dołączony jest assembler \lstinline|picoasm|. Zestaw instrukcji przedstawiono na rysunku \ref{3/pio_instr}. Jak wspomniano wcześniej, instrukcje są skondensowane, to znaczy mogą wykonywać wiele operacji na raz. Na przykład opóźniać wykonanie programu lub ustawiać osobny rodzaj wyjść typu \sset{}.
-				Instrukcja skoku obsługuje także dekrementację zmiennej w warunku. Same maszyny mogą mieć ustawiony dowolny adres wejścia i zapętlenia programu. Oszczędza to kilka instrukcji.
-				
-				\paragraph{Wyjścia typu \sset{}}
-					Jest to specjalny rodzaj wyjść, które mogą być ustawiane równocześnie z wykonywaniem innych instrukcji. Są szczególnie przydatne przy ustawianiu linii zegarowych i pozostałych linii kontrolnych. Minusem wykorzystania ustawiania wyjść \textit{na boku} jest konieczność poświęcenia możliwości opóźniania programu. W liście instrukcji pole \sset{} jest współdzielone z polem \lstinline|delay|. Jednak zaimplementowany program nie używa opóźnień.
-				
-				\imgh{3/pio_i2s_docs}{Przebieg czasowy protokołu \isqs{} (dokumentacja TDA1543\textsuperscript{\cite{tda_pdf}}, strona 9)}{0.9}
-				Dzięki tym blokom, możliwe jest dodanie do mikrokontrolera dowolnego protokołu danych bez zbytniego obciążenia procesora jego pełną symulacją. W ramach pracy został stworzony blok obsługi interfejsu \isqs{}, który serializuje dane dostarczane przez DMA i wysyła do układu DAC.
-				Dokumentacja protokołu \isqs{} została zaczerpnięta z dokumentacji układu TDA1543. Przedstawia ją rysunek \ref{3/pio_i2s_docs}. Jak widać zmiana kanału (kodowanego poziomem linii \lstinline|WS|)  musi nastąpić przed wysłaniem ostatniego bitu poprzedniego kanału (\lstinline|LSB|, czyli \textit{Least Significant Bit}, najmniej znaczący bit kanału lewego). Z tego powodu program wydłużył się do 8 instrukcji. Niektóre układy obsługują protokół \textit{left-just}, który nie posiada tego ograniczenia, jednak z uwagi na niewystarczającą dokumentacje i małe wsparcie przez układy, wybrany został klasyczny \isqs{}.
-				
-				\lstfile{pio}{Kod programu \isqs{}}{lst/3/i2s.pio}
-				
-				Kod tego bloku przedstawiony został na listingu \ref{lst/3/i2s.pio}. Poniżej omówione zostało jego działanie:
-				\begin{itemize}
-					\item Linia nr 3 ustawia ile bitów jest typu \lstinline|side-set|. Bity \lstinline|side-set| są wykorzystywane odpowiednio do: ustawienia linii \lstinline|WS| i linii \lstinline|BCK|.
-					
-					\item punktem wejścia programu jest linia nr 18. Ustawia ona liczbę powtórzeń i inicjalizuje linię \lstinline|WS| na 1 (kanał prawy) oraz linię \lstinline|BCK| na 1. Odwrócenie kolejności kanałów związane jest z kolejnością bajtów typu \textit{little-endian}). Następnie program automatycznie zapętla się do pierwszej instrukcji.
-					
-					\item Instrukcja \lstinline|out| powoduje wystawienie na linię \lstinline|DATA| jednego bitu z rejestru przesuwnego danych. \textit{Na boku} przełącza linię zegarową w stan niski
-					
-					\item Instrukcja \lstinline|jmp| najpierw sprawdza wartość rejestru \lstinline|X|. Jeżeli jest ona niezerowa to dekrementuje ją i skacze do etykiety \lstinline|right|. Pętla ta wykonuje się 15 razy.
-					
-					\item W linii nr 9 następuje transmisja najmniej znaczącego bitu kanału prawego. Zgodnie z dokumentacją musimy już zmienić stan linii \lstinline|WS| na 0 (kanał lewy). Następnie rejestr \lstinline|X| jest ponownie inicjalizowany na wartość 14.
-					
-					\item Linie 13-18 powtarzają transmisje zgodnie z opisem powyżej, ale tym razem dla kanału lewego.
-				\end{itemize}
-				
-				Instrukcja \lstinline|out| czeka na dane w buforze automatycznie.
+		\subsection{PIO}
+			RP2040 posiada 8 programowalnych maszyn stanów, zgrupowanych w 2 bloki.
+			Blok PIO przedstawiono na rysunku \ref{3/pio_block}.
+			\imgh{3/pio_block}{Pojedynczy blok PIO (dokumentacja RP2040\textsuperscript{\cite{pico_pdf}}, strona 309)}{0.7}
 			
-			\subsubsection{DMA}
-				\imgcs{3/dma_chain}{Kolejkowanie kanałów DMA}{0.55}
-				Podsystem bezpośredniego dostępu do pamięci wysyła dane do maszyn stanu PIO. Aby móc prowadzić nieprzerwaną transmisję, wykorzystane zostały dwa kanały z 12 dostępnych w układzie. Schemat działania przedstawiony został na rysunku \ref{3/dma_chain}. W momencie gdy jeden kanał skończy transfer, automatycznie uruchamiany jest drugi kanał. Taką funkcjonalność oferuje sprzętowo RP2040. Wywoływane jest także przerwanie, które zgłasza procesorowi potrzebę załadowania nowych danych.
+			W ramach jednego bloku maszyny współdzielą pamięć 32 instrukcji. Może wydawać się to mało, lecz instrukcje te są bardzo skondensowane. Język do programowania PIO to własnościowy język z rodziny assembler. Do środowiska \lstinline|pico-sdk| dołączony jest assembler \lstinline|picoasm|. Zestaw instrukcji przedstawiono na rysunku \ref{3/pio_instr}.
+			\imgh{3/pio_instr}{Zestaw instrukcji PIO (dokumentacja RP2040, strona 320)}{0.7}
+			
+			Jak wspomniano wcześniej, instrukcje są skondensowane, to znaczy mogą wykonywać wiele operacji na raz. Na przykład opóźniać wykonanie programu lub ustawiać osobny rodzaj wyjść typu \sset{}.
+			Instrukcja skoku obsługuje także dekrementację zmiennej w warunku. Same maszyny mogą mieć ustawiony dowolny adres wejścia i zapętlenia programu. Oszczędza to kilka instrukcji.
+			
+			\paragraph{Wyjścia typu \sset{}}
+				Jest to specjalny rodzaj wyjść, które mogą być ustawiane równocześnie z wykonywaniem innych instrukcji. Są szczególnie przydatne przy ustawianiu linii zegarowych i pozostałych linii kontrolnych. Minusem wykorzystania ustawiania wyjść \textit{na boku} jest konieczność poświęcenia możliwości opóźniania programu. W liście instrukcji pole \sset{} jest współdzielone z polem \lstinline|delay|. Jednak zaimplementowany program nie używa opóźnień.
+			$ $\\
+			
+			Dzięki tym blokom, możliwe jest dodanie do mikrokontrolera dowolnego protokołu danych bez zbytniego obciążenia procesora jego pełną symulacją. W ramach pracy został stworzony blok obsługi interfejsu \isqs{}, który serializuje dane dostarczane przez DMA i wysyła do układu DAC.
+			Dokumentacja protokołu \isqs{} została zaczerpnięta z dokumentacji układu TDA1543 (przetwornik cyfrowo-analogowy zastosowany we wczesnych prototypach). Przedstawia ją rysunek \ref{3/pio_i2s_docs}.
+			\imgh{3/pio_i2s_docs}{Przebieg czasowy protokołu \isqs{} (dokumentacja TDA1543\textsuperscript{\cite{tda_pdf}}, strona 9)}{0.9}
+			
+			Jak widać zmiana kanału (kodowanego poziomem linii \lstinline|WS|)  musi nastąpić przed wysłaniem ostatniego bitu poprzedniego kanału (\lstinline|LSB|, czyli \textit{Least Significant Bit}, najmniej znaczący bit kanału lewego). Z tego powodu program wydłużył się do 8 instrukcji. Niektóre układy obsługują protokół \textit{left-just}, który nie posiada tego ograniczenia, jednak z uwagi na niewystarczającą dokumentacje i małe wsparcie przez układy, wybrany został klasyczny \isqs{}. Kod tego bloku przedstawiony jest na listingu \ref{lst/3/i2s.pio}. 
+			
+			\lstfile{pio}{Kod programu \isqs{}}{lst/3/i2s.pio}
+			
+			Poniżej omówione zostało jego działanie:
+			\begin{itemize}
+				\item Linia nr 3 ustawia ile bitów jest typu \lstinline|side-set|. Bity \lstinline|side-set| są wykorzystywane odpowiednio do: ustawienia linii \lstinline|WS| i linii \lstinline|BCK|.
+				
+				\item punktem wejścia programu jest linia nr 18. Ustawia ona liczbę powtórzeń i inicjalizuje linię \lstinline|WS| na 1 (kanał prawy) oraz linię \lstinline|BCK| na 1. Odwrócenie kolejności kanałów związane jest z kolejnością bajtów typu \textit{little-endian}). Następnie program automatycznie zapętla się do pierwszej instrukcji.
+				
+				\item Instrukcja \lstinline|out| powoduje wystawienie na linię \lstinline|DATA| jednego bitu z rejestru przesuwnego danych. \textit{Na boku} przełącza linię zegarową w stan niski
+				
+				\item Instrukcja \lstinline|jmp| najpierw sprawdza wartość rejestru \lstinline|X|. Jeżeli jest ona niezerowa to dekrementuje ją i skacze do etykiety \lstinline|right|. Pętla ta wykonuje się 15 razy.
+				
+				\item W linii nr 9 następuje transmisja najmniej znaczącego bitu kanału prawego. Zgodnie z dokumentacją musimy już zmienić stan linii \lstinline|WS| na 0 (kanał lewy). Następnie rejestr \lstinline|X| jest ponownie inicjalizowany na wartość 14.
+				
+				\item Linie 13-18 powtarzają transmisje zgodnie z opisem powyżej, ale tym razem dla kanału lewego.
+			\end{itemize}
+			
+			Instrukcja \lstinline|out| czeka na dane w buforze automatycznie.
+		
+		\subsection{DMA}
+			Podsystem bezpośredniego dostępu do pamięci wysyła dane do maszyn stanu PIO. Aby móc prowadzić nieprzerwaną transmisję, wykorzystane zostały dwa kanały z 12 dostępnych w układzie. Schemat działania przedstawiony został na rysunku \ref{3/dma_chain}.
+			\imgh{3/dma_chain}{Kolejkowanie kanałów DMA}{0.55}
+			
+			W momencie gdy kanał zakończy transfer, istnieje potrzeba ponownego ustawienia jego adresu startowego.
+			Adres ten zmienia się w trakcie przesyłu, aby cały czas wskazywać na jeszcze nieprzesłane dane.
+			Należy także powiadomić procesor, aby uzupełnił bufor o nowe dane.
+			$ $\\
+			
+			Wszystkie te rzeczy są wykonywane przez przerwanie końca transferu.
+			Trwa ono relatywnie długo, co mogłoby powodować utratę płynności w odtwarzaniu dźwięku.
+			Dlatego równocześnie z uruchomieniem przerwania, automatycznie uruchamiany jest drugi kanał.
+			Dzięki temu, do PIO dane wysyłane są bez opóźnień związanych z uruchomieniem przerwania procesora.
+			Taką funkcjonalność oferuje sprzętowo RP2040.
 		
 		\subsection{Dekompresja formatów}
 			\label{sec:decode}
