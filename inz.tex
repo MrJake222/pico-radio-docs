@@ -50,7 +50,7 @@
 }
 
 % obrazek {nazwa.png}{opis}{rozmiar} (bez wymuszania)
-\newcommand{\imgcs}[3]{\imgint{#1}{#2}{#3}{}}
+%\newcommand{\imgcs}[3]{\imgint{#1}{#2}{#3}{}}
 
 % obrazek {nazwa.png}{opis} (domyślny rozmiar)
 \newcommand{\img}[2]{\imgcs{#1}{#2}{0.7}}
@@ -520,15 +520,9 @@
 		
 		\subsection{Dekompresja formatów}
 			\label{sec:decode}
-%			
-%			\paragraph{Droga dalszego rozwoju}
-%				Najbardziej korzystną drogą rozwoju jest implementacja dekodowania AAC/AAC+. Na ten moment nie zostało to zrobione.
-%			$ $\\
-		
-%		\subsubsection{Architektura programowa dekodera}
-			\imgh{3/PicoRadio-sound-decoding}{Architektura dekodowania dźwięku}{0.95}
 			
 			Rysunek \ref{3/PicoRadio-sound-decoding} przedstawia w jaki sposób zorganizowane zostało odtwarzanie i dekodowanie dźwięku. Wszelkie interakcje z pozostałymi komponentami systemu obsługiwane są przez rdzeń 0, natomiast rdzeń 1 obsługuje dekodowanie formatów audio. Droga, jaką obrano, pozwala na łatwe rozszerzanie obsługiwanych formatów. Ważne jest tylko, aby pojedynczy rdzeń \textit{Cortex M0+} poradził sobie z obsłużeniem dekodowania nowego formatu w czasie rzeczywistym.
+			\imgh{3/PicoRadio-sound-decoding}{Architektura dekodowania dźwięku}{0.95}
 			
 		%	\paragraph{Flagi przerwań}
 		%	Jak wcześniej wspomniano, przerwania generowane przez kanały DMA ustawiają dwie flagi \lstinline|a_done_irq| lub \lstinline|b_done_irq|. Poprzez wspólną pamięć są one odczytywane przez rdzeń 1, a ten dekoduje dane i uzupełn
@@ -548,14 +542,20 @@
 			Do biblioteki dekodującej odwołuje się tylko \lstinline|FormatMP3|, który funkcją \lstinline|decode_up_to_n|, dekoduje co najwyżej \lstinline|n| ramek MP3. Zwracana jest liczba zdekodowanych ramek. Jeżeli zdekoduje ich mniej, to znaczy, że odtwarzanie zakończyło się pomyślnie (np. koniec pliku). Jeżeli zwrócona zostanie wartość mniejsza od zera, oznacza to błąd. Jeżeli danych w buforze brakuje (np. niestabilna komunikacja sieciowa), rdzeń 1 czeka na dane w nieskończoność. Użytkownik jednak w każdej chwili może przerwać oczekiwanie.
 		
 		\subsection{Rozpoczynanie odtwarzania}
-			\imgcs{3/PicoRadio-start}{Schemat procesu rozpoczynania odtwarzania}{0.7}
-			Użytkownik rozpoczyna odtwarzanie poprzez wybranie pozycji z listy ulubionych lub wyszukanie stacji/wybór pliku na karcie SD. Dowolny widok może zainicjować ekran odtwarzania \lstinline|ScPlay|. Jednym z parametrów inicjalizacyjnych jest ścieżka dostępu. Gdy nastąpi zmiana aktywnego ekranu, wywoływana jest funkcja \lstinline|player_start()|. Więcej na temat widoków i zarządzania ekranem napisano w sekcji~\ref{sec:screen}.
+			Użytkownik rozpoczyna odtwarzanie poprzez wybranie pozycji z listy ulubionych lub wyszukanie stacji/wybór pliku na karcie SD.
+			Rysunek~\ref{3/PicoRadio-start} przedstawia proces rozpoczęcia odtwarzania.
+			$ $\\
+			
+			Dowolny widok może zainicjować ekran odtwarzania \lstinline|ScPlay|.
+			Jednym z parametrów inicjalizacyjnych jest ścieżka dostępu. Gdy nastąpi zmiana aktywnego ekranu, wywoływana jest funkcja \lstinline|player_start()|. Więcej na temat widoków i zarządzania ekranem napisano w sekcji~\ref{sec:screen}.
 			
 			\paragraph{Zadania systemu FreeRTOS}
 				Funkcja \lstinline|player_start()| tworzy dwa osobne zadania w systemie operacyjnym, a sama kończy działanie od razu. Pierwsze z nich, \lstinline|player|, odpowiedzialne jest za uruchomienie procesu odtwarzania i przetwarzanie komunikatów (np. odnośnie konsumpcji bajtów z bufora czy wystąpienia błędów). Ładuje ono także dane do bufora z pliku. Drugie, pomocnicze zadanie \lstinline|player stat| służy do okresowego aktualizowania stanu odtwarzania na ekranie.
 			
 			\paragraph{Wykrywanie formatu}
 				Format audio wykrywany jest na podstawie ścieżki do zasobu. Jeżeli ta zaczyna się od \lstinline|http|, zostanie użyta klasa \lstinline|DecodeStream| i \lstinline|FormatMP3|. Jeżeli początek nie dopasuje się do wzorca, przyjmowane jest odtwarzanie z pliku (klasa \lstinline|DecodeFile|) i na podstawie rozszerzenia pliku definiowane jest użycie klasy \lstinline|FormatWAV| lub \lstinline|FormatMP3|.
+				
+			\imgh{3/PicoRadio-start}{Schemat procesu rozpoczynania odtwarzania}{0.7}
 				
 			\paragraph{Ograniczenia detekcji plików}
 				Definicja formatu audio przebiega na samym początku co jest poważnym ograniczeniem i nie pozwala na zmianę formatu np. po odczytaniu nagłówka \lstinline|Content-type|. Jednak w obecnej formie projekt obsługuje tylko strumieniowanie plików MP3. Gdyby została dodana obsługa stacji AAC/AAC+ należałoby poprawić ten fragment kodu. Dodatkowo wtedy detekcja formatu plików lokalnych mogłaby zostać przeniesiona do \lstinline|DecodeFile|. Oprócz rozszerzeń, możliwa byłaby detekcja formatów plików na podstawie ich nagłówków. Pliki rozpoczynające się od \lstinline|http| zostaną potraktowane jako strumienie audio. Należy rozważyć użycie prefiksu \lstinline|file://| dla plików lokalnych.
@@ -564,9 +564,9 @@
 				Jeden z możliwych błędów występuje, gdy nie zostanie dopasowany żaden znany format audio. Należy wtedy zweryfikować czy pliki posiadają odpowiednie rozszerzenia, a strumienie sieciowe prefiks \lstinline|http|. Inny błąd oznacza że nie udało się rozpocząć odtwarzania, tzn. plik nie istnieje/nie można go odczytać lub serwer strumieniujący nie odpowiada lub też nie udało się określić jego adresu. Przedstawione poniżej zakańczanie odtwarzania nie uwzględnia tych błędów, ponieważ z punktu widzenia programu jeszcze się ono nie rozpoczęło.
 		
 		\subsection{Zatrzymywanie odtwarzania}
-			\imgcs{3/PicoRadio-stop}{Schemat obsługi żądań zakończenia odtwarzania}{1}
 			Zakończenie przetwarzania audio jest nietrywialnym procesem. Sygnał do zatrzymania może pochodzić z trzech różnych źródeł. Na rysunku~\ref{3/PicoRadio-stop} przedstawione zostały kolejne etapy obsługi tych sygnałów. Natomiast poniżej opisano skrótowo jak działa zgłaszanie poszczególnych kategorii zdarzeń. 
-			$ $\\
+			
+			\imgh{3/PicoRadio-stop}{Schemat obsługi żądań zakończenia odtwarzania}{1}
 			
 			Parametrem funkcji \lstinline|DecodeBase::notify_playback_end(bool error)| jest flaga, która mówi, czy odtwarzanie zakończyło się błędem. Jeżeli jest ona ustawiona, to program wyświetli ekran błędu.
 			
@@ -593,10 +593,10 @@
 			
 			W każdym z tych scenariuszy (wstępne i późniejsze przetwarzanie) wywoływana jest w pętli funkcja \lstinline|ICY::read()|. Pętla jest potrzebna, ponieważ w porcji odebranych danych, szczególnie dla niskich wartości \lstinline|icy-metaint|, może wystąpić więcej niż jedna ramka ICY.
 			
-			\imgcs{3/PicoRadio-icy}{Ramka MP3 rozdzielona ramką ICY}{0.9}
 			\paragraph{Format danych ICY}
 				Nagłówek metadanych ICY składa się z jednego bajtu kodującego rozmiar danych (bez nagłówka) podzielony przez 16. Dane dopełniane są zerami do podanego rozmiaru. Wewnątrz ramki kolejne pola oddzielone są od siebie średnikami, a same pola są w formacie \lstinline|klucz='wartosc'|. Dekoder zaimplementowany w projekcie obsługuje tylko klucz \lstinline|StreamTitle|, którego wartość to zazwyczaj tytuł utworu i jego wykonawca. Ramka ICY została przedstawiona na rysunku~\ref{3/PicoRadio-icy}.
-				$ $\\
+				
+			\imgh{3/PicoRadio-icy}{Ramka MP3 rozdzielona ramką ICY}{0.9}
 				
 			Wywołanie \lstinline|ICY::read()| kopiuje ramkę ICY z bufora audio do bufora tymczasowego, a następnie przesuwa dane za ramką wstecz o rozmiar ramki. Operację można porównać do wycinania tekstu z dokumentu tekstowego. W ten sposób przywracamy ciągłość ramce MP3. Dane w buforze tymczasowym nie są interpretowane aby zaoszczędzić cenny czas. Przypomnijmy, cała ta operacja odbywa się przy zablokowanej komunikacji sieciowej. Dane interpretowane są dopiero gdy zadanie \lstinline|player stat| wywoła \lstinline|DecodeBase::get_meta_str()|, która w implementacji \lstinline|DecodeStream| odwołuje się do metody \lstinline|ICY::get_stream_title()|. Funkcja ta blokuje mutex bufora tymczasowego i kopiuje dane do swojego buforu na stosie. Dopiero wtedy rozpoczyna potencjalnie kosztowną czasowo interpretację danych.
 		
@@ -607,16 +607,17 @@
 			Ramki ID3 w wersji drugiej mają znacznie bardziej rozbudowane kodowanie od np. ramek ICY czy starszego formatu ID3v1. Dokumentacja oryginalnie dostępna była pod adresem \href{id3.org}{id3.org} lecz w trakcie pisania pracy była ona niedostępna. Skorzystano z alternatywnej strony\textsuperscript{\cite{id3_spec_mutagen}}.
 			
 			\paragraph{Format ramek}
-			\imgcs{3/PicoRadio-id3}{Format danych ID3v2}{0.8}
 			Budowa formatu ID3v2 została przedstawiona na rysunku~\ref{3/PicoRadio-id3}. Podstawową jednostką budowy są tagi. Może być ich w pliku dowolna liczba. Są one opakowane dodatkowymi informacjami, takimi jak np. nagłówki. Z głównego nagłówka pobierany jest rozmiar i flaga czy nagłówek rozszerzony jest obecny. Jeżeli tak, to jest on ignorowany. Padding i stopka również są ignorowane.
-			$ $\\
+			
+			\imgh{3/PicoRadio-id3}{Format danych ID3v2}{0.8}
 			
 			Parser rozpoznaje ramki o kodach \lstinline|TPE1|(artysta) i \lstinline|TIT2|(tytuł). Są to ramki tekstowe, dlatego wyszczególniono taki format ramek na rysunku. Pierwszy bajt oznacza jakie kodowanie wykorzystano do zapisania tekstu. Możliwe formaty to ISO-8859-1, UTF-16, UTF-16BE i UTF-8. Wszystkie zostały zaimplementowane i przetestowane.
 	
 	\section{Bufor kołowy}
 		\label{sec:circular_buffer}
-		\imgcs{3/PicoRadio-buffer}{Schemat wykorzystania bufora kołowego}{0.8}
 		Małym, lecz kluczowym modułem w projekcie jest bufor kołowy \lstinline|CircularBuffer|. Używany jest on przede wszystkim przy odtwarzaniu dźwięku. Schematyczne wykorzystanie przedstawiono na rysunku~\ref{3/PicoRadio-buffer}. Poniżej zostały opisane najważniejsze jego funkcje.
+		
+		\imgh{3/PicoRadio-buffer}{Schemat wykorzystania bufora kołowego}{0.8}
 		
 		\paragraph{Zapis i odczyt danych przez różne wątki}
 			Dzięki zastosowaniu osobnych liczników do zapisu i odczytu danych, nie występuje problem wyścigu. Każda operacja może być wykonywana niezależnie przez co najwyżej jeden wątek.
@@ -634,7 +635,9 @@
 			Implementacja wycinania stała się konieczna w momencie kiedy w środku niepodzielnej jednostki przy odczycie (np. ramki MP3) pojawiają się metadane jak np. ICY. Trzeba je wtedy przetworzyć i usunąć, zapełniając powstałą lukę danymi występującymi dalej w buforze.
 	
 	\section{Klient protokołu HTTP}
-		Potrzeba stworzenia własnej implementacji klienta HTTP stała się konieczna, aby zintegrować go z buforem kołowym i biblioteką sieciową. Obsługuje on przekierowania i podstawowe nagłówki. Wystarczająco, aby z powodzeniem pobierać wyniki wyszukiwań stacji oraz odtwarzać je. Implementacja jest dwuczęściowa. Nadrzędny moduł \lstinline|HttpClient| obsługuje wysokopoziomowy standard HTTP. Zajmuje się komponowaniem żądań, ich nagłówków, a także przetwarzaniem odpowiedzi. Podrzędny moduł obsługuje niskopoziomową komunikację sieciową. Taka budowa modułowa pozwoliła na testowanie klienta w środowisku PC ze stosowną implementacją modułu podrzędnego. Urządzenie zawiera moduł \lstinline|HttpClientPico|, który współpracuje z zasobami dostępnymi na mikrokontrolerze.
+%		Potrzeba stworzenia własnej implementacji klienta HTTP stała się konieczna, aby zintegrować go z buforem kołowym i biblioteką sieciową.
+		W ramach projektu powstała implementacja klienta HTTP. Zintegrowany on został z buforem kołowym i biblioteką sieciową.
+		Klient obsługuje przekierowania i podstawowe nagłówki. Wystarczająco, aby z powodzeniem pobierać wyniki wyszukiwań stacji oraz odtwarzać je. Implementacja jest dwuczęściowa. Nadrzędny moduł \lstinline|HttpClient| obsługuje wysokopoziomowy standard HTTP. Zajmuje się komponowaniem żądań, ich nagłówków, a także przetwarzaniem odpowiedzi. Podrzędny moduł obsługuje niskopoziomową komunikację sieciową. Taka budowa modułowa pozwoliła na testowanie klienta w środowisku PC ze stosowną implementacją modułu podrzędnego. Urządzenie zawiera moduł \lstinline|HttpClientPico|, który współpracuje z zasobami dostępnymi na mikrokontrolerze.
 		$ $\\
 		
 		Obsługiwane nagłówki są ograniczone z uwagi na chęć statycznej alokacji pamięci. Żądanie wysyłane jest z nagłówkami:
@@ -681,7 +684,7 @@
 			\subsubsection{Wyniki wyszukiwania}
 				Pierwszą implementacją klasy ładującej była klasa służąca do wczytania wyników wyszukiwania stacji \lstinline|LoaderSearch|. Poprzez metodę \lstinline|begin(query)| przekazywana jest jej fraza do wyszukania. Następnie następuje odwołanie do klienta HTTP, który implementuje interfejs \lstinline|DataSource|. Agregat stacji radiowych zwraca dane wraz z nagłówkiem \lstinline|Content-Type|. Jego wartość determinuje, która lista zostanie użyta do interpretacji. Typ \lstinline|audio/mpegurl| oznacza \lstinline|ListM3U|, natomiast \lstinline|audio/scpls| lub \lstinline|audio/x-scpls| implikuje wykorzystanie \lstinline|ListPLS|. Tak załadowana lista stacji jest dostępna dla reszty systemu poprzez metody klasy nadrzędnej \lstinline|Loader|.
 			
-			\subsubsection{Ulubione stacji}
+			\subsubsection{Ulubione stacje}
 				Z uwagi na gotową implementację formatu M3U, zdecydowano się na wykorzystane go do przechowywania listy ulubionych stacji. Prostota formy oznaczała że możliwe będzie dodawanie wpisów w miejscu bez konieczności ładowania całego pliku do pamięci. Kolejną zaletą jest fakt, że pliki \lstinline|.m3u| to pliki tekstowe. Przewidziano możliwość zaimplementowania funkcji eksportowania i importowania listy ulubionych na kartę SD. Użytkownik mógłby modyfikować plik we własnym zakresie dodając stacje niebędące w ogólnodostępnym spisie stacji. Na ten moment nie zostało to zaimplementowane.
 
 			\subsubsection{Znane sieci Wi-Fi}
@@ -711,8 +714,9 @@
 			
 
 		\subsection{Współpraca klas ze sobą}
-			\imgh{3/PicoRadio-loaders}{Współpraca list z klasami ładującymi i ekranami}{0.95}
 			Na rysunku~\ref{3/PicoRadio-loaders} przedstawiono współpracę poszczególnych klas. Klasy ładujące mogą wykorzystywać listy. Jeżeli to robią, ich źródło danych musi implementować interfejs \lstinline|DataSource|. Tak się dzieje w przypadku klas \lstinline|LoaderM3U| oraz \lstinline|LoaderSearch|. Ładują one dane odpowiednio z pamięci stałej oraz z Internetu. Interpretacja zachodzi przy użyciu odpowiednich list. Odmienna sytuacja ma miejsce w przypadku pozostałych klas. Nie interpretują one plików/strumieni, więc nie potrzebują być implementacjami \lstinline|DataSource|, ani używać list. Interfejsy do skanowania Wi-Fi i ładowania plików lokalnych zwracają nazwy kolejnych elementów bezpośrednio, bez konieczności interpretacji. Jednak są one losowe i wymagają posortowania przy wykorzystaniu \lstinline|LFSSorter|. Klasa \lstinline|LoaderConst| bezpośrednio przepisuje wyniki i jest najprostszą ze wszystkich. Służy do definiowania list o stałej zawartości.
+			
+			\imgh{3/PicoRadio-loaders}{Współpraca list z klasami ładującymi i ekranami}{0.95}
 			
 			\paragraph{Ekrany}
 				Istnieje powiązanie pomiędzy klasami ładującymi a ekranami. Każdej klasie ładującej przyporządkowany jest ekran, który wyświetla dane pozycje. Zawiera on w sobie referencję klasy ładującej. Przekazuje ją swojej klasie nadrzędnej jako wskaźnik do klasy ogólnej \lstinline|Loader|. Tym sposobem, każdy z ekranów może ustalać szczegółowe parametry ładowania, a ekran nadrzędny implementuje ogólne funkcje związane z wyświetlaniem załadowanych pozycji na ekranie.
@@ -745,16 +749,16 @@
 				\item 5 bitów -- kolor niebieski.
 			\end{itemize}
 		
-		\imgh{3/PicoRadio-screen-xy}{Układ współrzędnych na ekranie}{0.45}
 		\paragraph{Współrzędne}
 			Na rysunku~\ref{3/PicoRadio-screen-xy} przedstawiono sposób, w jaki na ekranie reprezentowane są współrzędne. Na magistralę szeregową dane wysyłane są linia po linii.
+			
+		\imgh{3/PicoRadio-screen-xy}{Układ współrzędnych na ekranie}{0.45}
 		
 		\subsection{Rysowanie}
 			Aby przesłać kolory dla wybranych pikseli na ekranie, należy ustawić odpowiednie zmienne wskaźnikowe wewnątrz sterownika wyświetlacza. Funkcja \lstinline|ST7735S::setup_write()| pozwala na ich ustawienie i przekazanie początkowych oraz końcowych wartości współrzędnych. Dzięki temu na ekranie tworzony jest prostokąt dla którego należy przesłać zaktualizowane wartości pikseli w formacie podanym powyżej. Jednak oprócz funkcji do obsługi niskopoziomowej komunikacji klasa \lstinline|ST7735S|  wspiera także rysowanie prostokątów, czcionek i ikon.
 			
 			\subsubsection{Prostokąty}
-				\imgh{3/PicoRadio-screen-rect}{Współrzędne prostokąta na ekranie}{0.6}
-				Prostokąty rysowane są poprzez funkcję \lstinline|fill_rect(x, y, w, h, bg)|, gdzie:
+				Na rysunku~\ref{3/PicoRadio-screen-rect} przedstawiono jak rysowane są prostokąty. Używana jest funkcja \lstinline|fill_rect(x, y, w, h, bg)|, która przyjmuje następujące argumenty:
 				\begin{itemize}
 					\item \lstinline|x| -- współrzędna kolumny ,
 					\item \lstinline|y| -- współrzędna wiersza,
@@ -762,6 +766,8 @@
 					\item \lstinline|h| -- wysokość,
 					\item \lstinline|bg| -- kolor tła (24 bitowe RGB).
 				\end{itemize}
+				
+				\imgh{3/PicoRadio-screen-rect}{Współrzędne prostokąta na ekranie}{0.6}
 			
 			\subsubsection{Czcionki}
 				Każda czcionka składa się z dwóch tablic \lstinline|ascii_data_H| i \lstinline|utf8_data_H|, gdzie \lstinline|H| to rozmiar czcionki, tj. wysokość w pikselach (szerokość jest połową wysokości). Zostały one opisane strukturą \lstinline|font| w pliku \lstinline|assets/font.hpp|.
@@ -769,11 +775,11 @@
 				\paragraph{Mapowanie}
 					Pierwsza tablica zawiera znaki od spacji (kod \lstinline|0x20| ASCII) do tyldy (kod \lstinline|0x7E|). Druga z tablic zapewnia wyświetlanie znaków Unicode. Mapowanie jest tu arbitralne zapewnione funkcją sprawdzającą wartości 2-3 kolejnych bajtów danych. Zawiera ona obecnie 18 polskich znaków (wariant duży i mały) jak również symbol nieskończoności. Istnieje możliwość dodawania dowolnej liczby nowych znaków.
 				
-				\imgh{3/PicoRadio-screen-font}{Kodowanie czcionek (wartości 0x00 zastąpiono pustymi znakami)}{0.6}
 				\paragraph{Kodowanie}
 					Czcionki kodowane są jako bitmapy. Każda z tablic zawiera tyle elementów, ile jest pikseli we wszystkich znakach czcionki w tej tablicy. Każda wartość to jasność piksela (255 -- kolor pierwszoplanowy, 0 -- kolor tła). Dla przykładu czcionka podstawowa ASCII zawierająca 95 znaków o wymiarach 24x12 pikseli będzie miała rozmiar 27360 bajtów. Dodając 19 znaków Unicode otrzymujemy 32832 bajtów. Kodowanie znaku \lstinline|A| z tej czcionki przedstawia rysunek~\ref{3/PicoRadio-screen-font}.
 				
-				$ $\\
+				\imgh{3/PicoRadio-screen-font}{Kodowanie czcionek (wartości 0x00 zastąpiono pustymi znakami)}{0.6}
+				
 				W projekcie została wykorzystana czcionka Ubuntu\textsuperscript{\cite{ubuntu_font}} w wersji Mono (stała szerokość każdego znaku). Stworzony skrypt w języku Python wygenerował potrzebne bitmapy do projektu. Dostępne rozmiary czcionki to 12 (rozmiar ok. 8kB), 16 (ok. 14kB) i 24 (ok. 32kB). Razem stanowi to 54kB, czyli 2.65\% pamięci ROM. Czcionka została zapisana w pliku \lstinline|assets/ubuntu_mono.cpp| a także utworzono funkcję dostępową \lstinline|ubuntu_font_get_size()|. 
 				
 			\subsubsection{Ikony}
@@ -785,8 +791,9 @@
 				\end{itemize}
 		
 		\subsection{Ekrany}
-			\imgh{3/PicoRadio-screens}{Hierarchia ekranów}{0.55} % TODO opisać te ekrany na rysunku np ScPlay -- odtwarzacz
 			Na rysunku \ref{3/PicoRadio-screens} przedstawiono hierarchię ekranów. Klasą nadrzędną wszystkich ekranów jest klasa \lstinline|Screen|. Implementuje ona podstawową siatkę przycisków, przechodzenie pomiędzy nimi, jak również rysowanie i aktualizację ruchomych tekstów. Bezpośrednimi potomkami tej klasy są ekrany o niestandardowym układzie (np. ekran odtwarzania). Jednak większość ekranów jest podklasami dwóch innych potomnych klas: \lstinline|ScreenList| i \lstinline|ScreenKb|. Są to klasy wirtualne (znajdują się w katalogu \lstinline|screenvirt|), niemogące istnieć bezpośrednio. Standaryzują one układ potomnych ekranów. Pierwsza z nich implementuje widok listy, a druga, widok klawiatury. \lstinline|ScreenKb| implementowana jest przez ekran wyszukiwania stacji i ekran wprowadzania hasła Wi-Fi.
+			
+			\imgh{3/PicoRadio-screens}{Hierarchia ekranów}{0.55} % TODO opisać te ekrany na rysunku np ScPlay -- odtwarzacz
 			
 		\subsection{Menedżer ekranów}
 			Ekranami użytkownika zarządza plik \lstinline|screenmng.cpp|. Tworzy on szereg konstrukcji wymaganych do poprawnego obsłużenia interfejsu użytkownika. Poniżej zostały opisane wybrane z nich.
@@ -816,10 +823,11 @@
 			
 			\paragraph{Przekazywanie danych}
 				Podsystem przycisków opiera się o dwie tablice zawierające odpowiednie dane dla każdego przycisku z osobna. Pierwsza z nich, o nazwie \lstinline|b_pressed[]|, zawiera wartości logiczne. Mówią one o tym czy przycisk jest w danej chwili wciśnięty czy nie. Druga, \lstinline|b_pressed_time_us[]|, zawiera informację, w której mikrosekundzie nastąpiło wciśnięcie przycisku. Używa ona wbudowanej funkcji \lstinline|time_us_32()| do pobierania czasu.
-			
-			\imgh{3/PicoRadio-buttons}{Maszyna stanów w module przycisków}{0.75}
+			$ $\\
 			
 			Przerwanie, oprócz ustawienia odpowiednich wartości w tablicach, wybudza zadanie \lstinline|input handle|. Zawiera ono maszynę stanów, która umożliwia, oprócz podstawowego przekazywania zdarzeń do interfejsu, powtarzanie naciśnięć, tak jak robią to klawiatury komputerowe. Dodatkowo zawarto w niej także obsługę wygaszania ekranu. Na rysunku~\ref{3/PicoRadio-buttons} przedstawiono jej funkcjonowanie.
+			
+			\imgh{3/PicoRadio-buttons}{Maszyna stanów w module przycisków}{0.75}
 			
 			\paragraph{Czas oczekiwania}
 				Czas oczekiwania na ponowne uruchomienie maszyny jest tym mniejszy im częściej dane zdarzenie może wystąpić. To znaczy, gdy żaden z przycisków nie jest naciśnięty, a ekran wygaszony, maszyna oczekuje w nieskończoność na sygnał z przerwania. Gdy ekran nie jest wygaszony, zadanie czeka co najwyżej 30s. Po tym czasie następuje sprawdzenie warunków do wygaszenia, np. czy odtwarzanie jest uruchomione (pominięte na rysunku). Gdy są one spełnione, ekran zostaje wygaszony. Kiedy użytkownik kliknął i przytrzymuje przycisk, zadanie wykonuje się 26 razy na sekundę. Zapewnia to wystarczająco dokładny pomiar czasu, a nie obciąża zbytnio procesora. Jeżeli stan wejścia jest niski po minimum 20ms wykonywana jest jednokrotna akcja. Rozpoczęcie powtarzania następuje po 500ms ciągłego naciskania. Wartość 26 definiuje prędkość powtarzania znaków. Jest to częstotliwość powtarzania znaków przez klawiatury komputerowe. Wszystkie czasy są konfigurowalne w momencie kompilacji programu.
@@ -861,9 +869,9 @@
 		Radio jest kompletnym projektem, gotowym do odtwarzania bez zewnętrznego wzmacniacza czy głośników. Zadbano także o zasilanie akumulatorowe. Projekt schematu i płytki PCB powstały w programie KiCAD\textsuperscript{\cite{hw_kicad}}, natomiast obudowa została zaprojektowana w programie OpenSCAD\textsuperscript{\cite{hw_openscad}}.
 	
 		\subsection{Schemat}
-			\imgh{3/hw_kicad_sch}{Schemat elektryczny radia}{1}
+			Schemat całości systemu został pokazany na rysunku~\ref{3/hw_kicad_sch}. Podzielony jest on na 6 funkcjonalnych bloków, które zostały opisane poniżej.
 			
-			Schemat całości systemu został pokazany na rysunku~\ref{3/hw_kicad_sch}. Podzielony został na 6 funkcjonalnych bloków, które zostały opisane poniżej.
+			\imgh{3/hw_kicad_sch}{Schemat elektryczny radia}{1}
 			
 			\subsubsection{Sekcja zasilania}
 				Urządzenie posiada własne zasilanie oparte o dwa ogniwa litowo-jonowe o sumarycznej pojemności 4Ah i znamionowym napięciu 3.6V. Na schemacie ogniwa zaznaczono wspólnym symbolem \lstinline|BT1|. W roli układu ładowania i zabezpieczeń został wykorzystany gotowy moduł\textsuperscript{\cite{hw_mod_chg}} z układem TP4056 (\lstinline|B3|). Dzięki niemu, produkt nie wymaga dodatkowej ładowarki. Wyprowadzone zostało złącze USB~C, użytkownik może użyć każdej ładowarki o prądzie minimalnym 1A. Istotnym zadaniem sekcji zasilającej jest przełączanie źródła zasilania. Gdy ogniwa są ładowane, z terminali \lstinline|B+|, \lstinline|B-| oraz \lstinline|OUT+|, \lstinline|OUT-| pozostałe moduły nie mogą pobierać prądu. Może to spowodować przeładowanie ogniw. Tranzystor PMOS \lstinline|Q1|, dioda Schottkiego \lstinline|D1| oraz rezystor \lstinline|R5| tworzą układ\textsuperscript{\cite{hw_load_sw}}, który w trakcie ładowania przełącza  wyjście \lstinline|PWR| z zasilania bateryjnego \lstinline|OUT+| na zasilanie bezpośrednio z portu USB (\lstinline|IN+|). Dalej przetwornica wytwarza napięcie 5V do zasilenia portu USB, który w kolejnych wersjach projektu może posłużyć do podłączenia zewnętrznego modemu sieci komórkowej Obecnie nie jest on używany. Na końcu zastosowane zostały dzielniki napięcia, aby urządzenie mogło mierzyć kluczowe parametry pracy tej sekcji.
@@ -876,21 +884,22 @@
 				
 		\subsection{Płytka drukowana}
 			Na podstawie wyżej opisanego schematu powstała płytka drukowana. Gwarantuje ona dobrą jakość połączeń, w porównaniu do płytki stykowej, na jakiej powstawał prototyp.
-		
-			\imghss{3/hw_kicad_pcb}{Projekt płytki}{3/hw_pcb}{Zmontowana, gotowa płytka (bez modułów)}
+			$ $\\
 			
 			Na rysunku~\ref{3/hw_kicad_pcb} przedstawiony został projekt płytki. Zaznaczono na nim dwie najważniejsze sekcje. W centrum znajduje się płytka Raspberry Pi Pico W, a w jej sąsiedztwie slot na karty SD, i przyłącza do ekranu LCD (po lewej, 8-pinowe) i przycisków (po prawej, 6-pinowe). Obok, na rysunku~\ref{3/hw_pcb}, przedstawiona została gotowa płytka.
+			
+			\imghss{3/hw_kicad_pcb}{Projekt płytki}{3/hw_pcb}{Zmontowana, gotowa płytka (bez modułów)}
 			
 		\subsection{Obudowa}
 			Po zwymiarowaniu wszystkich komponentów systemu i płytki PCB powstał projekty obudowy do wydruku 3D.
 			
-			\lstfile{scad}{Kod generujący otwory na przyciski i śruby montażowe}{lst/3/buttons.scad}
-			
 			Wybór programu jest nieoczywisty ponieważ umożliwia on projektowanie 3D oparte o prosty język skryptowy. Dzięki temu podejście do projektowania może tylko nieznacznie różnić się od pisania oprogramowania. Fragment kodu opisu obudowy został przedstawiony na listingu~\ref{lst/3/buttons.scad}. Linie 3-4 generują siatkę 3x3 na której zostaną umieszczone przyciski/otwory na śruby. Operator trójargumentowy w liniach 7-8 powoduje że w rogach siatki otwory będą miały inną średnicę. Warto też zwrócić uwagę na wykorzystanie nazw zamiast wartości, co umożliwia łatwiejszą modyfikację.
 			
-			\imghss{3/hw_scad_case}{Finalny projekt obudowy radia}{3/hw_case}{Efekt końcowy, radio w obudowie}
+			\lstfile{scad}{Kod generujący otwory na przyciski i śruby montażowe}{lst/3/buttons.scad}
 			
 			Na rysunku~\ref{3/hw_scad_case} przedstawiono projekt całej obudowy. Obok zaprezentowano efekt finalny, funkcjonalne radio w obudowie (rysunek~\ref{3/hw_case}).
+			
+			\imghss{3/hw_scad_case}{Finalny projekt obudowy radia}{3/hw_case}{Efekt końcowy, radio w obudowie}
 			
 \chapter{Organizacja pracy}
 	W tym rozdziale opisane zostały etapy pracy nad projektem jak również organizacja pracy w trakcie jego trwania.
