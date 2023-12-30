@@ -905,27 +905,27 @@
 	W tym rozdziale opisane zostały etapy pracy nad projektem jak również organizacja pracy w trakcie jego trwania.
 	
 	\section{Przebieg prac}
-		\imgh{4/PicoRadio-steps}{Etapy projektu}{1}
-	
 		Prace nad projektem rozpoczęły się w kwietniu 2023 roku. Projekt realizowany był etapami. Zostały one pokazane na rysunku~\ref{4/PicoRadio-steps} oraz opisane poniżej.
+		
+		\imgh{4/PicoRadio-steps}{Etapy projektu}{1}
 		
 		\subsection{Określenie wymagań sprzętowych}
 			Propozycja wykorzystania układu RP2040 była względnie ryzykowna. Rdzenie Cortex M0+ mogły okazać się niewystarczające do obsłużenia wszystkich zadań, zwłaszcza, że brak im jednostki obliczeń zmiennoprzecinkowych. Należało więc jak najszybciej określić czy poradzą sobie one z najważniejszym i najbardziej wymagającym aspektem jakim jest dekodowanie formatu MP3.
+			$ $\\
+			
+			W krótkim czasie powstał prototyp przedstawiony na rysunku~\ref{4/prototype_1}. Zmontowany na płytce stykowej, zawierał minimum elementów wymaganych do testów audio. Znalazły się tam układy przetwornika cyfrowo-analogowego i wzmacniacza, oraz slot na kartę SD.
 			
 			\imgh{4/prototype_1}{Pierwszy prototyp do testów odtwarzania dźwięku}{0.6}
 			
-			W krótkim czasie powstał prototyp przedstawiony na rysunku~\ref{4/prototype_1}. Zmontowany na płytce stykowej, zawierał minimum elementów wymaganych do testów audio. Znalazły się tam układy przetwornika cyfrowo-analogowego i wzmacniacza, oraz slot na kartę SD.
+			Początkowo projekt odtwarzał tylko nieskompresowane pliki WAV. Na listingu~\ref{lst/4/prototype.c} przedstawiono jak odbywało się doładowywanie bufora danymi z karty SD. Flagi \lstinline|a_done_irq| i \lstinline|b_done_irq| były ustawianie w przerwaniach DMA. Główna pętla programu oczekiwała na te przerwania i ładowała dodatkowe dane. Dostęp do karty SD, jak i komunikacja \isqs{} z przetwornikiem działały poprawnie. Dzięki makrom \lstinline|DBG_ON| i \lstinline|DBG_OFF| ustawiającym pin mikrokontrolera w odpowiedni sposób, możliwa była zewnętrzna kontrola czasu wykonania odczytu i (później) dekodowania.
 			
 			% commit: https://github.com/MrJake222/pico-radio/commit/f74a7883a8a824952876943f6f33ca1d82e739dd
 			\lstfile{c}{Realizacja podstawowego ładowania bufora}{lst/4/prototype.c}
 			
-			Początkowo projekt odtwarzał tylko nieskompresowane pliki WAV. Na listingu~\ref{lst/4/prototype.c} przedstawiono jak odbywało się doładowywanie bufora danymi z karty SD. Flagi \lstinline|a_done_irq| i \lstinline|b_done_irq| były ustawianie w przerwaniach DMA. Główna pętla programu oczekiwała na te przerwania i ładowała dodatkowe dane. Dostęp do karty SD, jak i komunikacja \isqs{} z przetwornikiem działały poprawnie. Dzięki makrom \lstinline|DBG_ON| i \lstinline|DBG_OFF| ustawiającym pin mikrokontrolera w odpowiedni sposób, możliwa była zewnętrzna kontrola czasu wykonania odczytu i (później) dekodowania.
-			
+			Dalej, przy wykorzystaniu biblioteki \lstinline|minimp3|\textsuperscript{\cite{minimp3}}, dodana została obsługa dekodowania MP3. Krótki fragment kodu na listingu~\ref{lst/4/benchmark.c} przedstawia w jaki sposób badano czas dekodowania pojedynczej ramki audio. Niestety czas przetworzenia jednej ramki wynosił ok. 90ms, co stanowiło znacząco za dużo, gdyż jedna taka ramka odtwarzana jest przez 26ms.
+
 			% commit: https://github.com/MrJake222/pico-radio/commit/798cda3f2b81ec04788e7fbe123bc1dbff969250
 			\lstfile{c}{Pomiar czasu dekodowania ramki MP3}{lst/4/benchmark.c}
-			
-			Dalej, przy wykorzystaniu biblioteki \lstinline|minimp3|\textsuperscript{\cite{minimp3}}, dodana została obsługa dekodowania MP3. Krótki fragment kodu na listingu~\ref{lst/4/benchmark.c} przedstawia w jaki sposób badano czas dekodowania pojedynczej ramki audio. Niestety czas przetworzenia jednej ramki wynosił ok. 90ms, co stanowiło znacząco za dużo, gdyż jedna taka ramka odtwarzana jest przez 26ms.
-			$ $\\
 			
 			% commit: https://github.com/MrJake222/pico-radio/commit/ede28044f02faab5ef6a6204bf7e402d5687e736
 			Dopiero, gdy wykorzystana została biblioteka \lstinline|helixmp3| pracująca na reprezentacji stałopozycyjnej liczb, czas dekodowania spadł do 20ms. Oznaczało to zielone światło na dalsze prace nad projektem przy wykorzystaniu tego modelu mikroprocesora.
@@ -938,15 +938,14 @@
 %			Jednak do kompletnego produktu brakowało jeszcze interfejsu użytkownika.
 			
 		\subsection{System operacyjny}
+			W drugiej wersji prototypu widocznej na rysunku~\ref{4/prototype_2} do projektu zostały dołączone przyciski.
+			Po ich podłączeniu stało się jasne, że projekt bez systemu operacyjnego może okazać się wyzwaniem. Wykorzystano zatem projekt FreeRTOS. System czasu rzeczywistego pozwolił na asynchroniczne obsługiwanie zdarzeń takich jak np. wciśnięcia klawiszy. Po refaktoryzacji z wykorzystaniem nowych możliwości, takich jak kolejki i powiadomienia oraz wykorzystaniu drugiego rdzenia do dekodowania, koncepcja projektu zaczęła się krystalizować.
+			
 			\imgh{4/prototype_2}{Prototyp z wyświetlaczem i klawiaturą}{0.8}
-		
-			Po podłączeniu przycisków (rys.~\ref{4/prototype_2}) jasnym stało się, że projekt bez systemu operacyjnego może okazać się wyzwaniem. Wykorzystano zatem projekt FreeRTOS. System czasu rzeczywistego pozwolił na asynchroniczne obsługiwanie zdarzeń takich jak np. wciśnięcia klawiszy. Po refaktoryzacji z wykorzystaniem nowych możliwości, takich jak kolejki i powiadomienia oraz wykorzystaniu drugiego rdzenia do dekodowania, koncepcja projektu zaczęła się krystalizować.
 			
 			\subsubsection{Problemy z pamięcią RAM}
 				Po dodaniu systemu FreeRTOS z domyślną konfiguracją okazało się, że w czasie uruchomienia, brakuje pamięci RAM.
 				Postanowiono wtedy używać jedynie statycznej alokacji pamięci, żeby zauważyć i naprawić tego typu błędy w czasie kompilacji.
-
-				\lstfile{default}{Zajętość pamięci RAM}{lst/4/memory}
 
 				Powstało także narzędzie do analizy zużycia pamięci na podstawie pliku \lstinline|.elf.map|. Zawiera on informacje w której części przestrzeni adresowej znajdują się wszystkie zmienne w projekcie oraz ile bajtów zajmują. Skrypt \lstinline|read-elf-map.py| w języku Python analizuje ten plik. Wyświetla przyjazne dla użytkownika podsumowanie największych obiektów oraz procentową zajętość pamięci. Na listingu~\ref{lst/4/memory} że pamięć w finalnej wersji produktu została użyta w 80\%, a najwięcej pamięci alokują:
 				\begin{itemize}
@@ -955,19 +954,20 @@
 					\item 45kB (\lstinline|player.cpp|) -- bufor nieskompresowanego dźwięku, instancje dekoderów.
 					\item 29kB system operacyjny FreeRTOS.
 				\end{itemize}
+				
+				\lstfile{default}{Zajętość pamięci RAM}{lst/4/memory}
 			
 		\subsection{Interfejs użytkownika}
-			\imghss{4/first_screen_search}{Ekran wyszukiwania z klawiaturą}{4/first_screen_res}{Ekran wyników wyszukiwania}
-		
 			Koniec czerwca to implementacja architektury ekranów użytkownika. Na początku została dodana obsługa ekranów klawiatury (rys.~\ref{4/first_screen_search}), wyników wyszukiwania (rys.~\ref{4/first_screen_res}) i odtwarzacza. Wraz z końcem miesiąca radio było gotowe do znajdowania i odtwarzania stacji.
+			
+			\imghss{4/first_screen_search}{Ekran wyszukiwania z klawiaturą}{4/first_screen_res}{Ekran wyników wyszukiwania}
 			
 		\subsection{Problem z oknem TCP}
 			Niestety, urządzenie zaczęło wykazywać nieokreślone problemy. W nieregularnych odstępach czasu odtwarzanie przestawało być płynne. Wypełnienie bufora spadało do zera, dźwięk zapętlał się.
-			
-			\imgh{4/tcp_fail}{Wykres ogłaszanego okna klienta TCP}{0.85}
+			$ $\\
 			
 			Na rysunku~\ref{4/tcp_fail} przedstawiono jak prezentuje się ogłaszane przez radio okno TCP. Jest ono z góry ograniczone jako 12kB. Od czasu ok. 1:24 rozpoczęły się wspomniane problemy. Okazało się, że gdy bufor zaczyna się wyczerpywać, nie może on zostać wystarczająco szybko uzupełniony, ponieważ ilość danych na łączu ograniczona jest przez okno TCP i opóźnienie sieci. Z tego wniosku, maksymalne ogłaszane okno zostało zwiększone do 56kB.
-			$ $\\
+			\imgh{4/tcp_fail}{Wykres ogłaszanego okna klienta TCP}{0.85}
 			
 			Została dobrana specjalna stacja z największym opóźnieniem (nadająca z Nowej Zelandii) wynoszącym średnio 322ms. Wykres ogłaszanego okna przedstawia rysunek~\ref{4/tcp_good}.
 			
@@ -997,11 +997,11 @@
 			\end{itemize}
 			
 			Następna powstała płytka PCB, wytworzona domową metodą termotransferu przy użyciu żelazka\textsuperscript{\cite{ch4_pcb_method}}. Po przeniesieniu wydruku ścieżek na laminat pokryty warstwą miedzi, zostały one wytrawione roztworem nadsiarczanu sodu. Następnie zostały wywiercone otwory pod montaż przewlekany. Na rysunku~\ref{4/pcb} przedstawiono laminat po wywierceniu kilku pierwszych otworów.
-			
-			\imghss{4/pcb}{Płytka PCB po wytrawieniu, początek procesu wiercenia otworów}{4/prototype_3}{Kompletny prototyp na płytce}
+			$ $\\
 			
 			Po przetestowaniu kompletnego prototypu zmontowanego na płytce PCB (rysunek~\ref{4/prototype_3}), zaprojektowana została obudowa. Wydrukowana została na drukarce 3D. Panel frontowy pokazany został na rysunku~\ref{4/case1}.
-			$ $\\
+
+			\imghss{4/pcb}{Płytka PCB po wytrawieniu, początek procesu wiercenia otworów}{4/prototype_3}{Kompletny prototyp na płytce}
 			
 			Powstały dwie wersje obudowy. Druga poprawiła największy mankament wersji pierwszej, mianowicie bardzo słabo trzymające gwinty. Na podstawie wydruków testowych stwierdzono, że otwór o średnicy 2.8mm jest najlepiej dopasowany do wkrętów 3x12 (3mm szerokości). Dodatkowo zaprojektowano uchwyt do podnoszenia radia. Kompletna obudowa w wersji drugiej widoczna jest na rysunku~\ref{4/case2}.
 			
@@ -1037,12 +1037,11 @@
 	 \section{Organizacja pracy}
 	 	% TODO fix jira
 		Do planowania i organizacji pracy nad projektem użyto oprogramowania Jira. Główną wykorzystaną funkcjonalnością było tworzenie zadań i dzielenie ich na funkcjonalne bloki. Zawierały one implementacje podstawowych funkcjonalności takich jak: odtwarzanie lokalnych plików, automatyczne połączenia Wi-Fi.
-		
-		\imghss{4/plan1}{Blok ulepszeń}{4/plan2}{Zgrubny zarys dokumentacji, lokalnego odtwarzania i części sprzętowej}
+		$ $\\
 		
 		Bloki te zazwyczaj były następnie uruchamiane jako 1-2 tygodniowe sprinty. Przykłady takich bloków zostały przedstawione na rysunku~\ref{4/plan2}. Bloki ulepszeń (rys.~\ref{4/plan1}) czy błędów, istniały ciągle, dopisywane były do nich nowe pomysły czy zauważone błędy. Następnie mogły być one przenoszone do innych bloków.
 		W ramach jednego sprintu wykorzystywana była tablica Kanban.
-		 $ $\\
+ 		\imghss{4/plan1}{Blok ulepszeń}{4/plan2}{Zgrubny zarys dokumentacji, lokalnego odtwarzania i części sprzętowej}
 		 
 		 Utworzono szereg własnych typów zadań. Zostały one przedstawione w tabeli~\ref{jicons}.
 		 
