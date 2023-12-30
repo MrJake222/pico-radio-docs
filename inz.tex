@@ -139,6 +139,14 @@
 	\vspace{0.3cm}
 }
 
+% draw.io colors
+\definecolor{blue}{HTML}{6c8ebf}
+\definecolor{green}{HTML}{82b366}
+\definecolor{orange}{HTML}{d79b00}
+\definecolor{yellow}{HTML}{d6b656}
+\definecolor{red}{HTML}{b85450}
+\definecolor{purple}{HTML}{9673a6}
+
 \author{Norbert Morawski}
 \titlePL{Odbiornik internetowych stacji radiowych}
 \titleEN{Receiver of Internet radio stations}
@@ -298,12 +306,35 @@
 	\end{itemize}
 
 \chapter{Zakres funkcjonalności}
-	W rozdziale drugim skupiono się na aspektach funkcjonalności produktu jak i projekcje interakcji z użytkownikiem.\\
+	W rozdziale drugim skupiono się na krótkim wprowadzeniu do sprzętowej architektury projektu, funkcjonalności produktu jak i projekcie interakcji z użytkownikiem.\\
 	
-	Najważniejszym elementem planowania projektu z perspektywy użyteczności dla klienta jest plan wygodnego i intuicyjnego interfejsu użytkownika. Dodatkową komplikacją jest fakt, że urządzenie będzie miało do dyspozycji tylko niewielki wyświetlacz i kilka przycisków. Należy więc zadbać, żeby przy tym niewielkim asortymencie sprzętu dało się przekazać wszystkie informacje i ustalić co użytkownik planuje zrobić w następnej kolejności.
+	\section{Sprzętowa architektura systemu}
+		Sprzętowy projekt sytemu został przedstawiony na rysunku~\ref{2/PicoRadio-hw-blocks}. Część sprzętowa składa się z następujących elementów:
+		\begin{itemize}
+			\item złącza zewnętrzne i sekcja zasilania (kolor \textcolor{blue}{niebieski}),
+			\item współpracujące źródła danych (kolor \textcolor{green}{zielony}),
+			\item podsystem wejścia/wyjścia (kolor \textcolor{purple}{purpurowy})
+			\item Płytka rozwojowa (kolor \textcolor{orange}{pomarańczowy})
+			\item sekcja audio (kolor \textcolor{red}{czerwony})
+		\end{itemize}
 		
+		\imgh{2/PicoRadio-hw-blocks}{Sprzętowa architektura systemu}{0.95}
+		
+		Wybrana płytka rozwojowa to Raspberry Pi Pico W. Zawiera ona mikrokontroler RP2040, jak również 2MB pamięci stałej typu \textit{flash} oraz układ komunikacyjny Wi-Fi.
+		Jak wcześniej wspomniano, wybrany został miniaturowy wyświetlacz LCD o przekątnej 1,8 cala. Na podstawie jego wymiarów został zaprojektowany interfejs użytkownika przestawiony w sekcji~\ref{sec:ui}.
+		\clearpage
+		
+		W trakcie projektowania ekranów konieczne stało się założenie użycia 5 przycisków. Cztery z nich zostaną użyte do nawigacji prawo/lewo/góra/dół, a pozostały (środkowy) do wykonania wybranej akcji.
+	
 	\section{Projekt interfejsu}
-		Do zaprojektowania ekranów posłużyło narzędzie Figma\textsuperscript{\cite{figma}}. Na rysunku~\ref{2/interface/all} przedstawiono jak wyglądają poszczególne okna oraz jak użytkownik może przemieszczać się  pomiędzy nimi. Na rysunkach \ref{2/interface/real1} oraz \ref{2/interface/real2} umieszczono zdjęcia interfejsu na rzeczywistym wyświetlaczu.
+		\label{sec:ui}
+		Najważniejszym elementem planowania projektu z perspektywy użyteczności dla klienta jest plan wygodnego i intuicyjnego interfejsu użytkownika. Komplikacją jest fakt, że urządzenie będzie miało do dyspozycji tylko niewielki wyświetlacz i kilka przycisków.
+		Należy więc zadbać, żeby przy tym niewielkim asortymencie sprzętu udało się przekazać niezbędne informacje o stanie urządzenia oraz aby użytkownik nie czuł się zdezorientowany.
+		$ $\\
+
+		Do zaprojektowania ekranów posłużyło narzędzie Figma\textsuperscript{\cite{figma}}. Na rysunku~\ref{2/interface/all} przedstawiono jak wyglądają poszczególne okna oraz jak użytkownik może przemieszczać się  pomiędzy nimi.
+		
+		\imgh{2/interface/all}{Przemieszczanie się pomiędzy ekranami}{0.9}
 		
 		\paragraph{Ikony statusu}
 			Przy projektowaniu interfejsów poczyniono założenie, że ikony statusowe (połączenie WiFi/włożona karta SD/etc.) znajdować się będą na górze ekranu. Nie będą one klikalne.
@@ -313,31 +344,30 @@
 		
 		$ $\\
 		Przy wyświetlaniu listy (np. wyników wyszukiwania lub listy ulubionych stacji) kliknięcie w daną pozycję powoduje zaakceptowanie jej i otworzenie następnego ekranu.
-	
-		\imgcs{2/interface/all}{Przemieszczanie się pomiędzy ekranami}{0.9}
-		\imgss{2/interface/real1}{Wyszukiwanie stacji}{2/interface/real2}{Wyniki wyszukiwania}
+		
+		Na rysunkach \ref{2/interface/real1}, \ref{2/interface/real2} umieszczono zdjęcia interfejsu na rzeczywistym wyświetlaczu.
+		\imghss{2/interface/real1}{Wyszukiwanie stacji}{2/interface/real2}{Wyniki wyszukiwania}
 	
 	\section{Interakcja z użytkownikiem}
-	W trakcie projektowania ekranów konieczne stało się założenie użycia 5 przycisków. Cztery z nich zostaną użyte do nawigacji prawo/lewo/góra/dół, a pozostały (środkowy) do wykonania wybranej akcji. Poniżej przedstawione zostały wybrane scenariusze obsługi radia.
-%		Nawigacja oparta jest na siatce przycisków, przy czym może być ona nieregularna (różna liczba przycisków w różnych wierszach). 
-	
-	\imgh{2/btn/1}{Krok w dół na liście}{0.7}
-	Na rysunku~\ref{2/btn/1} widać jak użytkownik aby poruszyć się w dół listy stacji naciska dolny przycisk. Powrót do \textit{Radio 1} jest oczywiście możliwy poprzez naciśnięcie górnego przycisku.
-	
-	\imgh{2/btn/2}{Przewinięcie listy stacji do góry}{0.7}
-	Po dojściu do czwartej pozycji na liście, jeżeli na liście jest więcej niż 4 stacje, po naciśnięciu dolnego przycisku, zgodne z rysunkiem~\ref{2/btn/2}, kursor zostanie przeniesiony do piątej stacji. Należy zwrócić uwagę na zmianę położenia paska przewijania (po prawej stronie).
-	
-	\imgh{2/btn/3}{Przejście z listy do ikon akcji}{0.7}
-	Jeżeli wskaźnik znajduje się na końcu listy (pasek przewijania w skrajnie dolnej pozycji), po naciśnięciu przycisku w dół, kursor znajdzie się w pasku ikon akcji. Sytuację tę przedstawia rysunek \ref{2/btn/3}. Powrót na listę stacji jest możliwy przy pomocy górnego przycisku.
-	
-	\imghss{2/btn/4r}{Przejście w prawo}{2/btn/4l}{Przejście w lewo}
-	Poruszanie się w obrębie jednego wiersza zostało zrealizowane poprzez przyciski \mbox{lewo/prawo}. Przedstawiają to rysunki \ref{2/btn/4r} i \ref{2/btn/4l} na przykładzie dwóch ikon akcji.
-	
-	\imgh{2/btn/5}{Akceptacja wyboru}{0.7}
-	Przycisk środkowy służy do wykonania akcji. Jeżeli kursor jest ustawiony na liście, możemy rozpocząć odtwarzanie naciskając go (rysunek \ref{2/btn/5})
-	
-	\imghss{2/err1}{Błąd odtwarzania}{2/err2}{Błąd ładowania stacji z bazy danych}
-	Czasami w komunikacji z serwerem może wystąpić błąd. Takie sytuacje są zgłaszane użytkownikowi poprzez ekrany błędów widoczne na rysunkach \ref{2/err1} i \ref{2/err2} (czerwone tło). Aby wyjść z takiego ekranu nacisnąć dowolny przycisk.
+		Poniżej przedstawione zostały wybrane scenariusze obsługi radia.
+		
+		Na rysunku~\ref{2/btn/1} widać jak użytkownik aby poruszyć się w dół listy stacji naciska dolny przycisk. Powrót do \textit{Radio 1} jest oczywiście możliwy poprzez naciśnięcie górnego przycisku.
+		\imgh{2/btn/1}{Krok w dół na liście}{0.7}
+		
+		Po dojściu do czwartej pozycji na liście, jeżeli na liście jest więcej niż 4 stacje, po naciśnięciu dolnego przycisku, zgodne z rysunkiem~\ref{2/btn/2}, kursor zostanie przeniesiony do piątej stacji. Należy zwrócić uwagę na zmianę położenia paska przewijania (po prawej stronie).
+		\imgh{2/btn/2}{Przewinięcie listy stacji do góry}{0.7}
+		
+		Jeżeli wskaźnik znajduje się na końcu listy (pasek przewijania w skrajnie dolnej pozycji), po naciśnięciu przycisku w dół, kursor znajdzie się w pasku ikon akcji. Sytuację tę przedstawia rysunek \ref{2/btn/3}. Powrót na listę stacji jest możliwy przy pomocy górnego przycisku.
+		\imgh{2/btn/3}{Przejście z listy do ikon akcji}{0.7}
+		
+		Poruszanie się w obrębie jednego wiersza zostało zrealizowane poprzez przyciski \mbox{lewo/prawo}. Przedstawiają to rysunki \ref{2/btn/4r} i \ref{2/btn/4l} na przykładzie dwóch ikon akcji.
+		\imghss{2/btn/4r}{Przejście w prawo}{2/btn/4l}{Przejście w lewo}
+		
+		Przycisk środkowy służy do wykonania akcji. Jeżeli kursor jest ustawiony na liście, możemy rozpocząć odtwarzanie naciskając go (rysunek \ref{2/btn/5})
+		\imgh{2/btn/5}{Akceptacja wyboru}{0.7}
+				
+		Czasami w komunikacji z serwerem może wystąpić błąd. Takie sytuacje są zgłaszane użytkownikowi poprzez ekrany błędów widoczne na rysunkach \ref{2/err1} i \ref{2/err2} (czerwone tło). Aby wyjść z takiego ekranu nacisnąć dowolny przycisk.
+		\imghss{2/err1}{Błąd odtwarzania}{2/err2}{Błąd ładowania stacji}
 
 \chapter{Wybrane aspekty realizacji}
 	W tym rozdziale wyjaśnione zostało jak zbudowany został projekt.
