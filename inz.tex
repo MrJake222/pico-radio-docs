@@ -859,12 +859,13 @@
 			Odwołanie \lstinline|conn| powoduje także zapisanie sieci z hasłem do przyszłego użycia. Dodatkowe funkcje w tym module umożliwiają inicjalizację podsystemu Wi-Fi oraz np. sprawdzenie stanu połączenia.
 			
 		\subsection{Skanowanie dostępnych sieci}
-			Wykorzystywany przez ekran \lstinline|ScWifiScan| oraz klasę ładującą \lstinline|LoaderWifiScan|, moduł ten umożliwia przeskanowanie pobliskich sieci metodą \lstinline|scan()|. Sieci te zapisywane są do pamięci stałej przy użyciu przekazanej instancji \lstinline|LFSAccess|. Następnie ładowanie kolejnych stron wyników umożliwia funkcja \lstinline|read(n, k)|, która działa analogicznie do funkcji \lstinline|LFSorter::get_smallest_n_skip_k(n, k)|. Sortowanie odbywa się nierosnąco wg siły sygnału.
+%			Wykorzystywany przez ekran \lstinline|ScWifiScan| oraz klasę ładującą \lstinline|LoaderWifiScan|,
+			Moduł ten umożliwia przeskanowanie pobliskich sieci metodą \lstinline|scan()|. Są one zapisywane do pamięci stałej przy użyciu przekazanej instancji \lstinline|LFSAccess|. Następnie ładowanie kolejnych stron wyników umożliwia funkcja \lstinline|read(n, k)|, która działa analogicznie do funkcji \lstinline|LFSorter::get_smallest_n_skip_k(n, k)|. Sortowanie odbywa się nierosnąco wg siły sygnału.
 			
 		\subsection{Połączenie po uruchomieniu}
 			Gdy urządzenie zostanie uruchomione, użytkownik oczekuje że samo odnajdzie ono najlepszą do połączenia sieć. Zachowanie takie implementuje funkcja \lstinline|connect_best_saved()|. Wykorzystuje ona funkcje \lstinline|scan()| i \lstinline|read()| żeby pojedynczo wczytywać sieci, poczynając od tej o najwyższej sile sygnału. Gdy sieć istnieje w zapisanych sieciach, inicjowane jest połączenie. W przeciwnym wypadku ładowana jest następna sieć i tak aż do skutku, albo do wyczerpania się przeskanowanych sieci.
 		
-	\section{Sprzęt}
+	\section{Część sprzętowa}
 		\label{sec:hw}
 		Radio jest kompletnym projektem, gotowym do odtwarzania bez zewnętrznego wzmacniacza czy głośników. Zadbano także o zasilanie akumulatorowe. Projekt schematu i płytki PCB powstały w programie KiCAD\textsuperscript{\cite{hw_kicad}}, natomiast obudowa została zaprojektowana w programie OpenSCAD\textsuperscript{\cite{hw_openscad}}.
 	
@@ -917,10 +918,10 @@
 			
 			\imgh{4/prototype_1}{Pierwszy prototyp do testów odtwarzania dźwięku}{0.6}
 			
-			Początkowo projekt odtwarzał tylko nieskompresowane pliki WAV. Na listingu~\ref{lst/4/prototype.c} przedstawiono jak odbywało się doładowywanie bufora danymi z karty SD. Flagi \lstinline|a_done_irq| i \lstinline|b_done_irq| były ustawianie w przerwaniach DMA. Główna pętla programu oczekiwała na te przerwania i ładowała dodatkowe dane. Dostęp do karty SD, jak i komunikacja \isqs{} z przetwornikiem działały poprawnie. Dzięki makrom \lstinline|DBG_ON| i \lstinline|DBG_OFF| ustawiającym pin mikrokontrolera w odpowiedni sposób, możliwa była zewnętrzna kontrola czasu wykonania odczytu i (później) dekodowania.
-			
 			% commit: https://github.com/MrJake222/pico-radio/commit/f74a7883a8a824952876943f6f33ca1d82e739dd
 			\lstfile{c}{Realizacja podstawowego ładowania bufora}{lst/4/prototype.c}
+			
+			Początkowo projekt odtwarzał tylko nieskompresowane pliki WAV. Na listingu~\ref{lst/4/prototype.c} przedstawiono jak odbywało się doładowywanie bufora danymi z karty SD. Flagi \lstinline|a_done_irq| i \lstinline|b_done_irq| były ustawianie w przerwaniach DMA. Główna pętla programu oczekiwała na te przerwania i ładowała dodatkowe dane. Dostęp do karty SD, jak i komunikacja \isqs{} z przetwornikiem działały poprawnie. Dzięki makrom \lstinline|DBG_ON| i \lstinline|DBG_OFF| ustawiającym pin mikrokontrolera w odpowiedni sposób, możliwa była zewnętrzna kontrola czasu wykonania odczytu i (później) dekodowania.
 			
 			Dalej, przy wykorzystaniu biblioteki \lstinline|minimp3|\textsuperscript{\cite{minimp3}}, dodana została obsługa dekodowania MP3. Krótki fragment kodu na listingu~\ref{lst/4/benchmark.c} przedstawia w jaki sposób badano czas dekodowania pojedynczej ramki audio. Niestety czas przetworzenia jednej ramki wynosił ok. 90ms, co stanowiło znacząco za dużo, gdyż jedna taka ramka odtwarzana jest przez 26ms.
 
@@ -935,7 +936,6 @@
 			$ $\\
 			
 			Podczas refaktoryzacji pliki WAV zostały zintegrowane z istniejącą obsługą plików MP3. Zaimplementowany i zintegrowany został także klient HTTP. Pod koniec maja odtwarzacz plików MP3 zamienił się w radio, zdolne odtwarzać internetowe strumienie MP3.
-%			Jednak do kompletnego produktu brakowało jeszcze interfejsu użytkownika.
 			
 		\subsection{System operacyjny}
 			W drugiej wersji prototypu widocznej na rysunku~\ref{4/prototype_2} do projektu zostały dołączone przyciski.
