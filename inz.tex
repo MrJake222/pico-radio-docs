@@ -935,7 +935,9 @@
 			Droga do działającego odtwarzacza trwała około miesiąca. Pod koniec kwietnia, odtwarzanie działało, jednak stan repozytorium pozostawiał wiele do życzenia. Istniało wiele niepowiązanych ze sobą fragmentów kodu. Odtwarzanie formatów MP3 i WAV stanowiło dwie oddzielne funkcje. Następny miesiąc minał pod szyldem refaktoryzacji kodu. Powstały wtedy takie koncepcje jak bufor kołowy dekompresja formatów (opisane w sekcjach odpowiednio \ref{sec:circular_buffer} oraz \ref{sec:decode}).
 			$ $\\
 			
-			Podczas refaktoryzacji pliki WAV zostały zintegrowane z istniejącą obsługą plików MP3. Zaimplementowany i zintegrowany został także klient HTTP. Pod koniec maja odtwarzacz plików MP3 zamienił się w radio, zdolne odtwarzać internetowe strumienie MP3.
+			W trakcie standaryzacji interfejsu odtwarzanie plików MP3 oraz WAV zostało zintegrowane i obsługiwane jest obecnie przez jedną wspólną funkcję.
+			Zaimplementowany i zintegrowany został także klient HTTP, a wraz z nim obsługa strumieni internetowych.
+			Pod koniec maja odtwarzacz plików MP3, za sprawą powyższych zmian, stał się radiem internetowym.
 			
 		\subsection{System operacyjny}
 			W drugiej wersji prototypu widocznej na rysunku~\ref{4/prototype_2} do projektu zostały dołączone przyciski.
@@ -973,7 +975,9 @@
 			
 			\imgh{4/tcp_good}{Ogłaszane okno TCP maks. 56kB}{0.6}
 
-			Jak widać podobny problem zacząłby występować ok. 40 sekundy, lecz okno mogło urosnąć do ponad 40kB i serwer szybko dostarczył brakujące dane. Problem został rozwiązany. Na uznanie zasługuje sugestia z listy mailingowej projektu LwIP. %TODO https://lists.nongnu.org/archive/html/lwip-users/2023-07/msg00001.html
+			Jak widać podobny problem zacząłby występować ok. 40 sekundy, lecz okno mogło urosnąć do ponad 40kB i serwer szybko dostarczył brakujące dane. Problem został rozwiązany.
+%			Na uznanie zasługuje sugestia z listy mailingowej projektu LwIP.
+			%TODO https://lists.nongnu.org/archive/html/lwip-users/2023-07/msg00001.html
 			
 		\subsection{Proces przyrostowy}
 			Po pozbyciu się uciążliwego problemu z niewystarczającym oknem TCP, skupiono się na nowych funkcjonalnościach. W lipcu powstały m.in:
@@ -1016,7 +1020,7 @@
 			Użytkowanie radia jako kompletnego produktu szybko dostarczyło nowych danych o błędach. Dodana została obsługa MPEG2 (obsługa niższej jakości dźwięku), ponieważ niektóre stacje nie odtwarzały się poprawnie. Ograniczona została liczba przekierowań, na które odpowiada klient HTTP, ponieważ następowało zawieszanie się urządzenia. Długość metadanych ICY była zapisywana do zmiennej 8-bitowej co w przypadku stacji nadającej więcej informacji niż tylko tytuł utworu powodowała zawieszanie się odtwarzania. Ten błąd również został naprawiony.
 			$ $\\
 			
-			To tylko niektóre z błędów napotkanych przeze mnie i osoby z najbliższego otoczenia. Wszystkie odnalezione były niezwłocznie zapisywane w systemie do śledzenia zadań i później naprawiane. Sierpień upłynął, radio zyskiwało na użyteczności.
+			To tylko niektóre z błędów napotkanych przez osoby z najbliższego otoczenia. Wszystkie odnalezione były niezwłocznie zapisywane w systemie do śledzenia zadań i później naprawiane. Sierpień upłynął, radio zyskiwało na użyteczności.
 			
 		\subsection{Odtwarzanie plików lokalnych}
 			Jako że obsługa kart SD była wymaganiem opcjonalnym, zrealizowana została pod koniec prac nad urządzeniem. We wrześniu został dodany ekran listowania plików. Za ekran wykonawczy posłużył ekran radia z pomniejszymi zmianami. Dodano pasek postępu informujący użytkownika jaka część utworu została już odtworzona. Znalazło się też miejsce na informacje o czasie trwania całości. Oba ekrany przedstawiono na rysunkach \ref{4/scr_radio} oraz \ref{4/scr_player}.
@@ -1035,7 +1039,7 @@
 			 W pierwszej połowie grudnia w.w. funkcjonalność była gotowa.
 			 
 	 \section{Organizacja pracy}
-	 	% TODO fix jira
+		Praca była tworzona przez jedną osobę.
 		Do planowania i organizacji pracy nad projektem użyto oprogramowania Jira. Główną wykorzystaną funkcjonalnością było tworzenie zadań i dzielenie ich na funkcjonalne bloki. Zawierały one implementacje podstawowych funkcjonalności takich jak: odtwarzanie lokalnych plików, automatyczne połączenia Wi-Fi.
 		$ $\\
 		
