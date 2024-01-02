@@ -306,35 +306,45 @@
 	\end{itemize}
 
 \chapter{Zakres funkcjonalności}
-	W rozdziale drugim skupiono się na krótkim wprowadzeniu do sprzętowej architektury projektu, funkcjonalności produktu jak i projekcie interakcji z użytkownikiem.\\
+	W rozdziale drugim skupiono się na krótkim wprowadzeniu do sprzętowej architektury projektu. Przedstawiony został także opis funkcjonalności produktu oraz projekt interfejsu użytkownika.\\
 	
 	\section{Sprzętowa architektura systemu}
-		Sprzętowy projekt sytemu został przedstawiony na rysunku~\ref{2/PicoRadio-hw-blocks}. Część sprzętowa składa się z następujących elementów:
-		\begin{itemize}
-			\item złącza zewnętrzne i sekcja zasilania (kolor \textcolor{blue}{niebieski}),
-			\item współpracujące źródła danych (kolor \textcolor{green}{zielony}),
-			\item podsystem wejścia/wyjścia (kolor \textcolor{purple}{purpurowy})
-			\item Płytka rozwojowa (kolor \textcolor{orange}{pomarańczowy})
-			\item sekcja audio (kolor \textcolor{red}{czerwony})
-		\end{itemize}
-		
-		\imgh{2/PicoRadio-hw-blocks}{Sprzętowa architektura systemu}{0.95}
-		
-		Wybrana płytka rozwojowa to Raspberry Pi Pico W. Zawiera ona mikrokontroler RP2040, jak również 2MB pamięci stałej typu \textit{flash} oraz układ komunikacyjny Wi-Fi.
-		Jak wcześniej wspomniano, wybrany został miniaturowy wyświetlacz LCD o przekątnej 1,8 cala. Na podstawie jego wymiarów został zaprojektowany interfejs użytkownika przestawiony w sekcji~\ref{sec:ui}.
-		\clearpage
-		
-		W trakcie projektowania ekranów konieczne stało się założenie użycia 5 przycisków. Cztery z nich zostaną użyte do nawigacji prawo/lewo/góra/dół, a pozostały (środkowy) do wykonania wybranej akcji.
+			Architekturę systemu realizującego funkcje odbiornika internetowych stacji radiowych przedstawiono na rysunku~\ref{2/PicoRadio-hw-blocks}. Składa się on z następujących elementów:
+			\begin{itemize}
+				\item Płytka rozwojowa z mikrokontrolerem (kolor \textcolor{orange}{pomarańczowy}),
+				\item sekcja audio (kolor \textcolor{red}{czerwony}),
+				\item podsystem interfejsu użytkownika (kolor \textcolor{purple}{purpurowy}),
+				\item złącza zewnętrzne i sekcja zasilania (kolor \textcolor{blue}{niebieski}),
+				\item współpracujące źródła danych (kolor \textcolor{green}{zielony}).
+			\end{itemize}
+			
+			\imgh{2/PicoRadio-hw-blocks}{Sprzętowa architektura systemu}{0.95}
+			
+			Bazę odtwarzacza stanowi płytka rozwojowa Raspberry Pi Pico W oparta o mikrokontroler RP2040. Zawiera ona ponadto 2MB nieulotnej pamięci typu \textit{FLASH} (przeznaczonej na oprogramowanie układowe i dane użytkownika) oraz układ komunikacji Wi-Fi. Do niej dołączony jest przetwornik audio DAC który wraz dodatkowymi komponentami (potencjometry regulacji głośności, wzmacniacze mocy i głośniki) tworzą tor audio. Role interfejsu użytkownika pełni ekran LCD o przekątnej 1,8 cala oraz 5 przycisków chwilowych typu pushbutton. Do płytki  dołączonej jest również gniazdo dla kart SD. Całość jest zasilana z ogniwa litowo-jonowego współpracującego z układem jego monitorowania i ładowania. 
+			$ $\\
+			
+			Zasada działania urządzenia jest następująca.
+			Zaraz po uruchomieniu urządzenie próbuje połączyć się z jedną ze skonfigurowanych sieci Wi-Fi.
+			Jeśli zakończy się to sukcesem użytkownik ma możliwość wyboru stacji radiowej do odbioru. W trakcie odtwarzania urządzenie odbiera skompresowany strumień danych audio, który jest następnie dekodowany przez oprogramowanie układowe do formatu PCM. Zdekodowane dane są przesyłane poprzez interfejs \isqs{} do stereofonicznego przetwornika audio, który zamienia je w sygnał analogowy. Z wyjść przetwornika sygnał ten trafia na, zbudowany z podwójnego potencjometru logarytmicznego, układ regulacji głośności i dalej do układów wzmacniaczy mocy sterujących głośnikami kanału lewego i prawego.
+			Użytkownik może w dowolnym momencie zatrzymać odtwarzanie lub zmienić odtwarzaną stację na inną wybierając ją z pośród ulubionych lub wyszukując na liście dostępnych stacji.
+			Jeśli nie uda się nawiązać połączenia z siecią Wi-Fi, próby odtwarzania stacji radiowych są blokowane poprzez wyświetlenie stosownego komunikatu.
+			Jednak wtedy użytkownik ma możliwość uruchomienia odtwarzania plików z dołączonej karty SD. Po wybraniu odpowiedniego pliku, sposób działania jest identyczny jak w trybie odtwarzania stacji radiowej, z tą różnicą że strumień danych pobierany jest pliku znajdującego się na karcie. 
+			W każdym momencie użytkownik ma możliwość skonfigurowania połączenia internetowego, poprzez dodanie nowej sieci Wi-Fi.
+			Musi jednak najpierw przerwać odtwarzanie i otworzyć ekran ustawień.
 	
 	\section{Projekt interfejsu}
 		\label{sec:ui}
-		Najważniejszym elementem planowania projektu z perspektywy użyteczności dla klienta jest plan wygodnego i intuicyjnego interfejsu użytkownika. Komplikacją jest fakt, że urządzenie będzie miało do dyspozycji tylko niewielki wyświetlacz i kilka przycisków.
-		Należy więc zadbać, żeby przy tym niewielkim asortymencie sprzętu udało się przekazać niezbędne informacje o stanie urządzenia oraz aby użytkownik nie czuł się zdezorientowany.
+		Najważniejszym elementem planowania projektu z perspektywy użyteczności dla klienta jest projekt wygodnego i intuicyjnego interfejsu użytkownika. Komplikacją jest fakt, że urządzenie będzie miało do dyspozycji tylko niewielki wyświetlacz i kilka przycisków.
+		Należy więc zadbać, żeby przy tych ograniczonych możliwościach udało się przekazać niezbędne informacje o stanie urządzenia oraz zapewnić użytkownikowi prostą i ergonomiczną jego obsługę.
 		$ $\\
 
-		Do zaprojektowania ekranów posłużyło narzędzie Figma\textsuperscript{\cite{figma}}. Na rysunku~\ref{2/interface/all} przedstawiono jak wyglądają poszczególne okna oraz jak użytkownik może przemieszczać się  pomiędzy nimi.
+		Do zaprojektowania ekranów, z których następnie powstanie interfejs użytkownika, posłużyło narzędzie Figma\textsuperscript{\cite{figma}}. Na rysunku~\ref{2/interface/all} przedstawiono jak wyglądają poszczególne okna oraz jak użytkownik może przemieszczać się  pomiędzy nimi.
 		
 		\imgh{2/interface/all}{Przemieszczanie się pomiędzy ekranami}{0.9}
+		
+		Najczęściej wyświetlanym ekranem jest ekran odtwarzacza radia internetowego. Użytkownik widzi wówczas umieszczoną na ekranie nazwę aktualnie odtwarzanej stacji a pod nią tytuł audycji lub wykonawcę i tytuł aktualne nadawanego utworu.
+		W górnej części ekranu widoczna jest jego nazwa. Informuje ona o obecnym trybie pracy urządzenia.
+		W zależności od aktualnie wyświetlanego ekranu, obok jego nazwy, znajdują się ikony statusu, a w dolnej części ikony akcji.
 		
 		\paragraph{Ikony statusu}
 			Przy projektowaniu interfejsów poczyniono założenie, że ikony statusowe (połączenie WiFi/włożona karta SD/etc.) znajdować się będą na górze ekranu. Nie będą one klikalne.
@@ -348,8 +358,9 @@
 		Na rysunkach \ref{2/interface/real1}, \ref{2/interface/real2} umieszczono zdjęcia interfejsu na rzeczywistym wyświetlaczu.
 		\imghss{2/interface/real1}{Wyszukiwanie stacji}{2/interface/real2}{Wyniki wyszukiwania}
 	
-	\section{Interakcja z użytkownikiem}
-		Poniżej przedstawione zostały wybrane scenariusze obsługi radia.
+	\section{Interakcja użytkownika z interfejsem produktu}
+		Poniżej przedstawione zostały wybrane scenariusze poruszania się użytkownika w obrębie zaprojektowanego interfejsu.
+		$ $\\
 		
 		Na rysunku~\ref{2/btn/1} widać jak użytkownik aby poruszyć się w dół listy stacji naciska dolny przycisk. Powrót do \textit{Radio 1} jest oczywiście możliwy poprzez naciśnięcie górnego przycisku.
 		\imgh{2/btn/1}{Krok w dół na liście}{0.7}
@@ -366,7 +377,7 @@
 		Przycisk środkowy służy do wykonania akcji. Jeżeli kursor jest ustawiony na liście, możemy rozpocząć odtwarzanie naciskając go (rysunek \ref{2/btn/5})
 		\imgh{2/btn/5}{Akceptacja wyboru}{0.7}
 				
-		Czasami w komunikacji z serwerem może wystąpić błąd. Takie sytuacje są zgłaszane użytkownikowi poprzez ekrany błędów widoczne na rysunkach \ref{2/err1} i \ref{2/err2} (czerwone tło). Aby wyjść z takiego ekranu nacisnąć dowolny przycisk.
+		Czasami w komunikacji z serwerem może wystąpić błąd. Takie sytuacje są zgłaszane użytkownikowi poprzez ekrany błędów widoczne na rysunkach \ref{2/err1} i \ref{2/err2} (czerwone tło). Aby wyjść z takiego ekranu należy nacisnąć dowolny przycisk.
 		\imghss{2/err1}{Błąd odtwarzania}{2/err2}{Błąd ładowania stacji}
 
 \chapter{Wybrane aspekty realizacji}
