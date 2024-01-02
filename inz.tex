@@ -1087,22 +1087,26 @@
 		 Jak widać proces inspirowany był metodyką Scrum. Została ona jednak znacznie uproszczona.
 	 	
 \chapter{Wyniki projektu}
-	W tym rozdziale skupiono się na finalnym efekcie projektu.
+	W tym rozdziale omówione zostały wyniki pracy.
+	Projekt podsumowano i wyciągnięto wnioski.
+%	Projekt został podsumowany i wyciągnięte zostały wnioski
+%	skupiono się na finalnym efekcie projektu.
 	
 	\section{Przegląd zrealizowanych funkcji}
+		Poniżej przedstawiono posiadane przez urządzenie funkcje.
 	
 		\subsection{Odtwarzacz radiowy}			
-			Główną funkcją produktu jest odtwarzanie radia internetowego. Zrealizowane w postaci dedykowanego ekranu (rys.~\ref{5/radio}), prezentuje na nim podstawowe informacje na temat stacji radiowej oraz stanu urządzenia. Obsługa metadanych ICY pozwala na wyświetlanie tytułu granego w danej chwili. Poniżej wyświetlane są statystyki działanie dekodera. \textit{CPU} odnosi się do procentu wykorzystania rdzenia dekodującego, natomiast \textit{Bufor} informuje użytkownika o poziomie wypełnienia bufora (przydatne, gdy występują problemy z odtwarzaniem spowodowane niską jakością połączenia internetowego).
+			Główną funkcją produktu jest odtwarzanie radia internetowego. Odtwarzacz został zrealizowany w postaci dedykowanego ekranu przedstawionego na rysunku~\ref{5/radio}. Urządzenie prezentuje na nim podstawowe informacje na temat stacji radiowej oraz stanu odtwarzacza. Obsługa metadanych ICY pozwala na wyświetlanie tytułu i wykonawcy granego w danej chwili utworu. Poniżej wyświetlane są statystyki działanie dekodera. \textit{CPU} odnosi się do procentu wykorzystania rdzenia dekodującego, natomiast \textit{Bufor} informuje użytkownika o poziomie wypełnienia bufora (przydatne, gdy występują problemy z odtwarzaniem spowodowane niską jakością połączenia internetowego).
 			
 			\imghss{5/radio}{Ekran \textit{Radio} (włączone z listy ulubionych)}{5/radio_search}{Ekran \textit{Radio} (wyszukane)}
 			
-			Na dole ekranu dostępne są 2 lub 3 ikony. Pierwsza z nich zakańcza odtwarzanie i powraca do poprzedniego ekranu. Druga, ikona gwiazdy, pozwala dodawać/usuwać stację z listy ulubionych. Jeśli jest ona wypełniona, oznacza to że stacja jest zapisana i kliknięcie jej spowoduje jej usunięcie. Natomiast pusta ikona wskazuje, że jest to nowa stacja i pozwala na dodanie jej do listy ulubionych. Trzecia ikona jest dostępna tylko w przypadku uruchomienia radia z poziomu wyników wyszukiwania (rys.~\ref{5/radio_search}). Pozwala ona wrócić bezpośrednio do ekranu listy ulubionych stacji.
+%			Na dole ekranu dostępne są 2 lub 3 ikony. Pierwsza z nich zakańcza odtwarzanie i powraca do poprzedniego ekranu. Druga, ikona gwiazdy, pozwala dodawać/usuwać stację z listy ulubionych. Jeśli jest ona wypełniona, oznacza to że stacja jest zapisana i kliknięcie jej spowoduje jej usunięcie. Natomiast pusta ikona wskazuje, że jest to nowa stacja i pozwala na dodanie jej do listy ulubionych. Trzecia ikona jest dostępna tylko w przypadku uruchomienia radia z poziomu wyników wyszukiwania (rys.~\ref{5/radio_search}). Pozwala ona wrócić bezpośrednio do ekranu listy ulubionych stacji.
 		
 			\paragraph{Dalszy rozwój}
 				Implementacja dekodowania formatu AAC/AAC+ znacząco podniosłaby użyteczność produktu.
 			
 		\subsection{Lista ulubionych stacji}
-			Przechowywana w pamięci urządzenia lista ulubionych stacji zawiera znalezione i zapisane przez użytkownika stacje (rys.~\ref{5/fav}).
+			Przechowywana w pamięci urządzenia lista ulubionych stacji zawiera znalezione i zapisane przez użytkownika stacje. Przedstawia ją rysunek~\ref{5/fav}.
 			Ekran obsługuje stronicowanie wpisów. Domyślnie wyświetlanych jest 16 wpisów na stronę. Na dole ekranu wyświetlona jest aktualna strona i liczba wszystkich stron.
 			W górnym pasku zawiera się nazwa ekranu oraz ikony statusowe (Wi-Fi, karta SD, bateria).
 			
@@ -1125,7 +1129,7 @@
 				Obecnie obsługiwany jest tylko jeden dostawca wyszukiwania. Istnieje infrastruktura do obsługi wielu takich serwerów, lecz żaden inny nie został dodany.
 			
 		\subsection{Przeglądarka i odtwarzacz plików lokalnych}
-			Listing plików tworzony jest na podstawie plików znajdujących się na karcie SD (rys.~\ref{5/local}). Zapewnione jest sortowanie wpisów (foldery sortowane są jako pierwsze). Możliwe jest rekurencyjne przeglądanie drzewa katalogów. Nazwa ekranu jest dynamicznie aktualizowana i wyświetla nazwę aktualnego folderu. Jak widać obsługiwane jest także przewijanie długich tekstów poziomo na ekranie oraz dekodowanie metadanych ID3v2. Utwory w ramach jednego folderu są automatycznie odtwarzane jeden po drugim. Interfejs lokalnego odtwarzacza można zobaczyć na rysunku~\ref{5/local_play}.
+			Listing plików lokalnych przedstawiony został na rysunku~\ref{5/local}. Tworzony jest on na podstawie plików znajdujących się na karcie SD. Zapewnione jest sortowanie wpisów (foldery sortowane są jako pierwsze). Możliwe jest rekurencyjne przeglądanie drzewa katalogów. Nazwa ekranu jest dynamicznie aktualizowana i wyświetla nazwę aktualnego folderu. Jak widać obsługiwane jest także przewijanie długich tekstów poziomo na ekranie oraz dekodowanie metadanych ID3v2. Utwory w ramach jednego folderu są automatycznie odtwarzane jeden po drugim. Interfejs lokalnego odtwarzacza można zobaczyć na rysunku~\ref{5/local_play}.
 			
 			\imghss{5/local}{Ekran \textit{Pliki lokalne}}{5/local_play}{Odtwarzacz plików lokalnych}
 			
@@ -1193,7 +1197,7 @@
 				\item Rys.~\rflwifi{l} -- użytkownik może teraz z powodzeniem słuchać radia korzystając z nowej sieci Wi-Fi.
 			\end{itemize}
 			
-	\section{Podsumowanie wytworzonego oprogramowania}
+	\section{Podsumowanie oprogramowania układowego}
 		Produkt końcowy posiada wiele funkcji. Przeważająca większość z nich jest kompletna.
 		% TODO dopisać coś
 		
@@ -1215,7 +1219,7 @@
 			
 			Istniejąca infrastruktura pozwala na zaimplementowanie tworzenia wielu list ulubionych, jednak tak funkcjonalność nie została utworzona. Gdyby ją zaimplementowano, użytkownik mógłby grupować swoje utwory według własnego uznania. Odtwarzanie np. konkretnych gatunków muzycznych stałoby się o wiele prostsze.
 			
-	\section{Warstwa sprzętowa}
+	\section{Część sprzętowa}
 		Projekt od strony sprzętowej został udokumentowany w sekcji~\ref{sec:hw}. Oprócz schematu, powstała także płytka PCB, oraz obudowa wydrukowana przy użyciu drukarki~3D. Całość widoczna jest na rysunku~\ref{5/hw_result}.
 		
 		\imgh{5/hw_result}{Gotowy produkt w obudowie}{0.7}
@@ -1272,18 +1276,23 @@
 		Wszystkie założone cele zostały spełnione. Pomimo kilku niedociągnięć urządzenie jest w pełni funkcjonalne i z powodzeniem może być wykorzystane do odtwarzania radia internetowego i lokalnych plików MP3 oraz WAV. Powstała też założona obudowa, dzięki której radio nabiera wyglądu kompletnego produktu.
 		$ $\\
 		
-		Projekt uważam za udany. 
-		Z efektów pracy jestem nad wyraz zadowolony. Urządzenie da się wykorzystać do codziennego słuchania radia czy muzyki.
-%		Wbudowane ogniwa zapewniają przenośność urządzenia
-		Klient (promotor) również jest zadowolony. Temat był propozycją promotora. Zostały zrealizowane, a nawet przekroczone wszystkie jego założenia. Ponad wymagania zrealizowano projekt płytki czy obudowy, w której został zamknięty finalny produkt.
+		Projekt się udał. Efekty są zadowalające. Urządzenie da się wykorzystać do codziennego słuchania radia czy muzyki. Wbudowane ogniwa zapewniają przenośność urządzenia.
+		Temat był propozycją promotora.
+		Zostały zrealizowane, a nawet przekroczone wszystkie jego założenia. Ponad wymagania zrealizowano projekt płytki i obudowy, w której został zamknięty finalny produkt.
 		$ $\\
 		
-		Dużo się nauczyłem.
-		Znacząco rozwinąłem swoje umiejętności programowania w języku C++, szczególnie w zakresie tworzenia i utrzymywania średniego rozmiaru projektów. Zaprezentowane hierarchę klas były implementowane i refaktoryzowane przez kilka miesięcy. Pozwoliło mi to na doskonalenie dobrych praktyk programistycznych.
-		
-		$ $\\
-		Druk 3D był dla mnie nowym obszarem zainteresowań. Udało mi się dobrać odpowiedni program, zaprojektować i wydrukować obudowę projektu. 
-		Mój warsztat został doposażony, drukarka na pewno okaże się pomocna w przyszłych projektach.
+%		Projekt uważam za udany. 
+%		Z efektów pracy jestem nad wyraz zadowolony. Urządzenie da się wykorzystać do codziennego słuchania radia czy muzyki.
+%%		Wbudowane ogniwa zapewniają przenośność urządzenia
+%		Klient (promotor) również jest zadowolony. Temat był propozycją promotora. Zostały zrealizowane, a nawet przekroczone wszystkie jego założenia. Ponad wymagania zrealizowano projekt płytki czy obudowy, w której został zamknięty finalny produkt.
+%		$ $\\
+%		
+%		Dużo się nauczyłem.
+%		Znacząco rozwinąłem swoje umiejętności programowania w języku C++, szczególnie w zakresie tworzenia i utrzymywania średniego rozmiaru projektów. Zaprezentowane hierarchę klas były implementowane i refaktoryzowane przez kilka miesięcy. Pozwoliło mi to na doskonalenie dobrych praktyk programistycznych.
+%		
+%		$ $\\
+%		Druk 3D był dla mnie nowym obszarem zainteresowań. Udało mi się dobrać odpowiedni program, zaprojektować i wydrukować obudowę projektu. 
+%		Mój warsztat został doposażony, drukarka na pewno okaże się pomocna w przyszłych projektach.
 			
 	% TODO warnings gdzieś przy flow??
 	% TODO instrukcja obsługi (rozdział 5) ??
