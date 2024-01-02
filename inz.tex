@@ -28,6 +28,14 @@
 \usepackage{caption} % link przenosi do góry obrazka
 \usepackage{svg}
 
+% bibliografia
+\usepackage[
+backend=biber,
+%style=alphabetic,
+%sorting=ynt
+]{biblatex}
+\addbibresource{inz.bib}
+
 % bez odstępu w itemize
 \let\tempone\itemize
 \let\temptwo\enditemize
@@ -886,13 +894,13 @@
 			\imgh{3/hw_kicad_sch}{Schemat elektryczny radia}{1}
 			
 			\subsubsection{Sekcja zasilania}
-				Urządzenie posiada własne zasilanie oparte o dwa ogniwa litowo-jonowe o sumarycznej pojemności 4Ah i znamionowym napięciu 3.6V. Na schemacie ogniwa zaznaczono wspólnym symbolem \lstinline|BT1|. W roli układu ładowania i zabezpieczeń został wykorzystany gotowy moduł\textsuperscript{\cite{hw_mod_chg}} z układem TP4056 (\lstinline|B3|). Dzięki niemu, produkt nie wymaga dodatkowej ładowarki. Wyprowadzone zostało złącze USB~C, użytkownik może użyć każdej ładowarki o prądzie minimalnym 1A. Istotnym zadaniem sekcji zasilającej jest przełączanie źródła zasilania. Gdy ogniwa są ładowane, z terminali \lstinline|B+|, \lstinline|B-| oraz \lstinline|OUT+|, \lstinline|OUT-| pozostałe moduły nie mogą pobierać prądu. Może to spowodować przeładowanie ogniw. Tranzystor PMOS \lstinline|Q1|, dioda Schottkiego \lstinline|D1| oraz rezystor \lstinline|R5| tworzą układ\textsuperscript{\cite{hw_load_sw}}, który w trakcie ładowania przełącza  wyjście \lstinline|PWR| z zasilania bateryjnego \lstinline|OUT+| na zasilanie bezpośrednio z portu USB (\lstinline|IN+|). Dalej przetwornica wytwarza napięcie 5V do zasilenia portu USB, który w kolejnych wersjach projektu może posłużyć do podłączenia zewnętrznego modemu sieci komórkowej Obecnie nie jest on używany. Na końcu zastosowane zostały dzielniki napięcia, aby urządzenie mogło mierzyć kluczowe parametry pracy tej sekcji.
+				Urządzenie posiada własne zasilanie oparte o dwa ogniwa litowo-jonowe o sumarycznej pojemności 4Ah i znamionowym napięciu 3.6V. Na schemacie ogniwa zaznaczono wspólnym symbolem \lstinline|BT1|. W roli układu ładowania i zabezpieczeń został wykorzystany gotowy moduł z układem TP4056\textsuperscript{\cite{hw_chg}} (\lstinline|B3|). Dzięki niemu, produkt nie wymaga dodatkowej ładowarki. Wyprowadzone zostało złącze USB~C, użytkownik może użyć każdej ładowarki o prądzie minimalnym 1A. Istotnym zadaniem sekcji zasilającej jest przełączanie źródła zasilania. Gdy ogniwa są ładowane, z terminali \lstinline|B+|, \lstinline|B-| oraz \lstinline|OUT+|, \lstinline|OUT-| pozostałe moduły nie mogą pobierać prądu. Może to spowodować przeładowanie ogniw. Tranzystor PMOS \lstinline|Q1|, dioda Schottkiego \lstinline|D1| oraz rezystor \lstinline|R5| tworzą układ\textsuperscript{\cite{hw_load_sw}}, który w trakcie ładowania przełącza  wyjście \lstinline|PWR| z zasilania bateryjnego \lstinline|OUT+| na zasilanie bezpośrednio z portu USB (\lstinline|IN+|). Dalej przetwornica wytwarza napięcie 5V do zasilenia portu USB, który w kolejnych wersjach projektu może posłużyć do podłączenia zewnętrznego modemu sieci komórkowej Obecnie nie jest on używany. Na końcu zastosowane zostały dzielniki napięcia, aby urządzenie mogło mierzyć kluczowe parametry pracy tej sekcji.
 				
 			\subsubsection{Panel LCD, przyciski, karta SD}
 				Te trzy sekcje łączą poszczególne gotowe moduły z główną jednostką. Na uwagę jednak zasługuje zastosowanie kondensatorów w celu wygładzenia drgania styków.
 				
 			\subsubsection{Moduł przetwarzania dźwięku}
-				Najistotniejszy z modułów. Służy do przetworzenia dźwięku cyfrowego na analogowy i regulację jego głośności. Zastosowany gotowy moduł\textsuperscript{\cite{hw_mod_dac}} oparty na PCM5102a pełni rolę przetwornika analogowo-cyfrowego. Dalej w torze audio zastosowane zostały dwa potencjometry. Pierwszy z nich, wewnętrzny służy do stałego ograniczenia poziomu dźwięku, aby nie uszkodził on wzmacniacza lub głośników. Drugi, zewnętrzny, operowany jest przez użytkownika. Na końcu jest wzmacniacz, również oparty o gotowy moduł\textsuperscript{\cite{hw_mod_amp}}. Wykorzystany układ PAM8403 przy napięciu 3.3V posiada ok. 1W mocy na kanał (głośniki $4 \Omega$). Przy napięciu 3.7V będzie to nieznacznie więcej. Wejście \lstinline|MUTE| pozwala na całkowite wyciszenie wzmacniacza, gdy nie jest on używany. Notka na dole mówi, że do zasilenia modułu konwertera wystarczy napięcie 3.7V (posiada ona własne regulatory napięcia dla minimalizacji szumów).
+				Najistotniejszy z modułów. Służy do przetworzenia dźwięku cyfrowego na analogowy i regulację jego głośności. Zastosowany gotowy moduł oparty na PCM5102a\textsuperscript{\cite{hw_dac}} pełni rolę przetwornika analogowo-cyfrowego. Dalej w torze audio zastosowane zostały dwa potencjometry. Pierwszy z nich, wewnętrzny służy do stałego ograniczenia poziomu dźwięku, aby nie uszkodził on wzmacniacza lub głośników. Drugi, zewnętrzny, operowany jest przez użytkownika. Na końcu jest wzmacniacz, również oparty o gotowy moduł\textsuperscript{\cite{hw_mod_amp}}. Wykorzystany układ PAM8403 przy napięciu 3.3V posiada ok. 1W mocy na kanał (głośniki $4 \Omega$). Przy napięciu 3.7V będzie to nieznacznie więcej. Wejście \lstinline|MUTE| pozwala na całkowite wyciszenie wzmacniacza, gdy nie jest on używany. Notka na dole mówi, że do zasilenia modułu konwertera wystarczy napięcie 3.7V (posiada ona własne regulatory napięcia dla minimalizacji szumów).
 				
 		\subsection{Płytka drukowana}
 			Na podstawie wyżej opisanego schematu powstała płytka drukowana. Gwarantuje ona dobrą jakość połączeń, w porównaniu do płytki stykowej, na jakiej powstawał prototyp.
@@ -1297,96 +1305,6 @@
 	% TODO warnings gdzieś przy flow??
 	% TODO instrukcja obsługi (rozdział 5) ??
 		
-	\pagebreak
-	\begin{thebibliography}{9}
-		\bibitem{radio-browser}
-		\href{https://www.radio-browser.info/}{\textit{Radio-browser} -- baza danych stacji radiowych}
-		\bibitem{fmstream}
-		\href{http://fmstream.org}{\textit{fmstream} -- baza danych stacji radiowych}
-		
-		\bibitem{minimp3}
-		\href{https://github.com/lieff/minimp3}{\textit{minimp3} -- biblioteka dekodująca MP3}
-		\bibitem{realnetworks}
-		\href{https://realnetworks.com}{\textit{RealNetworks} -- firma odpowiedzialna za bibliotekę \textit{helixmp3}}
-		\bibitem{helixmp3_repo}
-		\href{https://github.com/ultraembedded/libhelix-mp3}{\textit{helixmp3} -- biblioteka dekodująca MP3 (napisana w 2003 roku przez RealNetworks)}
-		
-		\bibitem{rp2040}
-		\href{https://www.raspberrypi.com/documentation/microcontrollers/rp2040.html}{\textit{RP2040} -- Mikrokontroler firmy Raspberry Pi}
-		\bibitem{pico_sdk}
-		\href{https://github.com/raspberrypi/pico-sdk}{\textit{pico-sdk} -- Zestaw bibliotek do Raspberry Pi Pico}
-		\bibitem{freertos_kernel}
-		\href{https://github.com/FreeRTOS/FreeRTOS-Kernel}{\textit{FreeRTOS Kernel} -- Jądro systemu czasu rzeczywistego FreeRTOS}
-		\bibitem{adafruit_st7735}
-		\href{https://github.com/adafruit/Adafruit-ST7735-Library}{\textit{Adafruit-ST7735-Library} -- biblioteka do obsługi ekranów LCD napisana przez firmę Adafruit}
-		\bibitem{littlefs}
-		\href{https://github.com/littlefs-project/littlefs}{\textit{LittleFS} -- System plików przeznaczony do pamięci flash}
-		\bibitem{fatfs}
-		\href{http://elm-chan.org/fsw/ff/00index_e.html}{\textit{FatFS} -- Obsługa systemów plików z rodziny FAT}
-		\bibitem{sdfs}
-		\href{https://github.com/carlk3/no-OS-FatFS-SD-SPI-RPi-Pico}{\textit{FatFS+SPI na Pi Pico} --  kompleksowa biblioteka łącząca FatFS i komunikację poprzez SPI z kartą SD (przystosowana do Pi Pico)}
-		
-		\bibitem{radio_adapter}
-		\href{https://allegro.pl/oferta/adapter-radia-internetowego-dual-ir-3a-dab-fm-rds-12692108793}{\textit{Radio sieciowe} -- Sklep Allegro}
-		\bibitem{radio_tanie}
-		\href{https://www.x-kom.pl/p/653480-radio-internetowe-technisat-sternradio-ir-2-biale.html}{\textit{Radio internetowe mono} -- Sklep x-kom}
-		\bibitem{radio_drogie}
-		\href{https://www.x-kom.pl/p/724674-radio-internetowe-blaupunkt-ir10bt.html}{\textit{Radio internetowe stereo} -- Sklep x-kom}
-		\bibitem{botland_stm}
-		\href{https://botland.com.pl/stm32-discovery/4715-stm32f746g-disco-discovery-stm32f746ng-cortex-m7-ekran-dotykowy-pojemnosciowy-43--5904422374082.html}{\textit{STM32F746G-Disco} -- Sklep Botland}
-		
-		\bibitem{radio_pico1}
-		\href{https://github.com/episource/picopdio}{\textit{picopdio} -- Przykładowe radio internetowe Raspberry Pi Pico}
-		\bibitem{radio_vs1003}
-		\href{https://botland.com.pl/odtwarzacze-mp3-wav-ogg-midi/14308-odtwarzacz-mp3-vs1003-z-mikrofonem-5903351241786.html}{\textit{VS1003} -- Sprzętowy dekoder MP3}
-		
-		\bibitem{figma}
-		\href{https://www.figma.com}{\textit{Figma} -- Narzędzie do projektowania interfejsów}
-		
-		\bibitem{pico_pdf}
-		\href{https://datasheets.raspberrypi.com/rp2040/rp2040-datasheet.pdf}{\textit{RP2040 Datasheet} -- dokumentacja techniczna procesora RP2040}
-		\bibitem{tda_pdf}
-		\href{http://www.lampizator.eu/lampizator/LINKS%20AND%20DOWNLOADS/DATAMINING/tda%201543.pdf}{\textit{TDA1543 Datasheet} -- dokumentacja techniczna układu DAC TDA1543}
-		
-		\bibitem{radio_browser_codecs}
-		\href{https://www.radio-browser.info/codecs}{\textit{Radio browser codecs} -- kodeki audio wylistowane na stronie Radio Browser}
-		\bibitem{helixmp3_pr}
-		\href{https://github.com/ultraembedded/libhelix-mp3/pull/3}{\textit{helixmp3 pull request} -- ulepszenia biblioteki dekodującej}
-		
-		\bibitem{icy_spec}
-		\href{https://gist.github.com/niko/2a1d7b2d109ebe7f7ca2f860c3505ef0#file-icy_meta-md}{\textit{ICY} -- protokół przesyłania metadanych}
-		\bibitem{id3_spec_mutagen}
-		\href{https://mutagen-specs.readthedocs.io/en/latest/id3/id3v2.4.0-structure.html}{\textit{ID3v2.4.0} -- protokół zapisu metadanych w plikach MP3}
-		
-		\bibitem{m3u}
-		\href{https://en.wikipedia.org/wiki/M3U}{\textit{M3U} -- format zapisu playlist}
-		\bibitem{pls}
-		\href{https://en.wikipedia.org/wiki/PLS_(file_format)}{\textit{PLS} -- format zapisu playlist}
-		
-		\bibitem{ubuntu_font}
-		\href{https://design.ubuntu.com/font}{\textit{Ubuntu font} -- czcionka wykorzystana do wyświetlania znaków}
-		
-		\bibitem{hw_mod_chg}
-		\href{https://botland.com.pl/moduly-ladowania-lipol-usb-micro-usb/16979-ladowarka-li-pol-tp4056-pojedyncza-cela-1s-37v-usb-typ-c-z-zabezpieczeniami--5904422326708.html}{\textit{Ładowarka Li-Pol TP4056 USB C} -- moduł ładowania ogniw}
-		\bibitem{hw_load_sw}
-		\href{https://www.best-microcontroller-projects.com/tp4056-page2.html}{\textit{TP4056 Power Sharing Problem} -- układ przełączania obciążenia}
-		\bibitem{hw_mod_dac}
-		\href{https://www.aliexpress.com/item/1005002846127078.html}{\textit{Interfejs I2S PCM5102A} -- przetwornik cyfrowo-analogowy}
-		\bibitem{hw_mod_amp}
-		\href{https://botland.com.pl/odtwarzacze-mp3-wav-ogg-midi/6641-wzmacniacz-audio-stereo-pam8403-5v-3w-dwukanalowy-zielony-5904422359850.html}{\textit{Wzmacniacz audio stereo PAM8403} -- dwukanałowy wzmacniacz audio}
-		\bibitem{hw_kicad}
-		\href{https://www.kicad.org/}{\textit{KiCAD} -- program do tworzenia schematów elektrycznych i projektowania płytek PCB}
-		\bibitem{hw_openscad}
-		\href{https://openscad.org/}{\textit{OpenSCAD} -- program do skryptowego projektowania 3D}
-		
-		\bibitem{ch4_pcb_method}
-		\href{http://mikrokontrolery.blogspot.com/2011/03/wykonanie-plytki-pcb-metoda-termotransferu.html}{\textit{PCB: Metoda termotransferu} -- domowa metoda wytworzenia płytki PCB}
-		
-		\bibitem{ch5_pam8610}
-		\href{https://www.diodes.com/assets/Datasheets/products_inactive_data/PAM8610.pdf}{\textit{PAM8610} -- 2x10W wzmacniacz audio}
-		\bibitem{ch5_pam8006a}
-		\href{https://www.diodes.com/assets/Datasheets/PAM8006A.pdf}{\textit{PAM8006A} -- 2x15W wzmacniacz audio}
-		
-	\end{thebibliography}
+	\printbibliography
 	
 \end{document}
