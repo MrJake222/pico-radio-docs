@@ -28,6 +28,10 @@
 \usepackage{caption} % link przenosi do góry obrazka
 \usepackage{svg}
 
+% nie rozciągaj,
+% TODO usunąć na koniec
+%\raggedbottom
+
 % bibliografia
 \usepackage[
 backend=biber,
@@ -207,10 +211,11 @@ backend=biber,
 		
 		\subsection{Wymagane funkcjonalności}
 			\begin{itemize}
-				\item odtwarzanie stacji internetowych w formacie stereo,
+				\item odtwarzanie stacji internetowych,
 				\item wstrzymywanie odtwarzania,
-				\item prezentacja na zintegrowanym wyświetlaczu aktualnego stanu,
+				\item prezentacja na zintegrowanym wyświetlaczu aktualnego stanu urządzenia,
 				\item regulacja głośności odtwarzania,
+				\item odbiór i reprodukcja dźwięku stereo,
 				\item wyszukiwanie nowych stacji,
 				\item lista ulubionych stacji.
 			\end{itemize}
@@ -232,7 +237,7 @@ backend=biber,
 			Produkt musi także poradzić sobie z obsługą odpowiedniego formatu kodowania dźwięku.
 			Rysunek~\ref{3/rb_chart_new} przestawia procentowe wykorzystanie kodeków przez stacje radiowe (wg wyszukiwarki \textit{Radio Browser}\textsuperscript{\cite{radio_browser_codecs}}).
 			
-			\imgh{3/rb_chart_new}{Udział kodeków w stacjach radiowych}{0.9}
+			\imgh{3/rb_chart_new}{Udział kodeków w stacjach radiowych}{0.8}
 			
 			Najwięcej, około 66\% wszystkich i 60\% polskich stacji, używa kodeku MP3. Wybór padł na właśnie ten format.
 			Zapewni on kompatybilność urządzenia z największą liczbą dostępnych stacji radia internetowego.
@@ -241,47 +246,41 @@ backend=biber,
 			Zdecydowano się też na miniaturyzację wyświetlacza i zastosowanie do obsługi urządzenia kilku przycisków. Z uwagi na małą moc obliczeniową mikrokontrolera, regulacja głośności odbywać się będzie analogowym potencjometrem.
 		
 	\section{Przegląd konkurencyjnych rozwiązań}
-		Rosnąca popularność internetowych stacji radiowych sprawiła,ze na rynku dostępne są gotowe urządzenia odbiorcze.
+		Rosnąca popularność internetowych stacji radiowych sprawiła, że na rynku dostępne są gotowe urządzenia odbiorcze.
 		Na rysunku~\ref{1/radio_adapter} przedstawiony został komercyjny adapter radia internetowego (odbiornik przeznaczony do podłączenia zewnętrznego wzmacniacza i głośników). Ceny takich urządzeń zaczynają się od ok. 330 zł za produkt powystawowy. 
-		\imgh{1/radio_adapter}{Adapter radia internetowego DUAL~IR~3A\textsuperscript{\cite{radio_adapter}}}{0.7}
+		\imgh{1/radio_adapter}{Adapter radia internetowego DUAL~IR~3A\textsuperscript{\cite{radio_adapter}}}{0.6}
 		
 		Innym przykładem, bardziej kompaktowego odbiornika jest pokazany na rysunku~\ref{1/radio_tanie} odbiornik STERNRADIO IR~2 firmy TechniSat.
-%		Produkt przedstawiony na rysunku~\ref{1/radio_tanie} to odbiornik z pojedynczym głośnikiem mono. Urządzenie z wbudowaną możliwością odsłuchu bez zewnętrznych elementów to koszt rzędu 230 zł.
 		\imgh{1/radio_tanie}{Odbiornik STERNRADIO IR~2 firmy TechniSat\textsuperscript{\cite{radio_tanie}}}{0.4}
 		Jest to urządzenie przenośne, monofoniczne, zasilane z wbudowanego akumulatora. Jego obecny koszt zakupu wynosi około 240 zł.
-		
-		Produkt poniżej to wersja stereo. Urządzenie przestawione na rysunku~\ref{1/radio_drogie} posiada dwa głośniki. Taka wersja to koszt	370 zł.
-		
+		Kolejnym przykładem konkurencyjnego rozwiązania jest urządzenie przestawione na rysunku~\ref{1/radio_drogie}.
 		\imgh{1/radio_drogie}{Stereofoniczny odbiornik radia internetowego Blaupunkt IR10BT\textsuperscript{\cite{radio_drogie}}}{0.4}
+		Produkt obsługuje dźwięk stereofoniczny. Obecny koszt jego zakupu to 370 zł. W porównaniu z urządzeniem firmy TechniSat oferuje dodatkowo obsługę łączności Bluetooth oraz integrację z serwisem Spotify.
 		
-		Chciałbym mój produkt zrealizować kosztem przystępnym dla hobbystycznego amatora. Wykluczam zatem użycie gotowych, drogich płytek rozwojowych, takich jak np. \textit{STM32F746G-Disco} kosztującej 389 zł, przedstawionej na rysunku~\ref{1/botland_stm}.
+		Do budowy radia internetowego można wykorzystać komputer jednopłytkowy Raspberry Pi. Powstały w taki sposób przykładowy projekt\textsuperscript{\cite{rpi_sbc_radio}} używa systemu operacyjnego Linux oraz języka Python aby nawiązać połączenie z serwerem strumieniującym i odtwarzać dźwięk. Jako wyjście sygnału analogowego wykorzystane zostało wbudowane w płytkę złącze mini-jack.
+		Jednak możliwości komputera znacznie przewyższają wymagania potrzebne do odbioru radia internetowego.
+		$ $\\
 		
-		\imgh{1/botland_stm}{Płytka rozwojowa 
-			STM32F746G-Disco\textsuperscript{\cite{botland_stm}}}{0.6}
+		W roku 2022 na uczelni powstał podobny projekt odbiornika radia internetowego\textsuperscript{\cite{apd_radio2}}. Oparty on był o płytkę rozwojową STM32F746G-Disco, przedstawioną na rysunku~\ref{1/botland_stm}. 
+		\imgh{1/botland_stm}{Płytka rozwojowa STM32F746G-Disco\textsuperscript{\cite{botland_stm}}}{0.6}
+		Jest to relatywnie rozbudowany zestaw uruchomieniowy. Zawiera wbudowany wyświetlacz, złącze Ethernet, jak również przetwornik cyfrowo-analogowy. Jednak brakuje w nim obsługi technologii Wi-Fi czy zasilania akumulatorowego, co uniemożliwia zastosowanie go jako przenośnego odtwarzacza radia internetowego.
+		$ $\\
 		
-		Jednym z założeń pracy jest skonstruowanie systemu, którego dokumentacja pozwoli dowolnemu informatykowi/elektronikowi na zbudowanie podobnego urządzenia i modyfikację jego oprogramowania. Projekt sam w sobie jest ciekawy ponieważ w Internecie mało jest prób konstrukcji radia internetowego opartego o Raspberry Pi Pico. Nie znaleziono żadnych projektów dekodujących samodzielnie format MP3.  Jedno z rozwiązań\textsuperscript{\cite{radio_pico1}} używa sprzętowego dekodera MP3, przedstawionego na rysunku~\ref{1/radio_mp3}.
-		
-		\imgh{1/radio_mp3}{Sprzętowy dekoder MP3 \textsuperscript{\cite{radio_vs1003}}}{0.6}
-		
-		 Większość odtwarzaczy własnej konstrukcji opiera się o pełnoprawny komputer jednopłytkowy Raspberry Pi. Jego możliwości są znaczne, jednak nie zostałyby w pełni wykorzystane. Podniósłby znacznie koszty konstrukcyjne oraz jest on obecnie trudno dostępny.
+		W celu obsługi bezprzewodowego połączenia z Internetem można użyć mikrokontrolera z wbudowaną jego obsługą np. ESP32. Projekt Mini~Web~Radio\textsuperscript{\cite{esp32_radio}} używa tego mikrokontrolera umieszczonego na płytce z obsługą ładowania baterii. Jest to kompaktowe rozwiązane które dodatkowo umożliwia miniaturyzację urządzenia.
 	
 	\section{Analiza technologiczna}
-		Do realizacji projektu wybrany został bogato wyposażony mikrokontroler Raspberry Pi RP2040\textsuperscript{\cite{rp2040}}.
-		Jednostka ta zawiera dwa rdzenie \textit{Cortex M0+}, co umożliwi zrównoleglenie niektórych zadań.
+		Inspirując się projektem Mini~Web~Radio oraz sugestiami promotora, do realizacji projektu wybrany został moduł uruchomieniowy Raspberry~Pi~Pico.
+		Wykorzystany do jego budowy mikrokontroler RP2040\textsuperscript{\cite{rp2040}} zawiera dwa rdzenie \textit{Cortex M0+}, co umożliwi zrównoleglenie niektórych zadań.
 		Układ zawiera także wiele peryferiów. Pomogą one m.in. w implementacji protokołu przesyłu dźwięku \isqs{} oraz odciążeniu procesora poprzez wykorzystanie DMA.
 		
-%		Jednak pojawiły się obawy o możliwość dekodowania formatu MP3 w czasie rzeczywistym.
-		
 		\subsection{Dekodowanie formatu MP3}
-			Zanim RP2040 mógł być wykorzystany, należało się upewnić, że poradzi on sobie z dekodowanie formatu MP3 w czasie rzeczywistym. Ramka MP3 odtwarzana jest przez ok. 26ms. Implikuje to górny limit na czas dekodowania ramki. Potrzebna jest więc biblioteka dekodującą ramki MP3 w czasie co najwyżej 26ms.
+			Jednym z trudniejszych zagadnień związanych z budową odbiornika internetowych stacji radiowych jest dekodowanie strumienia danych w formacie MP3. Ze względu na złożoność metody kodowania, ograniczenia patentowe i  krótki czas realizacji projektu odrzucony został pomysł samodzielnego napisania oprogramowania dekodującego na rzecz wykorzystania dostępnych bibliotek.
 			$ $\\
 			
-			Początkowe testy z biblioteką \lstinline|minimp3|\textsuperscript{\cite{minimp3}} nie przyniosły obiecujących rezultatów.  Przy jej użyciu ramka była dekodowana w czasie 90ms.
-			Jednak wykorzystanie biblioteki \lstinline|helixmp3|\textsuperscript{\cite{helixmp3_repo}} pozwoliło na zdekodowanie ramki w 22ms (80\% dostępnego czasu) przy domyślnym taktowaniu procesora. 
-			Używa ona matematyki stałoprzecinkowej, co w przypadku jednostki bez koprocesora matematycznego stanowi dużą przewagę.
+			Jedną z popularnych bibliotek jest \lstinline|minimp3|\textsuperscript{\cite{minimp3}}. Sprawdza się ona doskonale w aplikacjach dedykowanych dla komputerów osobistych i wydajnych mikrokontrolerów, jednak jej wadą jest to, że wykorzystuje arytmetykę zmiennoprzecinkową. Ponieważ mikrokontroler RP2040 nie wspiera sprzętowo operacji zmiennoprzecinkowych istniała uzasadniona obawa, że nie poradzi on sobie z dekodowaniem strumienia MP3 w czasie rzeczywistym. W takiej sytuacji konieczne okazało się użycie  biblioteki \lstinline|helixmp3|\textsuperscript{\cite{helixmp3_repo}} która implementuje dekoder MP3 przy użyciu arytmetyki stałoprzecinkowej.
 			$ $\\
 			
-			Martwiące może się wydawać poświęcenie 80\% czasu procesora na dekodowanie formatu, jednak jako że mikrokontroler jest dwurdzeniowy, cały jeden rdzeń może zostać wykorzystany do dekodowania.
+			Szczegóły związane z implementacja procesu dekodowania strumienia MP3 omówione zostały w dalszej części pracy.
 		
 		\subsection{Oprogramowanie}
 			Oprogramowanie zostanie napisane w języku C++ z wykorzystaniem środowiska \lstinline|pico-sdk|\textsuperscript{\cite{pico_sdk}}.  W środowisko brak wbudowanego centralnego systemu zarządzającego przepływem informacji oraz zadaniami, zatem do projektu dołączone zostało jądro systemu czasu rzeczywistego FreeRTOS\textsuperscript{\cite{freertos_kernel}}
