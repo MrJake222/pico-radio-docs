@@ -177,13 +177,23 @@ backend=biber,
 \tableofcontents
 
 \chapter{Cel prac i wizja produktu}
-	W tym rozdziale opisano jak będzie wyglądał końcowy produkt. Zwrócono też uwagę na to jak będzie przebiegała jego realizacja i jakie ryzyka mogą wystąpić.
+%	W tym rozdziale opisano jak będzie wyglądał końcowy produkt. Zwrócono też uwagę na to jak będzie przebiegała jego realizacja i jakie ryzyka mogą wystąpić.
+
+	Tradycyjne radio powstało na początku XX wieku. Upłynęło ponad 100 lat, a jednak audycje radiowe wciąż cieszą się dużą popularnością. Wg podsumowania iloveradio.pl\textsuperscript{\cite{iloveradio_stats}} w 2022 roku 65\% polaków słuchało radia codziennie, a prawie 87\% co najmniej raz w tygodniu uruchamiało swoje radioodbiorniki. 
+	$ $\\
+	
+	Radio internetowe staje się co raz popularniejsze. Wg badań Krajowego Instytutu Mediów\textsuperscript{\cite{kim_2022} \cite{kim_2023}} łączny zasięg dzienny stacji słuchanych przez Internet w 2022 wyniósł z 6,3\%. W analogicznym okresie 2023 roku wynik podwyższył się do 7,6\%. Jest to wzrost o 1,3~punków procentowych.
 	
 	\section{Opis problemu}
-		Radio internetowe staje się co raz popularniejsze. Wolność transmisji, brak regulacji pasma radiowego powodują, że wiele niezależnych stacji radiowych wybiera właśnie to medium przekazu. Jednak większość funkcjonujących współcześnie odbiorników nie obsługuje strumieni internetowych. Celem pracy jest wykonanie kompletnego przenośnego urządzenia, które umożliwiłoby odbiór takich stacji.
+		Większość funkcjonujących współcześnie odbiorników nie obsługuje strumieni internetowych, a koncesje na transmisję w paśmie FM są kosztowne. Zdarza się tak, że niezależne rozgłośnie radiowe muszą zrezygnować ze starań o zgodę na nadawanie swojego programu w sposób analogowy\textsuperscript{\cite{r357_krrit}} z powodów finansowych.
+		Nadają one tylko przy pomocy Internetu.
+		Celem pracy jest wykonanie kompletnego przenośnego urządzenia, które umożliwiłoby odbiór takich stacji i wielu innych z całego świata.
+		$ $\\
+		
+		Użytkowanie np. telefonu komórkowego w celu odbioru radia może powodować pewne ograniczenia. Prowadzenie rozmów telefonicznych w czasie odsłuchu może być utrudnione. Jednak przede wszystkim, w porównaniu do dedykowanego urządzenia, dużo więcej czasu zajmuje odnalezienie odpowiedniej aplikacji w telefonie i uruchomienie jej.
 		
 	\section{Rola produktu}
-		Budowany w ramach  tej pracy odbiornik radia internetowego jest przeznaczony do osób z małą wiedzą techniczną. Jego obsługa powinna być prosta i  intuicyjna. Do korzystania z niego nie powinny być wymagane żadne dodatkowe elementy (np.~zewnętrzne głośniki czy specjalna ładowarka).
+		Budowany w ramach tej pracy odbiornik radia internetowego jest przeznaczony do osób z małą wiedzą techniczną. Jego obsługa powinna być prosta i  intuicyjna. Do korzystania z niego nie powinny być wymagane żadne dodatkowe elementy (np.~zewnętrzne głośniki czy specjalna ładowarka).
 		Produkt ma być kompletnym urządzeniem gotowym do odbioru internetowych stacji radiowych. Całość będzie zamknięta w obudowie. Na rysunku~\ref{1/radio_proj_trimmed} przedstawiony został projekt wizualny radia.
 %		Rysunek~\ref{1/PicoRadio_blocks} przedstawia uproszczony schemat blokowy urządzenia.
 		
@@ -248,14 +258,14 @@ backend=biber,
 	\section{Przegląd konkurencyjnych rozwiązań}
 		Rosnąca popularność internetowych stacji radiowych sprawiła, że na rynku dostępne są gotowe urządzenia odbiorcze.
 		Na rysunku~\ref{1/radio_adapter} przedstawiony został komercyjny adapter radia internetowego (odbiornik przeznaczony do podłączenia zewnętrznego wzmacniacza i głośników). Ceny takich urządzeń zaczynają się od ok. 330 zł za produkt powystawowy. 
-		\imgh{1/radio_adapter}{Adapter radia internetowego DUAL~IR~3A\textsuperscript{\cite{radio_adapter}}}{0.6}
+		\imgh{1/radio_adapter}{Adapter radia internetowego DUAL~IR~3A\textsuperscript{\cite{radio_adapter}}}{0.7}
 		
 		Innym przykładem, bardziej kompaktowego odbiornika jest pokazany na rysunku~\ref{1/radio_tanie} odbiornik STERNRADIO IR~2 firmy TechniSat.
-		\imgh{1/radio_tanie}{Odbiornik STERNRADIO IR~2 firmy TechniSat\textsuperscript{\cite{radio_tanie}}}{0.4}
+		\imgh{1/radio_tanie}{Odbiornik STERNRADIO IR~2 firmy TechniSat\textsuperscript{\cite{radio_tanie}}}{0.7}
 		Jest to urządzenie przenośne, monofoniczne, zasilane z wbudowanego akumulatora. Jego obecny koszt zakupu wynosi około 240 zł.
 		Kolejnym przykładem konkurencyjnego rozwiązania jest urządzenie przestawione na rysunku~\ref{1/radio_drogie}.
-		\imgh{1/radio_drogie}{Stereofoniczny odbiornik radia internetowego Blaupunkt IR10BT\textsuperscript{\cite{radio_drogie}}}{0.4}
-		Produkt obsługuje dźwięk stereofoniczny. Obecny koszt jego zakupu to 370 zł. W porównaniu z urządzeniem firmy TechniSat oferuje dodatkowo obsługę łączności Bluetooth oraz integrację z serwisem Spotify.
+		\imgh{1/radio_drogie}{Stereofoniczny odbiornik radia internetowego Blaupunkt IR10BT\textsuperscript{\cite{radio_drogie}}}{0.7}
+		Produkt obsługuje dźwięk stereofoniczny. Obecny koszt jego zakupu to 380 zł. W porównaniu z urządzeniem firmy TechniSat oferuje dodatkowo obsługę łączności Bluetooth oraz integrację z serwisem Spotify.
 		
 		Do budowy radia internetowego można wykorzystać komputer jednopłytkowy Raspberry Pi. Powstały w taki sposób przykładowy projekt\textsuperscript{\cite{rpi_sbc_radio}} używa systemu operacyjnego Linux oraz języka Python aby nawiązać połączenie z serwerem strumieniującym i odtwarzać dźwięk. Jako wyjście sygnału analogowego wykorzystane zostało wbudowane w płytkę złącze mini-jack.
 		Jednak możliwości komputera znacznie przewyższają wymagania potrzebne do odbioru radia internetowego.
@@ -275,7 +285,7 @@ backend=biber,
 		
 		\subsection{Dekodowanie formatu MP3}
 			Jednym z trudniejszych zagadnień związanych z budową odbiornika internetowych stacji radiowych jest dekodowanie strumienia danych w formacie MP3. Ze względu na złożoność metody kodowania, ograniczenia patentowe i  krótki czas realizacji projektu odrzucony został pomysł samodzielnego napisania oprogramowania dekodującego na rzecz wykorzystania dostępnych bibliotek.
-			$ $\\
+			\clearpage
 			
 			Jedną z popularnych bibliotek jest \lstinline|minimp3|\textsuperscript{\cite{minimp3}}. Sprawdza się ona doskonale w aplikacjach dedykowanych dla komputerów osobistych i wydajnych mikrokontrolerów, jednak jej wadą jest to, że wykorzystuje arytmetykę zmiennoprzecinkową. Ponieważ mikrokontroler RP2040 nie wspiera sprzętowo operacji zmiennoprzecinkowych istniała uzasadniona obawa, że nie poradzi on sobie z dekodowaniem strumienia MP3 w czasie rzeczywistym. W takiej sytuacji konieczne okazało się użycie  biblioteki \lstinline|helixmp3|\textsuperscript{\cite{helixmp3_repo}} która implementuje dekoder MP3 przy użyciu arytmetyki stałoprzecinkowej.
 			$ $\\
@@ -335,6 +345,7 @@ backend=biber,
 			
 			\imgh{2/PicoRadio-hw-blocks}{Sprzętowa architektura systemu}{0.95}
 			
+			\pagebreak
 			Bazę odtwarzacza stanowi płytka rozwojowa Raspberry Pi Pico W oparta o mikrokontroler RP2040. Zawiera ona ponadto 2MB nieulotnej pamięci typu \textit{FLASH} (przeznaczonej na oprogramowanie układowe i dane użytkownika) oraz układ komunikacji Wi-Fi. Do niej dołączony jest przetwornik audio DAC który wraz dodatkowymi komponentami (potencjometry regulacji głośności, wzmacniacze mocy i głośniki) tworzą tor audio. Role interfejsu użytkownika pełni ekran LCD o przekątnej 1,8 cala oraz 5 przycisków chwilowych typu pushbutton. Do płytki  dołączonej jest również gniazdo dla kart SD. Całość jest zasilana z ogniwa litowo-jonowego współpracującego z układem jego monitorowania i ładowania. 
 			$ $\\
 			
@@ -342,6 +353,8 @@ backend=biber,
 			Zaraz po uruchomieniu urządzenie próbuje połączyć się z jedną ze skonfigurowanych sieci Wi-Fi.
 			Jeśli zakończy się to sukcesem użytkownik ma możliwość wyboru stacji radiowej do odbioru. W trakcie odtwarzania urządzenie odbiera skompresowany strumień danych audio, który jest następnie dekodowany przez oprogramowanie układowe do formatu PCM. Zdekodowane dane są przesyłane poprzez interfejs \isqs{} do stereofonicznego przetwornika audio, który zamienia je w sygnał analogowy. Z wyjść przetwornika sygnał ten trafia na, zbudowany z podwójnego potencjometru logarytmicznego, układ regulacji głośności i dalej do układów wzmacniaczy mocy sterujących głośnikami kanału lewego i prawego.
 			Użytkownik może w dowolnym momencie zatrzymać odtwarzanie lub zmienić odtwarzaną stację na inną wybierając ją z pośród ulubionych lub wyszukując na liście dostępnych stacji.
+			$ $\\
+			
 			Jeśli nie uda się nawiązać połączenia z siecią Wi-Fi, próby odtwarzania stacji radiowych są blokowane poprzez wyświetlenie stosownego komunikatu.
 			Jednak wtedy użytkownik ma możliwość uruchomienia odtwarzania plików z dołączonej karty SD. Po wybraniu odpowiedniego pliku, sposób działania jest identyczny jak w trybie odtwarzania stacji radiowej, z tą różnicą że strumień danych pobierany jest pliku znajdującego się na karcie. 
 			W każdym momencie użytkownik ma możliwość skonfigurowania połączenia internetowego, poprzez dodanie nowej sieci Wi-Fi.
