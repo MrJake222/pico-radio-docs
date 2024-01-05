@@ -185,10 +185,10 @@ backend=biber,
 \chapter{Cel prac i~wizja produktu}
 %	W tym rozdziale opisano jak będzie wyglądał końcowy produkt. Zwrócono też uwagę na to jak będzie przebiegała jego realizacja i~jakie ryzyka mogą wystąpić.
 
-	Tradycyjne radio powstało na początku XX wieku. Upłynęło ponad 100 lat, a~jednak audycje radiowe wciąż cieszą się dużą popularnością. Wg podsumowania iloveradio.pl\textsuperscript{\cite{iloveradio_stats}} w~2022 roku 65\% polaków słuchało radia codziennie, a~prawie 87\% co najmniej raz w~tygodniu uruchamiało swoje radioodbiorniki. 
+	Tradycyjne radio powstało na początku XX wieku. Upłynęło ponad 100~lat, a~jednak audycje radiowe wciąż cieszą się dużą popularnością. Wg podsumowania iloveradio.pl\textsuperscript{\cite{iloveradio_stats}} w~2022~roku 65\% polaków słuchało radia codziennie, a~prawie 87\% co najmniej raz w~tygodniu uruchamiało swoje radioodbiorniki. 
 	$ $\\
 	
-	Radio internetowe staje się co raz popularniejsze. Wg badań Krajowego Instytutu Mediów\textsuperscript{\cite{kim_2022} \cite{kim_2023}} łączny zasięg dzienny stacji słuchanych przez Internet w~2022 wyniósł z~6,3\%. W~analogicznym okresie 2023 roku wynik podwyższył się do 7,6\%. Jest to wzrost o~1,3~punków procentowych.
+	Radio internetowe staje się co raz popularniejsze. Wg badań Krajowego Instytutu Mediów\textsuperscript{\cite{kim_2022} \cite{kim_2023}} łączny zasięg dzienny stacji słuchanych przez Internet w~2022~wyniósł z~6,3\%. W~analogicznym okresie 2023~roku wynik podwyższył się do 7,6\%. Jest to wzrost o~1,3~punków procentowych.
 	
 	\section{Opis problemu}
 		Większość funkcjonujących współcześnie odbiorników nie obsługuje strumieni internetowych, a~koncesje na transmisję w paśmie FM są kosztowne. Zdarza się tak, że niezależne rozgłośnie radiowe muszą zrezygnować ze starań o~zgodę na nadawanie swojego programu w~sposób analogowy\textsuperscript{\cite{r357_krrit}} z~powodów finansowych.
@@ -263,21 +263,21 @@ backend=biber,
 		
 	\section{Przegląd konkurencyjnych rozwiązań}
 		Rosnąca popularność internetowych stacji radiowych sprawiła, że na rynku dostępne są gotowe urządzenia odbiorcze.
-		Na rysunku~\ref{1/radio_adapter} przedstawiony został komercyjny adapter radia internetowego (odbiornik przeznaczony do podłączenia zewnętrznego wzmacniacza i~głośników). Ceny takich urządzeń zaczynają się od ok. 330 zł za produkt powystawowy. 
+		Na rysunku~\ref{1/radio_adapter} przedstawiony został komercyjny adapter radia internetowego (odbiornik przeznaczony do podłączenia zewnętrznego wzmacniacza i~głośników). Ceny takich urządzeń zaczynają się od ok. 330~zł za produkt powystawowy. 
 		\imgh{1/radio_adapter}{Adapter radia internetowego DUAL~IR~3A\textsuperscript{\cite{radio_adapter}}}{0.7}
 		
-		Innym przykładem, bardziej kompaktowego odbiornika jest pokazany na rysunku~\ref{1/radio_tanie} odbiornik STERNRADIO IR~2 firmy TechniSat.
-		\imgh{1/radio_tanie}{Odbiornik STERNRADIO IR~2 firmy TechniSat\textsuperscript{\cite{radio_tanie}}}{0.7}
-		Jest to urządzenie przenośne, monofoniczne, zasilane z~wbudowanego akumulatora. Jego obecny koszt zakupu wynosi około 240 zł.
+		Innym przykładem, bardziej kompaktowego odbiornika jest pokazany na rysunku~\ref{1/radio_tanie} odbiornik STERNRADIO IR~2~firmy TechniSat.
+		\imgh{1/radio_tanie}{Odbiornik STERNRADIO IR~2~firmy TechniSat\textsuperscript{\cite{radio_tanie}}}{0.7}
+		Jest to urządzenie przenośne, monofoniczne, zasilane z~wbudowanego akumulatora. Jego obecny koszt zakupu wynosi około 240~zł.
 		Kolejnym przykładem konkurencyjnego rozwiązania jest urządzenie przestawione na rysunku~\ref{1/radio_drogie}.
 		\imgh{1/radio_drogie}{Stereofoniczny odbiornik radia internetowego Blaupunkt IR10BT\textsuperscript{\cite{radio_drogie}}}{0.7}
-		Produkt obsługuje dźwięk stereofoniczny. Obecny koszt jego zakupu to 380 zł. W~porównaniu z~urządzeniem firmy TechniSat oferuje dodatkowo obsługę łączności Bluetooth oraz integrację z serwisem Spotify.
+		Produkt obsługuje dźwięk stereofoniczny. Obecny koszt jego zakupu to 380~zł. W~porównaniu z~urządzeniem firmy TechniSat oferuje dodatkowo obsługę łączności Bluetooth oraz integrację z serwisem Spotify.
 		
 		Do budowy radia internetowego można wykorzystać komputer jednopłytkowy Raspberry Pi. Powstały w~taki sposób przykładowy projekt\textsuperscript{\cite{rpi_sbc_radio}} używa systemu operacyjnego Linux oraz języka Python aby nawiązać połączenie z~serwerem strumieniującym i~odtwarzać dźwięk. Jako wyjście sygnału analogowego wykorzystane zostało wbudowane w~płytkę złącze mini-jack.
 		Jednak możliwości komputera znacznie przewyższają wymagania potrzebne do odbioru radia internetowego.
 		$ $\\
 		
-		W roku 2022 na uczelni powstał podobny projekt odbiornika radia internetowego\textsuperscript{\cite{apd_radio2}}. Oparty on był o~płytkę rozwojową STM32F746G-Disco, przedstawioną na rysunku~\ref{1/botland_stm}. 
+		W roku 2022~na uczelni powstał podobny projekt odbiornika radia internetowego\textsuperscript{\cite{apd_radio2}}. Oparty on był o~płytkę rozwojową STM32F746G-Disco, przedstawioną na rysunku~\ref{1/botland_stm}. 
 		\imgh{1/botland_stm}{Płytka rozwojowa STM32F746G-Disco\textsuperscript{\cite{botland_stm}}}{0.6}
 		Jest to relatywnie rozbudowany zestaw uruchomieniowy. Zawiera wbudowany wyświetlacz, złącze Ethernet, jak również przetwornik cyfrowo-analogowy. Jednak brakuje w~nim obsługi technologii Wi-Fi czy zasilania akumulatorowego, co uniemożliwia zastosowanie go jako przenośnego odtwarzacza radia internetowego.
 		$ $\\
@@ -328,7 +328,7 @@ backend=biber,
 		\item DMA (ang. \textit{Direct Memory Access}) -- podsystem mikrokontrolera, który pozwala na automatyczne transfery danych, bez ingerencji jednostki centralnej,
 		\item PIO (ang. \textit{Programmable Input Output}) -- programowalne maszyny stanów zawarte w~układzie RP2040,
 		\item DAC (ang. \textit{Digital to Analogue Converter}) -- przetwornik cyfrowo-analogowy,
-		\item \isqs{} (ang. \textit{Inter-IC Sound}) -- protokół przesyłu cyfrowego dźwięku opracowany w~1986 roku przez firmę Philips,
+		\item \isqs{} (ang. \textit{Inter-IC Sound}) -- protokół przesyłu cyfrowego dźwięku opracowany w~1986~roku przez firmę Philips,
 		\item PCM (ang. \textit{Pulse-Code Modulation}) -- metoda reprezentacji sygnału analogowego, poprzez próbkowanie i~zapis chwilowych wartości amplitudy dźwięku w~postaci cyfrowej,
 		\item SIO (ang. \textit{Single-cycle IO}) -- blok mikrokontrolera RP2040 zapewniający synchronizację obu jego rdzeni, komunikację miedzy nimi oraz atomiczny dostęp do pinów wejścia/wyjścia,
 		\item TCP (ang. \textit{Transmission Control Protocol}) -- protokół zapewniający integralność danych przesyłanych w~Internecie, oraz zapobiegający przeciążeniu odbiornika nadmierną ilością danych,
@@ -400,7 +400,7 @@ backend=biber,
 		Na rysunku~\ref{2/btn/1} widać jak użytkownik aby poruszyć się w~dół listy stacji naciska dolny przycisk. Powrót do \textit{Radio 1} jest oczywiście możliwy poprzez naciśnięcie górnego przycisku.
 		\imgh{2/btn/1}{Krok w~dół na liście}{0.7}
 		
-		Po dojściu do czwartej pozycji na liście, jeżeli na liście jest więcej niż 4 stacje, po naciśnięciu dolnego przycisku, zgodne z~rysunkiem~\ref{2/btn/2}, kursor zostanie przeniesiony do piątej stacji. Należy zwrócić uwagę na zmianę położenia paska przewijania (po prawej stronie).
+		Po dojściu do czwartej pozycji na liście, jeżeli na liście jest więcej niż 4~stacje, po naciśnięciu dolnego przycisku, zgodne z~rysunkiem~\ref{2/btn/2}, kursor zostanie przeniesiony do piątej stacji. Należy zwrócić uwagę na zmianę położenia paska przewijania (po prawej stronie).
 		\imgh{2/btn/2}{Przewinięcie listy stacji do góry}{0.7}
 		
 		Jeżeli wskaźnik znajduje się na końcu listy (pasek przewijania w~skrajnie dolnej pozycji), po naciśnięciu przycisku w~dół, kursor znajdzie się w~pasku ikon akcji. Sytuację tę przedstawia rysunek \ref{2/btn/3}. Powrót na listę stacji jest możliwy przy pomocy górnego przycisku.
@@ -425,16 +425,16 @@ backend=biber,
 		Projekt schematu i~płytki PCB powstały w~programie KiCAD\textsuperscript{\cite{hw_kicad}}.
 	
 		\subsection{Schemat}
-%			Schemat całości systemu został pokazany na rysunku~\ref{3/hw_kicad_sch}. Podzielony jest on na 6 funkcjonalnych bloków, które zostały opisane poniżej.
+%			Schemat całości systemu został pokazany na rysunku~\ref{3/hw_kicad_sch}. Podzielony jest on na 6~funkcjonalnych bloków, które zostały opisane poniżej.
 %			\imgh{3/hw_kicad_sch}{Schemat elektryczny radia}{1}
 
-			Schemat całości systemu został podzielony na 6 funkcjonalnych bloków, które zostały opisane poniżej.
+			Schemat całości systemu został podzielony na 6~funkcjonalnych bloków, które zostały opisane poniżej.
 			
 			\subsubsection{Sekcja zasilania}
 				Rysunek~\ref{3/hw_kicad_sch_power} przedstawia zaprojektowaną sekcję zasilania.
 				\imgh{3/hw_kicad_sch_power}{Schemat elektryczny radia: Sekcja zasilania}{0.95}
 				
-				Urządzenie posiada własne zasilanie oparte o~dwa ogniwa litowo-jonowe typu 18650 o~sumarycznej pojemności 4Ah i~znamionowym napięciu 3.6V. Na schemacie ogniwa zaznaczono wspólnym symbolem \lstinline|BT1|. W~roli układu ładowania i~zabezpieczeń został wykorzystany gotowy moduł z~układem TP4056\textsuperscript{\cite{hw_chg}} (schemat ozn.~\lstinline|B3|). Dzięki niemu, produkt nie wymaga stosowania specjalistycznej ładowarki, a~same ogniwa są zabezpieczone przed nadmiernym rozładowaniem i~przeładowaniem. Zgodnie z~najnowszymi trendami, zasilanie z~zewnątrz dostarczane jest przez złącze USB-C. Użytkownik może wykorzystać do tego dowolną kompatybilną ładowarkę o~prądzie minimalnym 1A.
+				Urządzenie posiada własne zasilanie oparte o~dwa ogniwa litowo-jonowe typu 18650~o~sumarycznej pojemności 4Ah i~znamionowym napięciu 3.6V. Na schemacie ogniwa zaznaczono wspólnym symbolem \lstinline|BT1|. W~roli układu ładowania i~zabezpieczeń został wykorzystany gotowy moduł z~układem TP4056\textsuperscript{\cite{hw_chg}} (schemat ozn.~\lstinline|B3|). Dzięki niemu, produkt nie wymaga stosowania specjalistycznej ładowarki, a~same ogniwa są zabezpieczone przed nadmiernym rozładowaniem i~przeładowaniem. Zgodnie z~najnowszymi trendami, zasilanie z~zewnątrz dostarczane jest przez złącze USB-C. Użytkownik może wykorzystać do tego dowolną kompatybilną ładowarkę o~prądzie minimalnym 1A.
 				$ $\\
 				
 				Dodatkowe elementy: tranzystor PMOS \lstinline|Q1|, Dioda Shottky'ego \lstinline|D1| i~rezystor \lstinline|R5| tworzą układ zabezpieczający ogniwa \lstinline|BT1| przed przeładowaniem podczas  zasilania urządzenia z~zewnętrznego źródła. Konieczność ich użycia została szczegółowo wyjaśniona w~\cite{hw_load_sw}. W~sekcji zasilania umieszczono ponad to dzielniki pomiarowe wykorzystane do monitorowania jej pracy oraz przetwornicę wytwarzającą napięcie +5V (schemat ozn.~\lstinline|B4|), która w~przyszłości posłużyć może do zasilania zewnętrznego modemu sieci komórkowej.
@@ -542,7 +542,7 @@ backend=biber,
 			
 			\paragraph{Odtwarzanie}
 				\begin{itemize}
-					\item \lstinline|mcorefifo| -- funkcje pomocnicze do przesyłania komunikatów z~rdzenia 1 do 0
+					\item \lstinline|mcorefifo| -- funkcje pomocnicze do przesyłania komunikatów z~rdzenia 1~do 0
 					\item \lstinline|player| -- kontrola i~odtwarzanie plików/strumieni internetowych
 					\begin{itemize}
 						\item \lstinline|decode| -- abstrakcje/implementacje dekodowania typów i~odczytywania źródeł danych
@@ -601,7 +601,7 @@ backend=biber,
 			W programie utworzony został bufor nieskompresowanego dźwięku PCM \lstinline|audio_pcm|. Ma on konfigurowalny rozmiar wyrażony w~jednostkach 32-bitowych (2 kanały * 16-bitowa próbka). Przekazywany jest on do systemu DMA, który następnie transmituje go poprzez PIO zaprogramowane do symulowania interfejsu \isqs{}. Oba etapy transmisji zostały opisane poniżej.
 		
 		\subsection{PIO}
-			RP2040 posiada 8 programowalnych maszyn stanów, zgrupowanych w~2 bloki.
+			RP2040 posiada 8~programowalnych maszyn stanów, zgrupowanych w~2~bloki.
 			Maszyny te można wykorzystać do symulacji szerokiej gamy interfejsów komunikacyjnych.
 			Poprzez ich zastosowanie, możliwe jest m.in. utworzenie dodatkowego bloku komunikacji UART czy SPI.
 			Jednak największy potencjał PIO wykazuje gdy w~układzie brak jest obsługi niezbędnego w~projekcie interfejsu, np. CAN czy \isqs{}.
@@ -626,22 +626,22 @@ backend=biber,
 			Został on zaczerpnięty z~dokumentacji układu TDA1543 (przetwornik cyfrowo-analogowy zastosowany we wczesnych prototypach).
 			\imgh{3/pio_i2s_docs}{Przebieg czasowy protokołu \isqs{} (dokumentacja TDA1543\textsuperscript{\cite{tda_pdf}}, strona 9)}{0.9}
 			
-%			Jak widać zmiana kanału (kodowanego poziomem linii \lstinline|WS|)  musi nastąpić przed wysłaniem ostatniego bitu poprzedniego kanału (\lstinline|LSB|, czyli \textit{Least Significant Bit}, najmniej znaczący bit kanału lewego). Z~tego powodu program wydłużył się do 8 instrukcji. Niektóre układy obsługują protokół \textit{left-just}, który nie posiada tego ograniczenia, jednak z~uwagi na niewystarczającą dokumentacje i~małe wsparcie przez układy, wybrany został klasyczny \isqs{}.
+%			Jak widać zmiana kanału (kodowanego poziomem linii \lstinline|WS|)  musi nastąpić przed wysłaniem ostatniego bitu poprzedniego kanału (\lstinline|LSB|, czyli \textit{Least Significant Bit}, najmniej znaczący bit kanału lewego). Z~tego powodu program wydłużył się do 8~instrukcji. Niektóre układy obsługują protokół \textit{left-just}, który nie posiada tego ograniczenia, jednak z~uwagi na niewystarczającą dokumentacje i~małe wsparcie przez układy, wybrany został klasyczny \isqs{}.
 			
 			\lstfile{pio}{Kod programu \isqs{}}{lst/3/i2s.pio}
 			
 			\noindent
 			Kod bloku PIO z~listingu powyżej działa następująco:
 			\begin{itemize}
-				\item Linia nr 3 ustawia ile bitów jest typu \lstinline|side-set|. Bity \lstinline|side-set| są wykorzystywane odpowiednio do: ustawienia linii \lstinline|WS| i~linii \lstinline|BCK|.
+				\item Linia nr 3~ustawia ile bitów jest typu \lstinline|side-set|. Bity \lstinline|side-set| są wykorzystywane odpowiednio do: ustawienia linii \lstinline|WS| i~linii \lstinline|BCK|.
 				
-				\item Punktem wejścia programu jest linia nr 18. Ustawia ona liczbę powtórzeń i~inicjalizuje linię \lstinline|WS| na 1 (kanał prawy) oraz linię \lstinline|BCK| na 1. Odwrócenie kolejności kanałów związane jest z~kolejnością bajtów typu \textit{little-endian}). Następnie program automatycznie zapętla się do pierwszej instrukcji.
+				\item Punktem wejścia programu jest linia nr 18. Ustawia ona liczbę powtórzeń i~inicjalizuje linię \lstinline|WS| na 1~(kanał prawy) oraz linię \lstinline|BCK| na 1. Odwrócenie kolejności kanałów związane jest z~kolejnością bajtów typu \textit{little-endian}). Następnie program automatycznie zapętla się do pierwszej instrukcji.
 				
 				\item Instrukcja \lstinline|out| powoduje wystawienie na linię \lstinline|DATA| jednego bitu z~rejestru przesuwnego danych. \textit{Na boku} przełącza linię zegarową w~stan niski
 				
 				\item Instrukcja \lstinline|jmp| najpierw sprawdza wartość rejestru \lstinline|X|. Jeżeli jest ona niezerowa to dekrementuje ją i~skacze do etykiety \lstinline|right|. Pętla ta wykonuje się 15 razy.
 				
-				\item W~linii nr 9 następuje transmisja najmniej znaczącego bitu kanału prawego. Zgodnie z~dokumentacją musimy już zmienić stan linii \lstinline|WS| na 0 (kanał lewy). Następnie rejestr \lstinline|X| jest ponownie inicjalizowany na wartość 14.
+				\item W~linii nr 9~następuje transmisja najmniej znaczącego bitu kanału prawego. Zgodnie z~dokumentacją musimy już zmienić stan linii \lstinline|WS| na 0~(kanał lewy). Następnie rejestr \lstinline|X| jest ponownie inicjalizowany na wartość 14.
 				
 				\item Linie 13-18 powtarzają transmisje zgodnie z~opisem powyżej, ale tym razem dla kanału lewego.
 			\end{itemize}
@@ -649,7 +649,7 @@ backend=biber,
 			Instrukcja \lstinline|out| czeka na dane w~buforze automatycznie.
 		
 		\subsection{DMA}
-			Użyty mikrokontroler posiada 12 kanałów DMA.
+			Użyty mikrokontroler posiada 12~kanałów DMA.
 			Pojedynczy kanał może służyć m.in. do transferów pomiędzy pamięcią a~wybranym układem peryferyjnym, np. blokiem PIO.
 			Poprzez zastosowanie tego mechanizmu procesor zostaje odciążony i~może wykonywać inne zadania.
 			$ $\\
@@ -679,12 +679,12 @@ backend=biber,
 		\subsection{Dekompresja formatów}
 			\label{sec:decode}
 			
-			Mikrokontroler RP2040 zawiera 2 rdzenie Cortex~M0+. Wykorzystanie obu jest niezbędne dla zapewnienia odpowiedniej wydajności pobierania i~przetwarzania danych zawierających dźwięk, zwłaszcza gdy jest on zakodowany w~formacie MP3.
+			Mikrokontroler RP2040 zawiera 2~rdzenie Cortex~M0+. Wykorzystanie obu jest niezbędne dla zapewnienia odpowiedniej wydajności pobierania i~przetwarzania danych zawierających dźwięk, zwłaszcza gdy jest on zakodowany w~formacie MP3.
 			$ $\\
 			
 			Rysunek \ref{3/PicoRadio-sound-decoding} przedstawia w~jaki sposób zorganizowane zostało dekodowanie i~odtwarzanie dźwięku.
-			Rdzeń 0 odpowiada za dostarczenie (pobranie z~serwera stacji lub z~pliku na karcie SD) surowych zakodowanych danych oraz obsługę (poprzez DMA) regularnego wysyłania rozkodowanych danych audio do przetwornika cyfrowo-analogowego.
-			Rdzeń 1 odpowiada za dekodowanie danych z~formatu wejściowego do postaci PCM.
+			Rdzeń 0~odpowiada za dostarczenie (pobranie z~serwera stacji lub z~pliku na karcie SD) surowych zakodowanych danych oraz obsługę (poprzez DMA) regularnego wysyłania rozkodowanych danych audio do przetwornika cyfrowo-analogowego.
+			Rdzeń 1~odpowiada za dekodowanie danych z~formatu wejściowego do postaci PCM.
 			\imgh{3/PicoRadio-sound-decoding}{Architektura dekodowania dźwięku}{0.95}
 			
 			Struktura taka umożliwia łatwą rozbudowę oprogramowania dekodującego o~obsługę innych formatów danych. Dodając obsługę nowego formatu należy mieć na uwadze, że proces dekodowania danych z~tego formatu musi się dać zrealizować w~czasie rzeczywistym na pojedynczym rdzeniu Cortex M0+.
@@ -699,18 +699,18 @@ backend=biber,
 				Powstały interfejs \lstinline|Format| służy do abstrakcji dekodowania danych surowych. Jego główną metodą jest \lstinline|decode_up_to_n|, która dekoduje co najwyżej \lstinline|n|~jednostek danych. Aby dowiedzieć się ile jednostek należy zdekodować istnieją funkcje \lstinline|units_to_decode_whole| i~\lstinline|units_to_decode_half|, zwracające odpowiednio ile jednostek zapełni cały bufor \lstinline|audio_pcm| a~ile pół bufora (taka liczba jest dekodowana po otrzymaniu przerwania od DMA, którego jeden kanał transferuje pół bufora). W~przypadku formatu WAV jednostki to po prostu bajty, a~gdy mówimy o~MP3 będą to ramki. Podklasy implementują specjalizowane funkcje do dekodowania poszczególnych formatów.
 			
 			\paragraph{Bufor FIFO}
-				RP2040 posiada wbudowane dwa bufory FIFO do komunikacji między rdzeniami. Jeden z~rdzenia 0 do rdzenia 1, drugi w~przeciwnym kierunku. Wykorzystany został bufor w~kierunku $1 \rightarrow 0$ do przekazywania informacji o~stanie dekodowania. Zaimplementowany został moduł \lstinline|mcorefifo| do wysyłania abstrakcyjnych wiadomości. Wykorzystuje on przerwanie SIO do odbioru komunikatów, a~następnie przekazuje je do zarejestrowanego odbiorcy. Jednym z~takich odbiorców jest moduł odtwarzacza, który w~pliku \lstinline|decodebase.cpp| odbiera komunikaty o~identyfikatorze \lstinline|PLAYER| w~funkcji \lstinline|player_msg()| i~przekazuje do swojej głównej pętli w~funkcji \lstinline|play()|.
+				RP2040 posiada wbudowane dwa bufory FIFO do komunikacji między rdzeniami. Jeden z~rdzenia 0~do rdzenia 1, drugi w~przeciwnym kierunku. Wykorzystany został bufor w~kierunku $1 \rightarrow 0$ do przekazywania informacji o~stanie dekodowania. Zaimplementowany został moduł \lstinline|mcorefifo| do wysyłania abstrakcyjnych wiadomości. Wykorzystuje on przerwanie SIO do odbioru komunikatów, a~następnie przekazuje je do zarejestrowanego odbiorcy. Jednym z~takich odbiorców jest moduł odtwarzacza, który w~pliku \lstinline|decodebase.cpp| odbiera komunikaty o~identyfikatorze \lstinline|PLAYER| w~funkcji \lstinline|player_msg()| i~przekazuje do swojej głównej pętli w~funkcji \lstinline|play()|.
 		
 		\subsubsection{Biblioteka \textit{helixmp3}}
 			Do dekodowania formatu MP3 wykorzystana została biblioteka \lstinline|helixmp3|.
 %			Opiera się ona na arytmetyce stałoprzecinkowej.
 			Zaimplementowany w~niej dekoder formatu MP3 wykorzystuje arytmetykę stałoprzecinkową co pozwala na efektywne jego wykorzystanie na maszynach nie mających sprzętowego wsparcia obliczeń zmiennoprzecinkowych.
-			Oryginalnie napisana przez \textit{RealNetworks}\textsuperscript{\cite{realnetworks}} w~2003 roku, znaleziona została w~Internecie pod postacią repozytoria GitHub\textsuperscript{\cite{helixmp3_repo}}. Do biblioteki dodana została obsługa RP2040 jak również integracja ze środowiskiem CMake.
+			Oryginalnie napisana przez \textit{RealNetworks}\textsuperscript{\cite{realnetworks}} w~2003~roku, znaleziona została w~Internecie pod postacią repozytoria GitHub\textsuperscript{\cite{helixmp3_repo}}. Do biblioteki dodana została obsługa RP2040 jak również integracja ze środowiskiem CMake.
 %			Wspomniane repozytorium GitHub to pierwszy wynik w~wyszukiwarce Google (fraza \textit{mp3 decoding library fixed point}), dlatego
 			Poczynione ulepszenia, zostały zgłoszone autorowi repozytorium\textsuperscript{\cite{helixmp3_pr}}. Umożliwiona została także statyczna alokacja buforów na dane dekodera.
 			$ $\\
 			
-			Do biblioteki dekodującej odwołuje się tylko \lstinline|FormatMP3|, który funkcją \lstinline|decode_up_to_n|, dekoduje co najwyżej \lstinline|n| ramek MP3. Zwracana jest liczba zdekodowanych ramek. Jeżeli zdekoduje ich mniej, to znaczy, że odtwarzanie zakończyło się pomyślnie (np. koniec pliku). Jeżeli zwrócona zostanie wartość mniejsza od zera, oznacza to błąd. Jeżeli danych w~buforze brakuje (np. niestabilna komunikacja sieciowa), rdzeń 1 czeka na dane w~nieskończoność. Użytkownik jednak w~każdej chwili może przerwać oczekiwanie.
+			Do biblioteki dekodującej odwołuje się tylko \lstinline|FormatMP3|, który funkcją \lstinline|decode_up_to_n|, dekoduje co najwyżej \lstinline|n| ramek MP3. Zwracana jest liczba zdekodowanych ramek. Jeżeli zdekoduje ich mniej, to znaczy, że odtwarzanie zakończyło się pomyślnie (np. koniec pliku). Jeżeli zwrócona zostanie wartość mniejsza od zera, oznacza to błąd. Jeżeli danych w~buforze brakuje (np. niestabilna komunikacja sieciowa), rdzeń 1~czeka na dane w~nieskończoność. Użytkownik jednak w~każdej chwili może przerwać oczekiwanie.
 		
 		\subsection{Rozpoczynanie odtwarzania}
 			Użytkownik rozpoczyna odtwarzanie poprzez wybranie pozycji z~listy ulubionych lub wyszukanie stacji/wybór pliku na karcie SD.
@@ -745,7 +745,7 @@ backend=biber,
 				Użytkownik może zakończyć odtwarzanie poprzez naciśnięcie przycisku \textit{Wstecz} na ekranie odtwarzania. Podsystem wyświetlacza wywołuje wtedy funkcje \lstinline|player_stop()|, która rozpoczyna proces zakończenia odtwarzania i~czeka aż rzeczywiście się ono zakończy. Ustawiana jest flaga \lstinline|abort|, która powoduje, że wszystkie implementacje \lstinline|decode_up_to_n(int n)|, kończą dekodowanie natychmiast. Dekodowane jest mniej ramek niż zadane \lstinline|n|, co wykrywane jest przez program jako zakończenie odtwarzania.
 			
 			\paragraph{Koniec pliku}
-				Gdy funkcja \lstinline|load_buffer()| w~\lstinline|DecodeFile| napotka koniec pliku powiadamia o~tym fakcie klasę nadrzędną wywołując \lstinline|notify_eof()|. Nie używa ona bezpośrednio funkcji \lstinline|notify_playback_end()|, ponieważ przy zakończeniu odtwarzania bufor może zawierać jeszcze do 4 sekund dźwięku (bufor 64kB, format MP3 128kbps). Dopiero gdy funkcja oczekiwania na dane wykryje że jest ich za mało, a~w pliku nie ma więcej bajtów do odczytania, odtwarzanie jest zakańczane. Dzieje się to w~analogiczny sposób jak w~przypadku zakończenia go przez użytkownika: dekodowane jest mniej ramek audio.
+				Gdy funkcja \lstinline|load_buffer()| w~\lstinline|DecodeFile| napotka koniec pliku powiadamia o~tym fakcie klasę nadrzędną wywołując \lstinline|notify_eof()|. Nie używa ona bezpośrednio funkcji \lstinline|notify_playback_end()|, ponieważ przy zakończeniu odtwarzania bufor może zawierać jeszcze do 4~sekund dźwięku (bufor 64kB, format MP3 128kbps). Dopiero gdy funkcja oczekiwania na dane wykryje że jest ich za mało, a~w pliku nie ma więcej bajtów do odczytania, odtwarzanie jest zakańczane. Dzieje się to w~analogiczny sposób jak w~przypadku zakończenia go przez użytkownika: dekodowane jest mniej ramek audio.
 			
 			\paragraph{Błąd}
 				Błędy modułu odtwarzacza mogą być dwojakie. Błąd sieciowy występuje przy odtwarzaniu strumieni internetowych, np. radia. Biblioteka \textit{LWIP} zgłasza błąd, który poprzez \lstinline|notify_playback_end()| powoduje natychmiastowe zatrzymanie odtwarzania i~wyświetlenie komunikatu o~błędzie (flaga \lstinline|error| ustawiona na \lstinline|true|). Błąd odczytu z~pliku występuje, gdy funkcja uzupełniająca bufor o~dane z~pliku zakończy się niepowodzeniem. Oznaczać to może na przykład że użytkownik usunął kartę SD z~urządzenia lub wystąpił błąd komunikacji z~nią. Analogicznie jak w~przypadku błędu sieci odtwarzanie jest zakańczane natychmiast.
@@ -754,11 +754,11 @@ backend=biber,
 		Jednym z~wymagań projektu było wyświetlanie informacji na temat aktualnie odtwarzanego utworu. Należało więc co najmniej zdekodować metadane wysyłane przez stacje radiowe. Dodatkowo, zostało zaimplementowane odczytywanie metadanych z~plików MP3.
 		
 		\subsubsection{Stacje radiowe -- ICY}
-			Szeroko stosowanym formatem przesyłania danych o~utworach w~strumieniach radiowych jest format ICY\textsuperscript{\cite{icy_spec}}. Klient może zażądać od serwera metadanych wysyłając do niego nagłówek \lstinline|Icy-Metadata: 1|. Serwer, jeżeli zaakceptował żądanie, odsyła nagłówek \lstinline|icy-metaint: <n>|. Jego wartość oznacza co ile bajtów strumienia będą wysyłane ramki z~metadanymi. Zwykle \lstinline|<n>| jest równe 16000, co oznacza, że co każde odebrane 16000 bajtów wystąpią metadane. Jest to 1 sekunda dźwięku MP3 128kbps, czyli nazwy utworów będą aktualizowane raz na sekundę. Występuje też wartość 1000, co oznacza 16 aktualizacji w~ciągu sekundy. Inne wartości są możliwe, ale nie są spotykane w~praktyce.
+			Szeroko stosowanym formatem przesyłania danych o~utworach w~strumieniach radiowych jest format ICY\textsuperscript{\cite{icy_spec}}. Klient może zażądać od serwera metadanych wysyłając do niego nagłówek \lstinline|Icy-Metadata: 1|. Serwer, jeżeli zaakceptował żądanie, odsyła nagłówek \lstinline|icy-metaint: <n>|. Jego wartość oznacza co ile bajtów strumienia będą wysyłane ramki z~metadanymi. Zwykle \lstinline|<n>| jest równe 16000, co oznacza, że co każde odebrane 16000~bajtów wystąpią metadane. Jest to 1~sekunda dźwięku MP3 128kbps, czyli nazwy utworów będą aktualizowane raz na sekundę. Występuje też wartość 1000, co oznacza 16~aktualizacji w~ciągu sekundy. Inne wartości są możliwe, ale nie są spotykane w~praktyce.
 			$ $\\
 			
 %			\paragraph{Abstrakcyjne położenie ramek ICY}
-			Warto zaznaczyć, że miejsce wstawienia metadanych w~żaden sposób nie uwzględnia formatu audio. Nie możemy zakładać że nie podzielą one jednej ramki MP3 na dwie części. Dla dźwięku MP3 128kbps ramka ma rozmiar 418 bajtów. Przy wartości \lstinline|icy-metaint| równej 16000, dane dźwiękowe będą podzielone co ok. $38.28$ ramki. Z~tego powodu konieczne stało się obsługiwanie ramek ICY w~momencie zapisu do bufora, zamiast przy jego odczycie. Odczyt obsługuje odpowiednia instancja \lstinline|Format|, która nie musi obsługiwać odczytywania ramek bajt po bajcie. Na przykład \lstinline|FormatMP3| nie obsługuje dekodowania ramek w~częściach. Ramka MP3 musi znaleźć się w ciągłym obszarze pamięci, nie może być rozdzielona ramką ICY.
+			Warto zaznaczyć, że miejsce wstawienia metadanych w~żaden sposób nie uwzględnia formatu audio. Nie możemy zakładać że nie podzielą one jednej ramki MP3 na dwie części. Dla dźwięku MP3 128kbps ramka ma rozmiar 418~bajtów. Przy wartości \lstinline|icy-metaint| równej 16000, dane dźwiękowe będą podzielone co ok. $38.28$ ramki. Z~tego powodu konieczne stało się obsługiwanie ramek ICY w~momencie zapisu do bufora, zamiast przy jego odczycie. Odczyt obsługuje odpowiednia instancja \lstinline|Format|, która nie musi obsługiwać odczytywania ramek bajt po bajcie. Na przykład \lstinline|FormatMP3| nie obsługuje dekodowania ramek w~częściach. Ramka MP3 musi znaleźć się w ciągłym obszarze pamięci, nie może być rozdzielona ramką ICY.
 			$ $\\
 			
 			Funkcja \lstinline|DecodeStream::play()|, jeżeli dostępny jest nagłówek \lstinline|icy-metaint|, inicjalizuje odbierane danych metodą \lstinline|ICY::start()|. Następnie rejestruje odwołanie, które jest wywoływane po każdym zapisie do bufora oraz przetwarza już odebrane dane. W~trakcie tych czynności blokowany jest kontekst biblioteki sieciowej, aby w~trakcie przetwarzania danych nie zostały odebrane żadne nowe dane, a~po odblokowaniu każde następne były wychwycone przez funkcję \lstinline|cbuf_write_cb()|.
@@ -845,7 +845,7 @@ backend=biber,
 				Jednym z~formatów obsługiwanych przez projekt jest format M3U\textsuperscript{\cite{m3u}} w~wersji \textit{Extended}. Format ten został wybrany z~uwagi na jego prostotę budowy oraz to, że strony agregujące stacje radiowe go obsługują. Jest to popularny format zapisu list odtwarzania. W~wersji standardowej przybiera postać linków do plików/strumieni zapisanych w~osobnych liniach pliku tekstowego. Wersja rozszerzona wprowadza specjalne komentarze. Zaimplementowany interpreter obsługuje komentarz \lstinline|EXTINF|, który zawiera czas trwania ścieżki oraz jej nazwę.
 			
 			\subsubsection{Format PLS}
-				Niektóre stacje radiowe przed wysłaniem strumienia audio, wysyłają plik w~formacie PLS\textsuperscript{\cite{pls}}. Plik taki zawiera różne warianty tego samego strumienia w~celu równoważenia obciążenia. Po wykryciu tego formatu ładowane są pierwsze 2 stacje (konfigurowalne) i~wybierana jest losowa z~nich. Format składa się z~par deklaracji postaci \lstinline|FileX| i~\lstinline|TitleX|, gdzie \lstinline|X| to kolejne liczby naturalne.
+				Niektóre stacje radiowe przed wysłaniem strumienia audio, wysyłają plik w~formacie PLS\textsuperscript{\cite{pls}}. Plik taki zawiera różne warianty tego samego strumienia w~celu równoważenia obciążenia. Po wykryciu tego formatu ładowane są pierwsze 2~stacje (konfigurowalne) i~wybierana jest losowa z~nich. Format składa się z~par deklaracji postaci \lstinline|FileX| i~\lstinline|TitleX|, gdzie \lstinline|X| to kolejne liczby naturalne.
 			
 		% TODO \subsection{Wpis na liście}
 		% TODO \subsection{Pliki pomocnicze}
@@ -914,11 +914,11 @@ backend=biber,
 			Kod niskopoziomowej komunikacji ze sterownikiem ekranu zawiera folder \lstinline|display/tft|. Inicjalizacja zapożyczona została z~biblioteki firmy Adafruit. W~pliku \lstinline|st7735_init.h| znajdują się definicje komend oraz listy poleceń potrzebne do uruchomienia wyświetlacza. Klasa \lstinline|ST7735S| zawiera metody \lstinline|reset()|, \lstinline|write_command_list()| oraz \lstinline|module_init()|, które odpowiadają za ustawienie poprawnych parametrów pracy urządzenia. Wszystkie wymagane operacje, włącznie z~konfiguracją pinów mikrokontrolera, zawiera metoda \lstinline|ST7735S::init()|.
 			
 		\paragraph{Kolory}
-			Do każdej funkcji przekazywany jest kolor w~formacie 24 bitowego RGB, tj. po 8 bitów na kolor, w~postaci jednej liczby. Kolor ten jest automatycznie mapowany na wewnętrzną 16 bitową reprezentację obsługiwaną przez sterownik. Podział na składowe RGB w~tej postaci to:
+			Do każdej funkcji przekazywany jest kolor w~formacie 24~bitowego RGB, tj. po 8~bitów na kolor, w~postaci jednej liczby. Kolor ten jest automatycznie mapowany na wewnętrzną 16~bitową reprezentację obsługiwaną przez sterownik. Podział na składowe RGB w~tej postaci to:
 			\begin{itemize}
-				\item 5 bitów -- kolor czerwony (najstarsze),
-				\item 6 bitów -- kolor zielony,
-				\item 5 bitów -- kolor niebieski.
+				\item 5~bitów -- kolor czerwony (najstarsze),
+				\item 6~bitów -- kolor zielony,
+				\item 5~bitów -- kolor niebieski.
 			\end{itemize}
 		
 		\paragraph{Współrzędne}
@@ -945,14 +945,14 @@ backend=biber,
 				Każda czcionka składa się z dwóch tablic \lstinline|ascii_data_H| i~\lstinline|utf8_data_H|, gdzie \lstinline|H| to rozmiar czcionki, tj. wysokość w~pikselach (szerokość jest połową wysokości). Zostały one opisane strukturą \lstinline|font| w~pliku \lstinline|assets/font.hpp|.
 				
 				\paragraph{Mapowanie}
-					Pierwsza tablica zawiera znaki od spacji (kod \lstinline|0x20| ASCII) do tyldy (kod \lstinline|0x7E|). Druga z~tablic zapewnia wyświetlanie znaków Unicode. Mapowanie jest tu arbitralne zapewnione funkcją sprawdzającą wartości 2-3 kolejnych bajtów danych. Zawiera ona obecnie 18 polskich znaków (wariant duży i~mały) jak również symbol nieskończoności. Istnieje możliwość dodawania dowolnej liczby nowych znaków.
+					Pierwsza tablica zawiera znaki od spacji (kod \lstinline|0x20| ASCII) do tyldy (kod \lstinline|0x7E|). Druga z~tablic zapewnia wyświetlanie znaków Unicode. Mapowanie jest tu arbitralne zapewnione funkcją sprawdzającą wartości 2-3 kolejnych bajtów danych. Zawiera ona obecnie 18~polskich znaków (wariant duży i~mały) jak również symbol nieskończoności. Istnieje możliwość dodawania dowolnej liczby nowych znaków.
 				
 				\paragraph{Kodowanie}
-					Czcionki kodowane są jako bitmapy. Każda z~tablic zawiera tyle elementów, ile jest pikseli we wszystkich znakach czcionki w~tej tablicy. Każda wartość to jasność piksela (255 -- kolor pierwszoplanowy, 0 -- kolor tła). Dla przykładu czcionka podstawowa ASCII zawierająca 95 znaków o~wymiarach 24x12 pikseli będzie miała rozmiar 27360 bajtów. Dodając 19 znaków Unicode otrzymujemy 32832 bajtów. Kodowanie znaku \lstinline|A| z~tej czcionki przedstawia rysunek~\ref{3/PicoRadio-screen-font}.
+					Czcionki kodowane są jako bitmapy. Każda z~tablic zawiera tyle elementów, ile jest pikseli we wszystkich znakach czcionki w~tej tablicy. Każda wartość to jasność piksela (255 -- kolor pierwszoplanowy, 0~-- kolor tła). Dla przykładu czcionka podstawowa ASCII zawierająca 95~znaków o~wymiarach 24x12 pikseli będzie miała rozmiar 27360~bajtów. Dodając 19~znaków Unicode otrzymujemy 32832~bajtów. Kodowanie znaku \lstinline|A| z~tej czcionki przedstawia rysunek~\ref{3/PicoRadio-screen-font}.
 				
 				\imgh{3/PicoRadio-screen-font}{Kodowanie czcionek (wartości 0x00 zastąpiono pustymi znakami)}{0.6}
 				
-				W projekcie została wykorzystana czcionka Ubuntu\textsuperscript{\cite{ubuntu_font}} w~wersji Mono (stała szerokość każdego znaku). Stworzony skrypt w~języku Python wygenerował potrzebne bitmapy do projektu. Dostępne rozmiary czcionki to 12 (rozmiar ok. 8kB), 16 (ok. 14kB) i~24 (ok. 32kB). Razem stanowi to 54kB, czyli 2.65\% pamięci ROM. Czcionka została zapisana w~pliku \lstinline|assets/ubuntu_mono.cpp| a~także utworzono funkcję dostępową \lstinline|ubuntu_font_get_size()|. 
+				W projekcie została wykorzystana czcionka Ubuntu\textsuperscript{\cite{ubuntu_font}} w~wersji Mono (stała szerokość każdego znaku). Stworzony skrypt w~języku Python wygenerował potrzebne bitmapy do projektu. Dostępne rozmiary czcionki to 12~(rozmiar ok. 8kB), 16~(ok. 14kB) i~24~(ok. 32kB). Razem stanowi to 54kB, czyli 2.65\% pamięci ROM. Czcionka została zapisana w~pliku \lstinline|assets/ubuntu_mono.cpp| a~także utworzono funkcję dostępową \lstinline|ubuntu_font_get_size()|. 
 				
 			\subsubsection{Ikony}
 				Ikony kodowane są w~podobny sposób do czcionek. Różnią się tym, że każda ikona może mieć inny rozmiar i~jest kodowana swoją własną tablicą. W~projekcie znalazły się m.in. ikony:
@@ -981,14 +981,14 @@ backend=biber,
 
 	\section{Odczyt informacji wejściowych}
 		\noindent
-		Zawartość modułu znajduje się w 3 katalogach:
+		Zawartość modułu znajduje się w 3~katalogach:
 		\begin{itemize}
 			\item \lstinline|buttons| -- Przyciski, interakcja z~użytkownikiem,
 			\item \lstinline|sd| -- Wykrywanie karty SD,
 			\item \lstinline|analog| -- Odczyt poziomu naładowania baterii.
 		\end{itemize}
 		
-		Katalogi te zawierają po 2 pliki (nagłówkowy i~kod źródłowy) realizujące funkcje opisane poniżej.
+		Katalogi te zawierają po 2~pliki (nagłówkowy i~kod źródłowy) realizujące funkcje opisane poniżej.
 		
 		\subsection{Interakcje użytkownika}
 			Dane od użytkownika pobierane są za pomocą przycisków. Każdy z~nich dołączony jest bezpośrednio do mikrokontrolera. Naciśnięcie przycisku powoduje wywołanie zbocza opadającego. Wykryte przez układ, aktywuje ono przerwanie. Eliminacja drgań styków została osiągnięta poprzez zastosowanie zewnętrznych kondensatorów i~wbudowanych przerzutników Schmitta dostępnych na każdym wejściu RP2040, oraz poprzez odczekanie 20ms po wywołaniu przerwania i~ponownym sprawdzeniu stanu na wejściu. Przerwanie, zgodnie z~dobrymi praktykami, ustawia jedynie odpowiednie flagi, które zostały opisane poniżej.
@@ -1002,16 +1002,16 @@ backend=biber,
 			\imgh{3/PicoRadio-buttons}{Maszyna stanów w~module przycisków}{0.75}
 			
 			\paragraph{Czas oczekiwania}
-				Czas oczekiwania na ponowne uruchomienie maszyny jest tym mniejszy im częściej dane zdarzenie może wystąpić. To znaczy, gdy żaden z~przycisków nie jest naciśnięty, a~ekran wygaszony, maszyna oczekuje w~nieskończoność na sygnał z~przerwania. Gdy ekran nie jest wygaszony, zadanie czeka co najwyżej 30s. Po tym czasie następuje sprawdzenie warunków do wygaszenia, np. czy odtwarzanie jest uruchomione (pominięte na rysunku). Gdy są one spełnione, ekran zostaje wygaszony. Kiedy użytkownik kliknął i~przytrzymuje przycisk, zadanie wykonuje się 26 razy na sekundę. Zapewnia to wystarczająco dokładny pomiar czasu, a~nie obciąża zbytnio procesora. Jeżeli stan wejścia jest niski po minimum 20ms wykonywana jest jednokrotna akcja. Rozpoczęcie powtarzania następuje po 500ms ciągłego naciskania. Wartość 26 definiuje prędkość powtarzania znaków. Jest to częstotliwość powtarzania znaków przez klawiatury komputerowe. Wszystkie czasy są konfigurowalne w~momencie kompilacji programu.
+				Czas oczekiwania na ponowne uruchomienie maszyny jest tym mniejszy im częściej dane zdarzenie może wystąpić. To znaczy, gdy żaden z~przycisków nie jest naciśnięty, a~ekran wygaszony, maszyna oczekuje w~nieskończoność na sygnał z~przerwania. Gdy ekran nie jest wygaszony, zadanie czeka co najwyżej 30s. Po tym czasie następuje sprawdzenie warunków do wygaszenia, np. czy odtwarzanie jest uruchomione (pominięte na rysunku). Gdy są one spełnione, ekran zostaje wygaszony. Kiedy użytkownik kliknął i~przytrzymuje przycisk, zadanie wykonuje się 26~razy na sekundę. Zapewnia to wystarczająco dokładny pomiar czasu, a~nie obciąża zbytnio procesora. Jeżeli stan wejścia jest niski po minimum 20ms wykonywana jest jednokrotna akcja. Rozpoczęcie powtarzania następuje po 500ms ciągłego naciskania. Wartość 26~definiuje prędkość powtarzania znaków. Jest to częstotliwość powtarzania znaków przez klawiatury komputerowe. Wszystkie czasy są konfigurowalne w~momencie kompilacji programu.
 		
 		\subsection{Karta SD}
 			Pin \textit{Card Detect} slotu na karty SD również został bezpośrednio podłączony do mikrokontrolera i~działa zgodnie z~tymi samymi zasadami co piny przycisków. Jednak obsługa wykrywania karty jest znacznie prostsza. Zadanie \lstinline|sd| wykrywa zmianę stanu na odpowiednim pinie i~montuje lub odmontowuje kartę SD z~wykorzystaniem biblioteki FatFS.
 			
 		\subsection{Bateria}
-			Poziom baterii jest wykrywany poprzez użycie jednego z~analogowych wejść mikrokontrolera. Na wejściu zastosowano dzielnik napięcia, współczynnik podziału wynosi 2. Dzięki niemu maksymalne napięcie ogniwa 4.2V równa się 2.1V, co mieści się w~zakresie pomiarowym mikrokontrolera (0V - 3.3V). W~pliku \lstinline|analog.cpp| zaimplementowano funkcję \lstinline|battery_voltage()|, która zwraca napięcie ogniwa po wszystkich niezbędnych przekształceniach. Dodatkowo, kod zawiera aproksymację poziomu naładowania baterii w~procentach. Funkcja \lstinline|battery_percentage()| zwraca liczbę z zakresu 0 - 100, która oznacza poziom naładowania ogniwa. Na podstawie wyniku tej funkcji rysowana jest ikona baterii w~górnym pasku ikon statusowych. Ma ona kolor zielony i~jest w~pełni naładowana gdy bateria posiada 60\% lub więcej energii, 20\% i~więcej to kolor żółty, natomiast poniżej 20\% ma ona kolor czerwony.
+			Poziom baterii jest wykrywany poprzez użycie jednego z~analogowych wejść mikrokontrolera. Na wejściu zastosowano dzielnik napięcia, współczynnik podziału wynosi 2. Dzięki niemu maksymalne napięcie ogniwa 4.2V równa się 2.1V, co mieści się w~zakresie pomiarowym mikrokontrolera (0V - 3.3V). W~pliku \lstinline|analog.cpp| zaimplementowano funkcję \lstinline|battery_voltage()|, która zwraca napięcie ogniwa po wszystkich niezbędnych przekształceniach. Dodatkowo, kod zawiera aproksymację poziomu naładowania baterii w~procentach. Funkcja \lstinline|battery_percentage()| zwraca liczbę z zakresu 0~- 100, która oznacza poziom naładowania ogniwa. Na podstawie wyniku tej funkcji rysowana jest ikona baterii w~górnym pasku ikon statusowych. Ma ona kolor zielony i~jest w~pełni naładowana gdy bateria posiada 60\% lub więcej energii, 20\% i~więcej to kolor żółty, natomiast poniżej 20\% ma ona kolor czerwony.
 		
 	\section{Bezprzewodowy dostęp do Internetu}
-		Obsługa sieci bezprzewodowej podzielona została na 3 pod-moduły:
+		Obsługa sieci bezprzewodowej podzielona została na 3~pod-moduły:
 		\begin{itemize}
 			\item \lstinline|wificonnect| -- połączenie z~Wi-Fi
 			\item \lstinline|wifiscan| -- skanowanie dostępnych sieci
@@ -1041,7 +1041,7 @@ backend=biber,
 	W tym rozdziale opisano organizację i~przebieg prac nad projektem.
 	
 	\section{Przebieg prac}
-		Prace nad projektem rozpoczęły się w~kwietniu 2023 roku. Projekt realizowany był etapami. Zostały one pokazane na rysunku~\ref{4/PicoRadio-steps} oraz opisane poniżej.
+		Prace nad projektem rozpoczęły się w~kwietniu 2023~roku. Projekt realizowany był etapami. Zostały one pokazane na rysunku~\ref{4/PicoRadio-steps} oraz opisane poniżej.
 		
 		\imgh{4/PicoRadio-steps}{Etapy projektu}{1}
 		
@@ -1131,7 +1131,7 @@ backend=biber,
 			
 			\imgh{4/tcp_good}{Ogłaszane okno TCP maks. 56kB}{0.6}
 
-			Jak widać podobny problem zacząłby występować ok. 40 sekundy, lecz okno mogło urosnąć do ponad 40kB i~serwer szybko dostarczył brakujące dane. Problem został rozwiązany.
+			Jak widać podobny problem zacząłby występować ok. 40~sekundy, lecz okno mogło urosnąć do ponad 40kB i~serwer szybko dostarczył brakujące dane. Problem został rozwiązany.
 %			Na uznanie zasługuje sugestia z~listy mailingowej projektu LwIP.
 			%TODO https://lists.nongnu.org/archive/html/lwip-users/2023-07/msg00001.html
 			
@@ -1172,11 +1172,11 @@ backend=biber,
 			W sierpniu radio było już gotowe. Po nieznacznych korektach w~oprogramowaniu (np. zmiana numerów wyprowadzeń) było produktem gotowym do testowania przez osoby postronne.
 
 		\subsection{Testowanie}
-			Pierwszym z~zauważonych problemów był zbyt krótki czas oczekiwania na połączenie z~serwerem stacji i~odbiór danych. Radio dotychczas było testowane w~bezpośrednim sąsiedztwie routera Wi-Fi. Po przeniesieniu do innego pomieszczenia radio nie mogło połączyć się z~większością stacji z~powodu zbyt szybkiego zgłaszania błędu przekroczenia czasu oczekiwania na dane. Został on powiększony do 4 sekund, ponieważ bufor ma 64kB, a~większość stacji nadaje z~przepływnością 128kb/s.
+			Pierwszym z~zauważonych problemów był zbyt krótki czas oczekiwania na połączenie z~serwerem stacji i~odbiór danych. Radio dotychczas było testowane w~bezpośrednim sąsiedztwie routera Wi-Fi. Po przeniesieniu do innego pomieszczenia radio nie mogło połączyć się z~większością stacji z~powodu zbyt szybkiego zgłaszania błędu przekroczenia czasu oczekiwania na dane. Został on powiększony do 4~sekund, ponieważ bufor ma 64kB, a~większość stacji nadaje z~przepływnością 128kb/s.
 			$ $\\
 			
 			Użytkowanie radia jako kompletnego produktu szybko dostarczyło nowych danych o~błędach. Dodana została obsługa MPEG2 (obsługa niższej jakości dźwięku), ponieważ niektóre stacje nie odtwarzały się poprawnie. Ograniczona została liczba przekierowań, na które odpowiada klient HTTP, ponieważ przy ich zbyt dużej liczbie następowało zawieszanie się urządzenia.
-			Wykryto i~naprawiono również problem z~odbiorem metadanych w~formacie ICY. Pierwotnie ich długość była zapisywana do zmiennej jednobajtowej co w~przypadku stacji nadającej więcej informacji niż tylko tytuł utworu powodowała zawieszanie się odtwarzania. Po zwiększeniu rozmiaru zmiennej do 4 bajtów problem został rozwiązany.
+			Wykryto i~naprawiono również problem z~odbiorem metadanych w~formacie ICY. Pierwotnie ich długość była zapisywana do zmiennej jednobajtowej co w~przypadku stacji nadającej więcej informacji niż tylko tytuł utworu powodowała zawieszanie się odtwarzania. Po zwiększeniu rozmiaru zmiennej do 4~bajtów problem został rozwiązany.
 			$ $\\
 			
 			To tylko niektóre z~błędów napotkanych przez osoby z~najbliższego otoczenia. Wszystkie odnalezione były niezwłocznie zapisywane w~systemie do śledzenia zadań i~później naprawiane.
@@ -1252,14 +1252,14 @@ backend=biber,
 			
 			\imghss{5/radio}{Ekran \textit{Radio} (włączone z~listy ulubionych)}{5/radio_search}{Ekran \textit{Radio} (wyszukane)}
 			
-%			Na dole ekranu dostępne są 2 lub 3 ikony. Pierwsza z~nich zakańcza odtwarzanie i~powraca do poprzedniego ekranu. Druga, ikona gwiazdy, pozwala dodawać/usuwać stację z listy ulubionych. Jeśli jest ona wypełniona, oznacza to że stacja jest zapisana i~kliknięcie jej spowoduje jej usunięcie. Natomiast pusta ikona wskazuje, że jest to nowa stacja i~pozwala na dodanie jej do listy ulubionych. Trzecia ikona jest dostępna tylko w~przypadku uruchomienia radia z~poziomu wyników wyszukiwania (rys.~\ref{5/radio_search}). Pozwala ona wrócić bezpośrednio do ekranu listy ulubionych stacji.
+%			Na dole ekranu dostępne są 2~lub 3~ikony. Pierwsza z~nich zakańcza odtwarzanie i~powraca do poprzedniego ekranu. Druga, ikona gwiazdy, pozwala dodawać/usuwać stację z listy ulubionych. Jeśli jest ona wypełniona, oznacza to że stacja jest zapisana i~kliknięcie jej spowoduje jej usunięcie. Natomiast pusta ikona wskazuje, że jest to nowa stacja i~pozwala na dodanie jej do listy ulubionych. Trzecia ikona jest dostępna tylko w~przypadku uruchomienia radia z~poziomu wyników wyszukiwania (rys.~\ref{5/radio_search}). Pozwala ona wrócić bezpośrednio do ekranu listy ulubionych stacji.
 		
 			\paragraph{Dalszy rozwój}
 				Implementacja dekodowania formatu AAC/AAC+ znacząco podniosłaby użyteczność produktu.
 			
 		\subsection{Lista ulubionych stacji}
 			Przechowywana w~pamięci urządzenia lista ulubionych stacji zawiera znalezione i~zapisane przez użytkownika stacje. Przedstawia ją rysunek~\ref{5/fav}.
-			Ekran obsługuje stronicowanie wpisów. Domyślnie wyświetlanych jest 16 wpisów na stronę. Na dole ekranu wyświetlona jest aktualna strona i~liczba wszystkich stron.
+			Ekran obsługuje stronicowanie wpisów. Domyślnie wyświetlanych jest 16~wpisów na stronę. Na dole ekranu wyświetlona jest aktualna strona i~liczba wszystkich stron.
 			W górnym pasku zawiera się nazwa ekranu oraz ikony statusowe (Wi-Fi, karta SD, bateria).
 			
 			\imgh{5/fav}{Ekran \textit{Ulubione stacje}}{0.5}
@@ -1354,7 +1354,7 @@ backend=biber,
 		% TODO dopisać coś
 		
 		\subsection{Ocena obecnej wersji produktu}
-			Udało się zaimplementować dekodowanie MP3 z~każdą przepływnością, nawet 320 kbps, w~wariantach MPEG1 oraz MPEG2. Ponad to obsługiwane są pliki WAV. Udało się także odczytać metadane zarówno strumieni internetowych (ICY) jak i~lokalnych plików MP3 (ID3v2). Dekoder potrafi uwzględniać i~korygować wiele nieprawidłowości w~strumieniu danych. Obsługiwane jest także wykrywanie i~zgłaszanie błędów dekodowania. Klient HTTP obsługuje minimum funkcji, lecz jest to wystarczające do poprawnego strumieniowania radia internetowego.
+			Udało się zaimplementować dekodowanie MP3 z~każdą przepływnością, nawet 320~kbps, w~wariantach MPEG1 oraz MPEG2. Ponad to obsługiwane są pliki WAV. Udało się także odczytać metadane zarówno strumieni internetowych (ICY) jak i~lokalnych plików MP3 (ID3v2). Dekoder potrafi uwzględniać i~korygować wiele nieprawidłowości w~strumieniu danych. Obsługiwane jest także wykrywanie i~zgłaszanie błędów dekodowania. Klient HTTP obsługuje minimum funkcji, lecz jest to wystarczające do poprawnego strumieniowania radia internetowego.
 			$ $\\
 			
 			Należałoby poprawić dokładność wyliczania procentu pozostałej energii w~ogniwach. Aproksymacja zgrubnie jest poprawna lecz do pełnej poprawności brakuje wielogodzinnych testów i~poprawek. Podczas ładowania, wskazanie poziomu baterii jest znacznie zawyżone.
@@ -1416,7 +1416,7 @@ backend=biber,
 			$ $\\
 
 			Należałoby się zastanowić także, czy jakość i poziom głośności dźwięku odpowiada użytkownikowi. Jeżeli nie, istnieje możliwość wykorzystania mocniejszego wzmacniacza w~celu obniżenia zniekształceń przy cichym słuchaniu lub zwiększenia mocy maksymalnej. Jednak układy o~większej mocy wymagają wyższego napięcia.
-			Przykładowo PAM8610\textsuperscript{\cite{ch5_pam8610}} przy napięciu 7V (przybliżone napięcie 2 ogniw połączonych szeregowo) jest w~stanie oddać moc 4W na kanał (obecnie użyty wzmacniacz posiada moc ok. 1W na kanał). Nowszy PAM8006a\textsuperscript{\cite{ch5_pam8006a}} jest w~stanie wysterować głośniki mocą aż 8W na kanał, lecz wiąże się to z~napięciem zasilania 12V (3 ogniwa szeregowo) i~zmianą głośników na takie o~impedancji $8 \Omega$.
+			Przykładowo PAM8610\textsuperscript{\cite{ch5_pam8610}} przy napięciu 7V (przybliżone napięcie 2~ogniw połączonych szeregowo) jest w~stanie oddać moc 4W na kanał (obecnie użyty wzmacniacz posiada moc ok. 1W na kanał). Nowszy PAM8006a\textsuperscript{\cite{ch5_pam8006a}} jest w~stanie wysterować głośniki mocą aż 8W na kanał, lecz wiąże się to z~napięciem zasilania 12V (3 ogniwa szeregowo) i~zmianą głośników na takie o~impedancji $8 \Omega$.
 			Jednak pociąga to za sobą komplikacje sekcji zasilającej. Ogniwa szeregowe musiałyby być ładowane wyższym napięciem i~prawdopodobnie poskutkowałoby to zrezygnowaniem z~wysokiej kompatybilności USB~C. Dostarcza ono zbyt niskiego napięcia. Istnieje opcja wykorzystania protokołu USB~PD (ang. \textit{power delivery}), który, może poinformować ładowarkę, że urządzenie obsługuje napięcie wyższe niż 5V, np. 9V czy 12V.
 			$ $\\
 			
