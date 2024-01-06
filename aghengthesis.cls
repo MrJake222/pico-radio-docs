@@ -184,7 +184,7 @@
 \vspace*{1cm}
 
 \begin{tabbing}
-\small{\LangThesisAuthor} \hspace{2cm} \= {\@author} \\
+\small{\LangThesisAuthor} \hspace{3.5cm} \= {\@author} \\
 \small{\LangFieldOfStudy} \> {\@fieldofstudy}\\
 %\small{\LangTypeOfStudies} \> {\@typeofstudies}\\
 \small{\LangSupervisor} \> {\@supervisor}

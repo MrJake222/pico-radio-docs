@@ -182,24 +182,20 @@ backend=biber,
 
 \tableofcontents
 
-\chapter{Cel prac i~wizja produktu}
-%	W tym rozdziale opisano jak będzie wyglądał końcowy produkt. Zwrócono też uwagę na to jak będzie przebiegała jego realizacja i~jakie ryzyka mogą wystąpić.
-
-	Tradycyjne radio powstało na początku XX wieku. Upłynęło ponad 100~lat, a~jednak audycje radiowe wciąż cieszą się dużą popularnością. Wg podsumowania iloveradio.pl\textsuperscript{\cite{iloveradio_stats}} w~2022~roku 65\% polaków słuchało radia codziennie, a~prawie 87\% co najmniej raz w~tygodniu uruchamiało swoje radioodbiorniki. 
-	$ $\\
-	
-	Radio internetowe staje się co raz popularniejsze. Wg badań Krajowego Instytutu Mediów\textsuperscript{\cite{kim_2022} \cite{kim_2023}} łączny zasięg dzienny stacji słuchanych przez Internet w~2022~wyniósł z~6,3\%. W~analogicznym okresie 2023~roku wynik podwyższył się do 7,6\%. Jest to wzrost o~1,3~punków procentowych.
+\chapter{Cel prac i wizja produktu}
+	Tradycyjne radio powstało na początku XX wieku i do dzisiaj bardzo popularne jest słuchanie audycji radiowych. Według badań\textsuperscript{\cite{iloveradio_stats}} przeprowadzonych w 2022 r., 65\% Polaków słuchało radia codziennie.
 	
 	\section{Opis problemu}
-		Większość funkcjonujących współcześnie odbiorników nie obsługuje strumieni internetowych, a~koncesje na transmisję w paśmie FM są kosztowne. Zdarza się tak, że niezależne rozgłośnie radiowe muszą zrezygnować ze starań o~zgodę na nadawanie swojego programu w~sposób analogowy\textsuperscript{\cite{r357_krrit}} z~powodów finansowych.
-		Nadają one tylko przy pomocy Internetu.
-		Celem pracy jest wykonanie kompletnego przenośnego urządzenia, które umożliwiłoby odbiór takich stacji i~wielu innych z~całego świata.
-		$ $\\
-		
-		Użytkowanie np. telefonu komórkowego w~celu odbioru radia może powodować pewne ograniczenia. Prowadzenie rozmów telefonicznych w~czasie odsłuchu może być utrudnione. Jednak przede wszystkim, w~porównaniu do dedykowanego urządzenia, dużo więcej czasu zajmuje odnalezienie odpowiedniej aplikacji w~telefonie i~uruchomienie jej.
+			Uwarunkowania prawno-ekonomiczne, związane z emisją tradycyjnego programu radiowego i postęp w dziedzinie technologii komunikacyjnych sprawiły, że rozwinęło się radio Internetowe, którego popularność i słuchalność regularnie wzrasta (w roku 2022 było to około 6\% ogółu słuchaczy, a w 2023 powyżej 7,5\%) \textsuperscript{\cite{kim_2022} \cite{kim_2023}}. Z punktu widzenia odbiorcy największe zalety radia internetowego to jego globalny zasięg i różnorodność emitowanych treści przejawiająca się liczbą dostępnych stacji.
+			$ $\\
+			
+			Najpopularniejsza, mająca swoje wady, metoda odbioru radia internetowego wykorzystuje odpowiednie oprogramowanie pracujące na komputerze, natomiast tradycyjny radioodbiornik w ogóle nie umożliwia odbierania nadawanych w ten sposób audycji. Ogranicza to dostępność programów emitowanych przez rozgłośnie internetowe.
+			$ $\\
+			
+			Powstał zatem pomysł zaprojektowania i zbudowania, opisanego w niniejszej pracy, przenośnego urządzenia wbudowanego realizującego funkcję odbiornika Internetowych stacji radiowych.
 		
 	\section{Rola produktu}
-		Budowany w~ramach tej pracy odbiornik radia internetowego jest przeznaczony do osób z~małą wiedzą techniczną. Jego obsługa powinna być prosta i~ intuicyjna. Do korzystania z~niego nie powinny być wymagane żadne dodatkowe elementy (np.~zewnętrzne głośniki czy specjalna ładowarka).
+		Budowany w~ramach tej pracy odbiornik radia internetowego jest przeznaczony do osób z~małą wiedzą techniczną. Jego obsługa powinna być prosta i~intuicyjna. Do korzystania z~niego nie powinny być wymagane żadne dodatkowe elementy (np.~zewnętrzne głośniki czy specjalna ładowarka).
 		Produkt ma być kompletnym urządzeniem gotowym do odbioru internetowych stacji radiowych. Całość będzie zamknięta w~obudowie. Na rysunku~\ref{1/radio_proj_trimmed} przedstawiony został projekt wizualny radia.
 %		Rysunek~\ref{1/PicoRadio_blocks} przedstawia uproszczony schemat blokowy urządzenia.
 		
@@ -290,7 +286,7 @@ backend=biber,
 		Układ zawiera także wiele peryferiów. Pomogą one m.in. w~implementacji protokołu przesyłu dźwięku \isqs{} oraz odciążeniu procesora poprzez wykorzystanie DMA.
 		
 		\subsection{Dekodowanie formatu MP3}
-			Jednym z~trudniejszych zagadnień związanych z~budową odbiornika internetowych stacji radiowych jest dekodowanie strumienia danych w~formacie MP3. Ze względu na złożoność metody kodowania, ograniczenia patentowe i~ krótki czas realizacji projektu odrzucony został pomysł samodzielnego napisania oprogramowania dekodującego na rzecz wykorzystania dostępnych bibliotek.
+			Jednym z~trudniejszych zagadnień związanych z~budową odbiornika internetowych stacji radiowych jest dekodowanie strumienia danych w~formacie MP3. Ze względu na złożoność metody kodowania, ograniczenia patentowe i~krótki czas realizacji projektu odrzucony został pomysł samodzielnego napisania oprogramowania dekodującego na rzecz wykorzystania dostępnych bibliotek.
 			
 			Jedną z~popularnych bibliotek jest \lstinline|minimp3|\textsuperscript{\cite{minimp3}}. Sprawdza się ona doskonale w~aplikacjach dedykowanych dla komputerów osobistych i~wydajnych mikrokontrolerów, jednak jej wadą jest to, że wykorzystuje arytmetykę zmiennoprzecinkową. Ponieważ mikrokontroler RP2040 nie wspiera sprzętowo operacji zmiennoprzecinkowych istniała uzasadniona obawa, że nie poradzi on sobie z~dekodowaniem strumienia MP3 w~czasie rzeczywistym. W~takiej sytuacji konieczne okazało się użycie  biblioteki \lstinline|helixmp3|\textsuperscript{\cite{helixmp3_repo}} która implementuje dekoder MP3 przy użyciu arytmetyki stałoprzecinkowej.
 			$ $\\
@@ -1450,5 +1446,7 @@ backend=biber,
 	% TODO instrukcja obsługi (rozdział 5) ??
 		
 	\printbibliography
+	
+	\listoffigures
 	
 \end{document}
