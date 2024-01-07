@@ -132,7 +132,7 @@
 \RequirePackage{graphicx}
 \RequirePackage{geometry}
 \RequirePackage{fancyhdr}
-\RequirePackage{titlesec}
+%\RequirePackage{titlesec}
 \RequirePackage{amssymb}
 \RequirePackage[\BabelLang]{babel}
 \RequirePackage{amsmath}
@@ -223,14 +223,26 @@
 
 %\ProcessOptions
 
-\pagestyle{fancy}
-\renewcommand{\sectionmark}[1]{\markright{\thesection.\ #1}}
-\renewcommand{\headrulewidth}{0.5pt}
-\fancyhf{}
-\fancyhead{}
+%\pagestyle{fancy}
+%\renewcommand{\sectionmark}[1]{\markright{\thesection.\ #1}}
+%\renewcommand{\headrulewidth}{0.5pt}
+%\fancyhf{}
+%\fancyhead{}
+%
+%\fancyhead[LE]{\bfseries \thepage}
+%\fancyhead[RO]{\bfseries \thepage}
 
-\fancyhead[LE]{\bfseries \thepage}
-\fancyhead[RO]{\bfseries \thepage}
+\pagestyle{fancy}
+\renewcommand\headrulewidth{0pt} % no line between document and header
+\fancyhead{} % clear header
+\fancyfoot{} % clear footer
+\fancyfoot[LE,RO]{\thepage} % page at left on even and right on odd pages
+
+% chapter pages
+\fancypagestyle{plain}{
+	\fancyhf{} 
+	\fancyfoot[LE,RO]{\thepage}
+	\renewcommand{\headrulewidth}{0pt}}
 
 \frenchspacing
 \sloppy
@@ -238,9 +250,9 @@
 \clubpenalty      9999
 \flushbottom
 
-\titleformat{\section}[block]
-{\bfseries\Large}{\filright \Large\thesection. }{0ex}{}
-\titleformat{\subsection}[block]
-{\bfseries\large}{\filright \large\thesubsection. }{0ex}{}
-\titleformat{\subsubsection}[block]
-{\bfseries\normalsize}{\filright \normalsize\thesubsubsection. }{0ex}{}
+%\titleformat{\section}[block]
+%{\bfseries\Large}{\filright \Large\thesection. }{0ex}{}
+%\titleformat{\subsection}[block]
+%{\bfseries\large}{\filright \large\thesubsection. }{0ex}{}
+%\titleformat{\subsubsection}[block]
+%{\bfseries\normalsize}{\filright \normalsize\thesubsubsection. }{0ex}{}

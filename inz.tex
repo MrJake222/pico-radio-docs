@@ -27,6 +27,7 @@
 }
 \usepackage{caption} % link przenosi do góry obrazka
 \usepackage{svg}
+\usepackage{enumitem}
 
 % nie rozciągaj,
 % TODO usunąć na koniec
@@ -38,6 +39,15 @@ backend=biber,
 ]{biblatex}
 \addbibresource{inz.bib}
 \DeclareFieldFormat{urldate}{dostęp #1}
+
+% enquote (cytaty w "")
+\usepackage[autostyle]{csquotes}
+\DeclareQuoteAlias{dutch}{polish}
+
+% mniejsze marginesy wkoło "Spisu treści"
+\usepackage{tocloft}
+\setlength{\cftbeforetoctitleskip}{20pt}
+\setlength{\cftaftertoctitleskip}{30pt}
 
 % bez odstępu w~itemize
 \let\tempone\itemize
@@ -180,19 +190,21 @@ backend=biber,
 
 \maketitle
 
+\addtocontents{toc}{\protect\thispagestyle{empty}}
 \tableofcontents
 
+\cleardoublepage
 \chapter{Cel prac i wizja produktu}
-	Tradycyjne radio powstało na początku XX wieku i do dzisiaj bardzo popularne jest słuchanie audycji radiowych. Według badań\textsuperscript{\cite{iloveradio_stats}} przeprowadzonych w 2022 r., 65\% Polaków słuchało radia codziennie.
+	Tradycyjne radio powstało na początku XX wieku i~do dzisiaj audycje radiowe cieszą się wysoką popularnością. Według podsumowania serwisu iloveradio.pl\textsuperscript{\cite{iloveradio_stats}} w~2022~roku 65\% Polaków słuchała radia codziennie, a~prawie 87\% co najmniej raz w~tygodniu uruchamiało swoje radioodbiorniki. 
+	$ $\\
+	
+	Uwarunkowania prawno-ekonomiczne, związane z~tradycyjną emisją programu radiowego i~postęp w~dziedzinie technologii komunikacyjnych sprawiły, że rozwinęło się radio Internetowe, którego popularność i~słuchalność regularnie wzrasta. Według badań Krajowego Instytutu Mediów łączny zasięg dzienny stacji słuchanych przez Internet w~2022~wyniósł z~6,3\%\textsuperscript{\cite{kim_2022}}. W~analogicznym okresie 2023~roku wynik podwyższył się do 7,6\%\textsuperscript{\cite{kim_2023}}.
+	Związane jest to z~kilkoma czynnikami. Radio internetowe często oferuje dużo lepszą technicznie jakość odbieranego dźwięku. Do wyboru jest znacznie większa liczba rozgłośni, wśród nich są rozgłośnie tematyczne, emitujące określony typ audycji czy rodzaj muzyki. Dodatkowo, radio internetowe nie ma ograniczeń geograficznych związanych z~odbiorem, jak ma to miejsce w~przypadku tradycyjnego radia. Przez Internet można słuchać stacji nadającej z~dowolnego miejsca na świecie.
 	
 	\section{Opis problemu}
-			Uwarunkowania prawno-ekonomiczne, związane z emisją tradycyjnego programu radiowego i postęp w dziedzinie technologii komunikacyjnych sprawiły, że rozwinęło się radio Internetowe, którego popularność i słuchalność regularnie wzrasta (w roku 2022 było to około 6\% ogółu słuchaczy, a w 2023 powyżej 7,5\%) \textsuperscript{\cite{kim_2022} \cite{kim_2023}}. Z punktu widzenia odbiorcy największe zalety radia internetowego to jego globalny zasięg i różnorodność emitowanych treści przejawiająca się liczbą dostępnych stacji.
-			$ $\\
-			
-			Najpopularniejsza, mająca swoje wady, metoda odbioru radia internetowego wykorzystuje odpowiednie oprogramowanie pracujące na komputerze, natomiast tradycyjny radioodbiornik w ogóle nie umożliwia odbierania nadawanych w ten sposób audycji. Ogranicza to dostępność programów emitowanych przez rozgłośnie internetowe.
-			$ $\\
-			
-			Powstał zatem pomysł zaprojektowania i zbudowania, opisanego w niniejszej pracy, przenośnego urządzenia wbudowanego realizującego funkcję odbiornika Internetowych stacji radiowych.
+			Niestety, typowy odbiornik radia naziemnego nie umożliwia odbierania audycji nadawanych przez rozgłośnie internetowe.
+			Do ich odbioru wykorzystywane jest najczęściej odpowiednie oprogramowanie pracujące na komputerze lub smartfonie.
+			Może się to wiązać z~pewnymi niedogodnościami: nie zawsze istnieje możliwość uruchomienia takiej aplikacji na dostępnym urządzeniu, obsługa takiej aplikacji może być w~pewnych okolicznościach niewygodna lub utrudniona, wreszcie samo urządzenie może nie być odpowiednio wyposażone np. w~głośniki umożliwiające odsłuch odbieranej stacji lub użytkownik nie chce narażać urządzenia na niekorzystne warunki otoczenia. Ponad to, istnieje grupa użytkowników o~stosunkowo niskiej kulturze technicznej, dla których korzystanie z~komputera lub smartfona jest zadaniem trudnym, natomiast bez problemu radzą sobie z~obsługą stosunkowo prostych urządzeń, do których można zaliczyć tradycyjny radioodbiornik. Powstał zatem pomysł zaprojektowania i~zbudowania, opisanego w~niniejszej pracy, przenośnego urządzenia, wbudowanego realizującego funkcję odbiornika Internetowych stacji radiowych.
 		
 	\section{Rola produktu}
 		Budowany w~ramach tej pracy odbiornik radia internetowego jest przeznaczony do osób z~małą wiedzą techniczną. Jego obsługa powinna być prosta i~intuicyjna. Do korzystania z~niego nie powinny być wymagane żadne dodatkowe elementy (np.~zewnętrzne głośniki czy specjalna ładowarka).
@@ -234,7 +246,7 @@ backend=biber,
 			
 			\paragraph{Dodatkowe funkcjonalności (niewymagane)}
 			\begin{itemize}
-				\item odtwarzanie plików z~nośnika wymiennego,
+				\item odtwarzanie plików z~dołączanego do urządzenia nośnika wymiennego (karta SD).
 			\end{itemize}
 		
 			\paragraph{Oczekiwany produkt}
@@ -251,9 +263,10 @@ backend=biber,
 			
 			\imgh{3/rb_chart_new}{Udział kodeków w~stacjach radiowych}{0.8}
 			
-			Najwięcej, około 66\% wszystkich i~60\% polskich stacji, używa kodeku MP3. Wybór padł na właśnie ten format.
+			Najwięcej, około 66\% wszystkich i~60\% polskich stacji, używa kodeka MP3. Wybór padł na właśnie ten format.
 			Zapewni on kompatybilność urządzenia z~największą liczbą dostępnych stacji radia internetowego.
-			$ $\\
+			\pagebreak
+%			$ $\\
 			
 			Zdecydowano się też na miniaturyzację wyświetlacza i~zastosowanie do obsługi urządzenia kilku przycisków. Z~uwagi na małą moc obliczeniową mikrokontrolera, regulacja głośności odbywać się będzie analogowym potencjometrem.
 		
@@ -265,30 +278,38 @@ backend=biber,
 		Innym przykładem, bardziej kompaktowego odbiornika jest pokazany na rysunku~\ref{1/radio_tanie} odbiornik STERNRADIO IR~2~firmy TechniSat.
 		\imgh{1/radio_tanie}{Odbiornik STERNRADIO IR~2~firmy TechniSat\textsuperscript{\cite{radio_tanie}}}{0.7}
 		Jest to urządzenie przenośne, monofoniczne, zasilane z~wbudowanego akumulatora. Jego obecny koszt zakupu wynosi około 240~zł.
+		
+		\pagebreak
 		Kolejnym przykładem konkurencyjnego rozwiązania jest urządzenie przestawione na rysunku~\ref{1/radio_drogie}.
 		\imgh{1/radio_drogie}{Stereofoniczny odbiornik radia internetowego Blaupunkt IR10BT\textsuperscript{\cite{radio_drogie}}}{0.7}
 		Produkt obsługuje dźwięk stereofoniczny. Obecny koszt jego zakupu to 380~zł. W~porównaniu z~urządzeniem firmy TechniSat oferuje dodatkowo obsługę łączności Bluetooth oraz integrację z serwisem Spotify.
-		
-		Do budowy radia internetowego można wykorzystać komputer jednopłytkowy Raspberry Pi. Powstały w~taki sposób przykładowy projekt\textsuperscript{\cite{rpi_sbc_radio}} używa systemu operacyjnego Linux oraz języka Python aby nawiązać połączenie z~serwerem strumieniującym i~odtwarzać dźwięk. Jako wyjście sygnału analogowego wykorzystane zostało wbudowane w~płytkę złącze mini-jack.
-		Jednak możliwości komputera znacznie przewyższają wymagania potrzebne do odbioru radia internetowego.
 		$ $\\
 		
-		W roku 2022~na uczelni powstał podobny projekt odbiornika radia internetowego\textsuperscript{\cite{apd_radio2}}. Oparty on był o~płytkę rozwojową STM32F746G-Disco, przedstawioną na rysunku~\ref{1/botland_stm}. 
+		Obok rozwiązań komercyjnych w~Internecie znaleźć można rozmaite projekty typu \enquote{zrób to sam} opisujące konstrukcje odbiorników radia internetowego. Przykładem takiego rozwiązania jest konstrukcja\textsuperscript{\cite{rpi_sbc_radio}} oparta o~miniaturowy komputer jednopłytkowy Raspberry Pi model B, pracujący pod kontrolą systemu operacyjnego Linux. System operacyjny został skonfigurowany w~taki sposób aby automatycznie uruchamiana była, napisana w~języku Python, aplikacja, która łączy się z~jednym z~zakodowanych na stałe serwerów stacji radiowej i~uruchamia odtwarzanie wysyłanego przez nią strumienia. Całość jest zamknięta w~obudowie pozyskanej z~klasycznego przenośnego radioodbiornika.
+		$ $\\
+		
+		Odbiornik radia internetowego można zbudować wykorzystując gotowe, oparte o~mikrokontrolery rozbudowane zestawy uruchomieniowe. W~ramach zrealizowanej w~Instytucie Informatyki AGH pracy inżynierskiej\textsuperscript{\cite{apd_radio2}} powstało urządzenie oparte o~pokazaną na rysunku~\ref{1/botland_stm} płytkę rozwojową STM32F746G-Disco\textsuperscript{\cite{stm32_disco}}.
+		
 		\imgh{1/botland_stm}{Płytka rozwojowa STM32F746G-Disco\textsuperscript{\cite{botland_stm}}}{0.6}
-		Jest to relatywnie rozbudowany zestaw uruchomieniowy. Zawiera wbudowany wyświetlacz, złącze Ethernet, jak również przetwornik cyfrowo-analogowy. Jednak brakuje w~nim obsługi technologii Wi-Fi czy zasilania akumulatorowego, co uniemożliwia zastosowanie go jako przenośnego odtwarzacza radia internetowego.
+		
+		Wspomniany zestaw uruchomieniowy zawiera m.in. wbudowany, duży, kolorowy, wyposażony w~moduł ekranu dotykowego wyświetlacz LCD, kodek audio oraz interfejs Ethernet. Znajdujący się w~nim mikrokontroler jest na tyle wydajny, że bez problemu programowo dekoduje strumienie MP3 a~duży wyświetlacz pozwolił Autorom na stworzenie atrakcyjnego interfejsu użytkownika. Odbiornik ten ma jednak cechy urządzenia stacjonarnego. Wymaga dołączenia zewnętrznego zasilania, głośników oraz przewodowego połączenia do sieci lokalnej. Niestety cena samego zestawu oscylująca aktualnie w~okolicach 400~zł jest mało atrakcyjna.
 		$ $\\
 		
-		W celu obsługi bezprzewodowego połączenia z~Internetem można użyć mikrokontrolera z~wbudowaną jego obsługą np. ESP32. Projekt Mini~Web~Radio\textsuperscript{\cite{esp32_radio}} używa tego mikrokontrolera umieszczonego na płytce z~obsługą ładowania baterii. Jest to kompaktowe rozwiązane które dodatkowo umożliwia miniaturyzację urządzenia.
+		Jednym z~wymagań niefunkcjonalnych realizowanego w~ramach tej pracy odbiornika jest wykorzystanie bezprzewodowego połączenia Wi-Fi do odbierania strumienia danych z~serwera stacji radiowej. Podobne rozwiązanie zrealizowane zostało w~ramach projektu Mini Web Radio\textsuperscript{\cite{esp32_radio}}. Odbiornik ten zbudowano wykorzystując zestaw uruchomieniowy Lolin32 Lite oparty o~układ SoC ESP32. Interesującą cechą rodziny tych układów jest zintegrowany moduł komunikacji Wi-Fi. Między innymi dzięki temu powstała niewielka, przenośna, zasilana bateryjnie konstrukcja. Pewną niedogodnością w~jej użytkowaniu może być jednak fakt, interfejs użytkownika został maksymalnie uproszczony i~pozwala jedynie na regulacje głośności odtwarzanej stacji. Natomiast zaawansowana konfiguracja, obejmująca m.in. wprowadzenie adresu serwera stacji radiowej odbywa się za pośrednictwem przeglądarki internetowej.
+		
+		%		Jest to relatywnie rozbudowany zestaw uruchomieniowy. Zawiera wbudowany wyświetlacz, złącze Ethernet, jak również przetwornik cyfrowo-analogowy. Jednak brakuje w~nim obsługi technologii Wi-Fi czy zasilania akumulatorowego, co uniemożliwia zastosowanie go jako przenośnego odtwarzacza radia internetowego.
+		%		$ $\\
+		%		W celu obsługi bezprzewodowego połączenia z~Internetem można użyć mikrokontrolera z~wbudowaną jego obsługą np. ESP32. Projekt Mini~Web~Radio\textsuperscript{\cite{esp32_radio}} używa tego mikrokontrolera umieszczonego na płytce z~obsługą ładowania baterii. Jest to kompaktowe rozwiązane które dodatkowo umożliwia miniaturyzację urządzenia.
 	
 	\section{Analiza technologiczna}
-		Inspirując się projektem Mini~Web~Radio oraz sugestiami promotora, do realizacji projektu wybrany został moduł uruchomieniowy Raspberry~Pi~Pico.
+		Inspirując się projektem Mini~Web~Radio oraz sugestiami promotora, do realizacji projektu wybrany został moduł uruchomieniowy Raspberry~Pi~Pico~W.
 		Wykorzystany do jego budowy mikrokontroler RP2040\textsuperscript{\cite{rp2040}} zawiera dwa rdzenie \textit{Cortex M0+}, co umożliwi zrównoleglenie niektórych zadań.
-		Układ zawiera także wiele peryferiów. Pomogą one m.in. w~implementacji protokołu przesyłu dźwięku \isqs{} oraz odciążeniu procesora poprzez wykorzystanie DMA.
+		Układ zawiera także wiele peryferiów. Pomogą one m.in. w~implementacji protokołu przesyłu dźwięku \isqs{} oraz odciążeniu procesora poprzez wykorzystanie transferów DMA. Na płytce modułu znajduje się również układ radiowy umożliwiający komunikację za pośrednictwem standardu Wi-Fi.
 		
 		\subsection{Dekodowanie formatu MP3}
 			Jednym z~trudniejszych zagadnień związanych z~budową odbiornika internetowych stacji radiowych jest dekodowanie strumienia danych w~formacie MP3. Ze względu na złożoność metody kodowania, ograniczenia patentowe i~krótki czas realizacji projektu odrzucony został pomysł samodzielnego napisania oprogramowania dekodującego na rzecz wykorzystania dostępnych bibliotek.
 			
-			Jedną z~popularnych bibliotek jest \lstinline|minimp3|\textsuperscript{\cite{minimp3}}. Sprawdza się ona doskonale w~aplikacjach dedykowanych dla komputerów osobistych i~wydajnych mikrokontrolerów, jednak jej wadą jest to, że wykorzystuje arytmetykę zmiennoprzecinkową. Ponieważ mikrokontroler RP2040 nie wspiera sprzętowo operacji zmiennoprzecinkowych istniała uzasadniona obawa, że nie poradzi on sobie z~dekodowaniem strumienia MP3 w~czasie rzeczywistym. W~takiej sytuacji konieczne okazało się użycie  biblioteki \lstinline|helixmp3|\textsuperscript{\cite{helixmp3_repo}} która implementuje dekoder MP3 przy użyciu arytmetyki stałoprzecinkowej.
+			Jedną z~popularnych bibliotek oferujących dekodowanie formatu MP3 jest \lstinline|minimp3|\textsuperscript{\cite{minimp3}}. Sprawdza się ona doskonale w~aplikacjach dedykowanych dla komputerów osobistych i~wydajnych mikrokontrolerów, jednak jej wadą jest to, że wykorzystuje arytmetykę zmiennoprzecinkową. Ponieważ mikrokontroler RP2040 nie wspiera sprzętowo operacji zmiennoprzecinkowych, istniała uzasadniona obawa, że nie poradzi on sobie z~dekodowaniem strumienia MP3 w~czasie rzeczywistym. W~takiej sytuacji konieczne okazało się użycie  biblioteki \lstinline|helixmp3|\textsuperscript{\cite{helixmp3_repo}} która implementuje dekoder MP3 przy użyciu arytmetyki stałoprzecinkowej.
 			$ $\\
 			
 			Szczegóły związane z~implementacja procesu dekodowania strumienia MP3 omówione zostały w~dalszej części pracy.
@@ -297,31 +318,36 @@ backend=biber,
 			Oprogramowanie zostanie napisane w~języku C++ z~wykorzystaniem środowiska \lstinline|pico-sdk|\textsuperscript{\cite{pico_sdk}}.  W~środowisko brak wbudowanego centralnego systemu zarządzającego przepływem informacji oraz zadaniami, zatem do projektu dołączone zostało jądro systemu czasu rzeczywistego FreeRTOS\textsuperscript{\cite{freertos_kernel}}
 	
 	\section{Ryzyko}
-		Należy uwzględnić ryzyko opóźnień w~ustalonym trybie prac. Tworzenie oprogramowania wiąże się z~ryzykiem dotarcia w~ślepy zaułek i~konieczności gruntownego przeprojektowania części systemów. Dostosowanie platformy pod centralny system czasu rzeczywistego stanowi przykład takiego opóźnienia.
+		Podczas budowy prototypu odbiornika i~tworzenia jego oprogramowania układowego może wystąpić szereg różnych problemów, które mogą opóźnić prace projektowe.
 		$ $\\
 		
-		Niespodziewane problemy z~jakością oprogramowania, takie jak na przykład ciężko reprodukowalne błędy w~strumieniowaniu audio, także mogą przyczynić się do długiego poszukiwania przyczyn takiego zachowania aplikacji.
+		Pierwszym czynnikiem opóźniającym mogą stać się problemy we współpracy między sobą poszczególnych komponentów sprzętowych odbiornika, prowadzące do niedziałania lub błędnego działania urządzenia. Ich usuniecie może wymagać czasu niezbędnego do ustalenia przyczyn i~znalezienia rozwiązania. Minimalizacja oddziaływania tego czynnika polegać będzie na odpowiednim dobraniu komponentów odbiornika i~jak najszybszym przeprowadzeniu testów wstępnie weryfikujących poprawność ich współpracy. W~przypadku wystąpienia problemów konieczne będzie znalezienie innych, poprawnie współpracujących komponentów i~wprowadzenie niezbędnych zmian konstrukcyjnych.
 		$ $\\
 		
-		Dostępna pamięć RAM ma rozmiar 264kB. Jest to stosunkowo niewiele. Może ona okazać się niewystarczająca. Jednak po wstępnych testach wiadomo, że nie będzie to problemem.
+		Drugi z~istotnych czynników ryzyka to problemy wydajnościowe związane z~jednoczesnym odbieraniem strumienia sygnału stacji radiowej, jego dekodowaniem i~odtwarzaniem. Mikrokontroler modułu Raspberry Pi Pico W~taktowany jest zegarem 133~MHz, co  w~porównaniu chociażby z~komputerami jednopłytkowymi Raspberry Pi jest wartością niewielką. Może okazać się że dostępne biblioteki dekodujące nie pozwolą na uzyskanie odpowiedniej wydajności procesu dekodowania co skutkować będzie niepoprawnym odtwarzaniem sygnału stacji. Konieczne wtedy może się okazać znalezienie innej biblioteki dekodującej lub w~skrajnej sytuacji konieczna będzie zmiana założeń projektowych. Minimalizacja wpływu tego czynnika polegać będzie na takim zorganizowaniu prac, aby jak najwcześniej przeprowadzić testy pozwalające stwierdzić czy wydajność procesu dekodowania jest wystarczającą. 
 		$ $\\
 		
-		Posiadając jedną płytkę Raspberry Pi Pico, jej uszkodzenie również może powodować opóźnienia w~realizacji projektu. Warto zaopatrzyć się w~więcej niż jedną sztukę krytycznych elementów.
+		Kolejnym istotnym czynnikiem ryzyka jest rozmiar pamięci RAM mikrokontrolera RP2040.  Może się okazać, że 264kB RAM to zbyt mało by umieścić w~niej wszystkie struktury danych niezbędne do  prawidłowego działania oprogramowania układowego. Czynnikiem zaradczym będzie w~tym przypadku oszczędne gospodarowanie pamięcią i~monitorowanie stopnia jej wykorzystania przez cały czas prac nad kodem oprogramowania układowego.
 		$ $\\
 		
-		Dobre planowanie, rzetelne projektowanie i~tworzenie kodu powinny umniejszyć rolę w.w. ryzyk.
+		Niezakłócone odtwarzanie audycji radiowej związane jest ze stabilnym przepływem danych z~serwera rozgłośni do odbiornika. Może się okazać, że domyślna konfiguracja komunikacji sieciowej spowoduje trudne do zidentyfikowania zakłócenia stabilnego przepływu danych. Ustalenie przyczyny oraz znalezienie rozwiązania wymagać będzie przeprowadzenia wielu testów i~może okazać się poważnym wyzwaniem.
+		$ $\\
+		
+		Istnieje niebezpieczeństwo, że projektując architekturę oprogramowania układowego na skutek zaniechania lub niewłaściwych założeń, popełnione zostaną błędy, których usunięcie wymagać będzie wprowadzenia do niej zasadniczych zmian a~ich pozostawienie ograniczy w~sposób istotny funkcjonalności odbiornika. 
+		$ $\\
+		
+		Na każdym etapie prac istnieje ryzyko przypadkowego uszkodzenia lub zniszczenia prototypu, co spowoduje całkowite wstrzymanie prac do czasu jego odbudowy lub naprawy. Jedyną możliwością minimalizacji wpływu takiego zdarzenia na harmonogram prac jest posiadanie drugiego egzemplarza prototypu lub co najmniej posiadanie dodatkowego egzemplarza kluczowego elementu jakim jest moduł Rasperry Pi Pico W.
 	
 	\section{Słownik pojęć}
 	\begin{itemize}
-		\setlength{\itemsep}{0.3cm}
+		\setlength{\itemsep}{0.1cm}
 		\item MP3 (\textit{MPEG-1 Audio Layer 3}) -- popularny format zapisu dźwięku; implementuje stratną kompresję,
 		\item AAC/AAC+ (\textit{Advanced Audio Coding}) -- inny format dźwięku z~kompresją stratną,
 		\item Li-ion -- akumulatory Litowo-jonowe (ładowalne),
-		\item Raspberry Pi -- komputery jednopłytkowe tworzone przez Raspberry Pi Foundation,
-		\item Raspberry Pi Pico -- płytki rozwojowe oparte o~mikrokontroler RP2040 (produkowane również przez Raspberry Pi Foundation),
+		\item Raspberry Pi Pico W -- płytki rozwojowe oparte o~mikrokontroler RP2040 (produkowane przez Raspberry Pi Foundation), wersja z~wbudowanym modułem komunikacyjnym Wi-Fi
 		\item \textit{Cortex M0+} -- rdzeń procesora, zaprojektowany przez firmę ARM i~sprzedawany innym podmiotom jako własność intelektualna; relatywnie nieskomplikowany i~zajmujący małą powierzchnię krzemu, jednak przez to najmniej wydajny,
 %		\item PWM (ang. \textit{Pulse Width Modulation}) -- 
-		\item DMA (ang. \textit{Direct Memory Access}) -- podsystem mikrokontrolera, który pozwala na automatyczne transfery danych, bez ingerencji jednostki centralnej,
+		\item DMA (ang. \textit{Direct Memory Access}) -- podsystem mikrokontrolera, który pozwala na automatyczne transfery danych do pamięci, bez ingerencji jednostki centralnej,
 		\item PIO (ang. \textit{Programmable Input Output}) -- programowalne maszyny stanów zawarte w~układzie RP2040,
 		\item DAC (ang. \textit{Digital to Analogue Converter}) -- przetwornik cyfrowo-analogowy,
 		\item \isqs{} (ang. \textit{Inter-IC Sound}) -- protokół przesyłu cyfrowego dźwięku opracowany w~1986~roku przez firmę Philips,
@@ -331,8 +357,9 @@ backend=biber,
 		\item TLS (ang. \textit{Transport Layer Security}) -- protokół zapewniający szyfrowanie i~poufność danych przesyłanych w~Internecie,
 	\end{itemize}
 
+\cleardoublepage
 \chapter{Zakres funkcjonalności}
-	W rozdziale drugim skupiono się na krótkim wprowadzeniu do sprzętowej architektury projektu. Przedstawiony został także opis funkcjonalności produktu oraz projekt interfejsu użytkownika.\\
+	W rozdziale drugim skupiono się na krótkim wprowadzeniu do sprzętowej architektury odbiornika. Przedstawiony został także opis funkcjonalności produktu oraz projekt interfejsu użytkownika.\\
 	
 	\section{Sprzętowa architektura systemu}
 			Architekturę systemu realizującego funkcje odbiornika internetowych stacji radiowych przedstawiono na rysunku~\ref{2/PicoRadio-hw-blocks}. Składa się on z~następujących elementów:
@@ -347,12 +374,12 @@ backend=biber,
 			\imgh{2/PicoRadio-hw-blocks}{Sprzętowa architektura systemu}{0.95}
 			
 			\pagebreak
-			Bazę odtwarzacza stanowi płytka rozwojowa Raspberry Pi Pico W~oparta o~mikrokontroler RP2040. Zawiera ona ponadto 2MB nieulotnej pamięci typu \textit{FLASH} (przeznaczonej na oprogramowanie układowe i~dane użytkownika) oraz układ komunikacji Wi-Fi. Do niej dołączony jest przetwornik audio DAC który wraz dodatkowymi komponentami (potencjometry regulacji głośności, wzmacniacze mocy i~głośniki) tworzą tor audio. Role interfejsu użytkownika pełni ekran LCD o~przekątnej 1,8~cala oraz 5~przycisków chwilowych typu pushbutton. Do płytki  dołączonej jest również gniazdo dla kart SD. Całość jest zasilana z~ogniwa litowo-jonowego współpracującego z~układem jego monitorowania i~ładowania. 
+			Bazę odtwarzacza stanowi płytka rozwojowa Raspberry Pi Pico~W oparta o~mikrokontroler RP2040. Zawiera ona ponadto 2MB nieulotnej pamięci typu \textit{FLASH} (przeznaczonej na oprogramowanie układowe i~dane użytkownika) oraz układ komunikacji Wi-Fi. Do niej dołączony jest przetwornik audio DAC który wraz dodatkowymi komponentami (potencjometry regulacji głośności, wzmacniacze mocy i~głośniki) tworzą tor audio. Role interfejsu użytkownika pełni ekran LCD o~przekątnej 1,8~cala oraz 5~przycisków chwilowych typu pushbutton. Do płytki dołączone jest również gniazdo dla kart SD. Całość jest zasilana z~ogniwa litowo-jonowego współpracującego z~układem jego monitorowania i~ładowania. 
 			$ $\\
 			
 			Zasada działania urządzenia jest następująca.
-			Zaraz po uruchomieniu urządzenie próbuje połączyć się z~jedną ze skonfigurowanych sieci Wi-Fi.
-			Jeśli zakończy się to sukcesem użytkownik ma możliwość wyboru stacji radiowej do odbioru. W~trakcie odtwarzania urządzenie odbiera skompresowany strumień danych audio, który jest następnie dekodowany przez oprogramowanie układowe do formatu PCM. Zdekodowane dane są przesyłane poprzez interfejs \isqs{} do stereofonicznego przetwornika audio, który zamienia je w~sygnał analogowy. Z~wyjść przetwornika sygnał ten trafia na, zbudowany z~podwójnego potencjometru logarytmicznego, układ regulacji głośności i~dalej do układów wzmacniaczy mocy sterujących głośnikami kanału lewego i~prawego.
+			Zaraz po uruchomieniu, urządzenie próbuje połączyć się z~jedną ze skonfigurowanych sieci Wi-Fi.
+			Jeśli zakończy się to sukcesem użytkownik ma możliwość wyboru stacji radiowej do odbioru. W~trakcie odtwarzania urządzenie odbiera skompresowany strumień danych audio, który jest następnie dekodowany przez oprogramowanie układowe do formatu PCM. Zdekodowane dane są przesyłane poprzez interfejs \isqs{} do stereofonicznego przetwornika audio, który zamienia je w~sygnał analogowy. Z~wyjść przetwornika sygnał ten trafia na, zbudowany z~podwójnego potencjometru logarytmicznego, układ regulacji głośności i~dalej do układów wzmacniacza mocy sterującego głośnikami kanału lewego i~prawego.
 			Użytkownik może w~dowolnym momencie zatrzymać odtwarzanie lub zmienić odtwarzaną stację na inną wybierając ją z~pośród ulubionych lub wyszukując na liście dostępnych stacji.
 			$ $\\
 			
@@ -363,7 +390,7 @@ backend=biber,
 	
 	\section{Projekt interfejsu}
 		\label{sec:ui}
-		Najważniejszym elementem planowania projektu z~perspektywy użyteczności dla klienta jest projekt wygodnego i~intuicyjnego interfejsu użytkownika. Komplikacją jest fakt, że urządzenie będzie miało do dyspozycji tylko niewielki wyświetlacz i~kilka przycisków.
+		Najważniejszym elementem planowania odbiornika z~perspektywy użyteczności dla klienta jest projekt wygodnego i~intuicyjnego interfejsu użytkownika. Komplikacją jest fakt, że urządzenie będzie miało do dyspozycji tylko niewielki wyświetlacz i~kilka przycisków.
 		Należy więc zadbać, żeby przy tych ograniczonych możliwościach udało się przekazać niezbędne informacje o~stanie urządzenia oraz zapewnić użytkownikowi prostą i~ergonomiczną jego obsługę.
 		$ $\\
 
@@ -372,7 +399,9 @@ backend=biber,
 		\imgh{2/interface/all}{Przemieszczanie się pomiędzy ekranami}{0.9}
 		
 		Najczęściej wyświetlanym ekranem jest ekran odtwarzacza radia internetowego. Użytkownik widzi wówczas umieszczoną na ekranie nazwę aktualnie odtwarzanej stacji a~pod nią tytuł audycji lub wykonawcę i~tytuł aktualne nadawanego utworu.
-		W górnej części ekranu widoczna jest jego nazwa. Informuje ona o~obecnym trybie pracy urządzenia.
+		$ $\\
+		
+		W górnej części wyświetlacza widoczna jest nazwa aktualnie otwartego ekranu. Informuje ona o~trybie pracy urządzenia.
 		W zależności od aktualnie wyświetlanego ekranu, obok jego nazwy, znajdują się ikony statusu, a~w dolnej części ikony akcji.
 		
 		\paragraph{Ikony statusu}
@@ -385,7 +414,7 @@ backend=biber,
 		Przy wyświetlaniu listy (np. wyników wyszukiwania lub listy ulubionych stacji) kliknięcie w~daną pozycję powoduje zaakceptowanie jej i~otworzenie następnego ekranu.
 		$ $\\
 		
-		Na rysunkach \ref{2/interface/real1}, \ref{2/interface/real2} umieszczono zdjęcia przedstawiające wygląd interfejsu na rzeczywistym wyświetlaczu. W~sekcji~\ref{sec:uinav} przedstawiono sposób nawigacji z~wykorzystaniem przycisków.
+		Na rysunkach \ref{2/interface/real1}, \ref{2/interface/real2} umieszczono zdjęcia przedstawiające wygląd interfejsu na rzeczywistym wyświetlaczu. W~sekcji~\ref{sec:uinav} omówiono sposób nawigacji z~wykorzystaniem przycisków.
 		\imghss{2/interface/real1}{Wyszukiwanie stacji}{2/interface/real2}{Wyniki wyszukiwania}
 	
 	\section{Interakcja użytkownika z~interfejsem produktu}
@@ -393,7 +422,7 @@ backend=biber,
 		Poniżej przedstawione zostały wybrane scenariusze poruszania się użytkownika w~obrębie zaprojektowanego interfejsu.
 		$ $\\
 		
-		Na rysunku~\ref{2/btn/1} widać jak użytkownik aby poruszyć się w~dół listy stacji naciska dolny przycisk. Powrót do \textit{Radio 1} jest oczywiście możliwy poprzez naciśnięcie górnego przycisku.
+		Na rysunku~\ref{2/btn/1} widać jak użytkownik aby poruszyć się w~dół listy stacji naciska dolny przycisk. Powrót do pozycji \textit{Radio 1} jest oczywiście możliwy poprzez naciśnięcie górnego przycisku.
 		\imgh{2/btn/1}{Krok w~dół na liście}{0.7}
 		
 		Po dojściu do czwartej pozycji na liście, jeżeli na liście jest więcej niż 4~stacje, po naciśnięciu dolnego przycisku, zgodne z~rysunkiem~\ref{2/btn/2}, kursor zostanie przeniesiony do piątej stacji. Należy zwrócić uwagę na zmianę położenia paska przewijania (po prawej stronie).
@@ -405,12 +434,13 @@ backend=biber,
 		Poruszanie się w~obrębie jednego wiersza zostało zrealizowane poprzez przyciski \mbox{lewo/prawo}. Przedstawiają to rysunki \ref{2/btn/4r} i~\ref{2/btn/4l} na przykładzie dwóch ikon akcji.
 		\imghss{2/btn/4r}{Przejście w~prawo}{2/btn/4l}{Przejście w~lewo}
 		
-		Przycisk środkowy służy do wykonania akcji. Jeżeli kursor jest ustawiony na liście, możemy rozpocząć odtwarzanie naciskając go (rysunek \ref{2/btn/5})
+		Przycisk środkowy służy do wykonania akcji. Jeżeli kursor jest ustawiony na liście, naciskając go, możemy rozpocząć odtwarzanie wybranej stacji (rysunek \ref{2/btn/5}). Nastąpi wówczas przejście do ekranu \textit{Radio}.
 		\imgh{2/btn/5}{Akceptacja wyboru}{0.7}
 				
-		Czasami w~komunikacji z~serwerem może wystąpić błąd. Takie sytuacje są zgłaszane użytkownikowi poprzez ekrany błędów widoczne na rysunkach \ref{2/err1} i~\ref{2/err2} (czerwone tło). Aby wyjść z~takiego ekranu należy nacisnąć dowolny przycisk.
+		Czasami w~komunikacji z~serwerem może wystąpić błąd. Takie sytuacje są zgłaszane użytkownikowi poprzez ekrany błędów widoczne na rysunkach \ref{2/err1} i~\ref{2/err2} (czerwone tło). Aby wyjść z~takiego ekranu wystarczy nacisnąć dowolny przycisk.
 		\imghss{2/err1}{Błąd odtwarzania}{2/err2}{Błąd ładowania stacji}
 
+\cleardoublepage
 \chapter{Wybrane aspekty realizacji}
 	W tym rozdziale opisano ukończony produkt.
 	Przedstawiono jak funkcjonuje część sprzętowa oraz programowa projektu. Opisano także poszczególne bloki funkcjonalne.
@@ -436,14 +466,14 @@ backend=biber,
 				Dodatkowe elementy: tranzystor PMOS \lstinline|Q1|, Dioda Shottky'ego \lstinline|D1| i~rezystor \lstinline|R5| tworzą układ zabezpieczający ogniwa \lstinline|BT1| przed przeładowaniem podczas  zasilania urządzenia z~zewnętrznego źródła. Konieczność ich użycia została szczegółowo wyjaśniona w~\cite{hw_load_sw}. W~sekcji zasilania umieszczono ponad to dzielniki pomiarowe wykorzystane do monitorowania jej pracy oraz przetwornicę wytwarzającą napięcie +5V (schemat ozn.~\lstinline|B4|), która w~przyszłości posłużyć może do zasilania zewnętrznego modemu sieci komórkowej.
 				$ $\\
 				
-				Napięcie 3.3V, niezbędne do zasilania wyświetlacza oraz karty SD pobierane jest z~wyjścia stabilizatora 3.3V znajdującego się na płytce Raspberry Pi Pico.
+				Napięcie 3.3V, niezbędne do zasilania wyświetlacza oraz karty SD pobierane jest z~wyjścia stabilizatora 3.3V znajdującego się na płytce Raspberry Pi Pico~W.
 				
 			\subsubsection{Panel LCD, przyciski, karta SD}
 				Na rysunku~\ref{3/hw_kicad_sch_perip} przedstawione zostało dołączenie peryferiów wejścia/wyjścia do układu.
 				\imgh{3/hw_kicad_sch_perip}{Schemat elektryczny radia: peryferia wejścia/wyjścia}{0.95}
 				
 				Te trzy sekcje łączą poszczególne gotowe moduły z~główną jednostką.
-				Wyświetlacz LCD oraz gniazdo karty SD dołączone są bezpośrednio do wyprowadzeń modułu Raspberry Pi Pico. Niezbędne do ich zasilania napięcie 3.3V jest również pobierane z~Pi Pico.
+				Wyświetlacz LCD oraz gniazdo karty SD dołączone są bezpośrednio do wyprowadzeń modułu Raspberry Pi Pico~W. Niezbędne do ich zasilania napięcie 3.3V jest również pobierane z~Pi Pico~W
 				$ $\\
 				
 				Moduł klawiatury składa się z~pięciu przycisków membranowych typu pushbutton zwierających do masy odpowiednie wyjście. Zrealizowany jest jako osobna płytka (zostanie zamontowany na przednim panelu obudowy).  Do wszystkich sygnałów pochodzących z~wejść będących stykami mechanicznymi dołączone zostały równolegle kondensatory 100nF służące do eliminacji zjawiska drgania styków.
@@ -453,7 +483,7 @@ backend=biber,
 				Rysunek~\ref{3/hw_kicad_sch_audio} ukazuje tor analogowy, którego celem jest odtwarzanie dźwięku.
 				\imgh{3/hw_kicad_sch_audio}{Schemat elektryczny radia: Tor audio}{0.95}
 				
-				W torze audio zastosowano gotowy moduł oparty o~scalony, stereofoniczny przetwornik PCM5102a\textsuperscript{\cite{hw_dac}}. Dane do przetwornika dostarczane są z~modułu Raspberry Pi Pico przez interfejs I2S. Moduł przetwornika posiada własne stabilizatory napięcia, w~związku z~tym zasilany jest napięciem 3.7V pobieranym bezpośrednio z~ogniw.
+				W torze audio zastosowano gotowy moduł oparty o~scalony, stereofoniczny przetwornik PCM5102a\textsuperscript{\cite{hw_dac}}. Dane do przetwornika dostarczane są z~modułu Raspberry Pi Pico~W przez interfejs I2S. Moduł przetwornika posiada własne stabilizatory napięcia, w~związku z~tym zasilany jest napięciem 3.7V pobieranym bezpośrednio z~ogniw.
 				$ $\\
 				
 				Z wyjścia przetwornika sygnały poszczególnych kanałów są wprowadzane na dwustopniowy dzielnik napięcia zrealizowany na dwóch podwójnych, sprzężonych potencjometrach obrotowych. Pierwszy stopień regulacji dostępny jest wewnątrz urządzenia i~służy do ograniczenia, na etapie uruchamiania odbiornika, maksymalnej amplitudy sygnału audio jaka może zostać podana na wyjściowe wzmacniacze mocy. Drugi stopień regulacji jest dostępy z~zewnątrz urządzenia i~służy do ustawiania przez użytkownika poziomu głośności odbieranej stacji. 
@@ -464,8 +494,8 @@ backend=biber,
 							
 			\subsubsection{Raspberry Pi Pico W}
 				Główny moduł został przedstawiony na rysunku~\ref{3/hw_kicad_sch_picow}.
-			 	Składa się on głównie z~płytki rozwojowej Raspberry Pi Pico W, która zawiera układ mikrokontrolera RP2040 oraz pamięć oprogramowania układowego typu FLASH. Znajduje się tam także moduł komunikacji bezprzewodowej Wi-Fi.
-				\imgh{3/hw_kicad_sch_picow}{Schemat elektryczny radia: Raspberry Pi Pico W}{0.65}
+			 	Składa się on głównie z~płytki rozwojowej Raspberry Pi Pico~W, która zawiera układ mikrokontrolera RP2040 oraz pamięć oprogramowania układowego typu FLASH. Znajduje się tam także moduł komunikacji bezprzewodowej Wi-Fi.
+				\imgh{3/hw_kicad_sch_picow}{Schemat elektryczny radia: Raspberry Pi Pico~W}{0.65}
 				
 				Z głównego modułu wyprowadzone zostało 5-pinowe złącze komunikacyjne. Znajduje się ono na tylnej ścianie obudowy i~zawiera sygnały:
 				\begin{enumerate}
@@ -487,7 +517,7 @@ backend=biber,
 			Zapewnia ona odpowiednia trwałość mechaniczna i~dobrą jakość połączeń elektrycznych pomiędzy poszczególnymi modułami wykorzystanymi do skonstruowania urządzenia.
 			$ $\\
 			
-			Na rysunku~\ref{3/hw_kicad_pcb} przedstawiony został projekt płytki. Zaznaczono na nim dwie najważniejsze sekcje. W~centrum znajduje się płytka Raspberry Pi Pico W, a~w jej sąsiedztwie slot na karty SD oraz przyłącza do ekranu LCD (po lewej, 8-pinowe) i~przycisków (po prawej, 6-pinowe). Obok, na rysunku~\ref{3/hw_pcb}, przedstawiona została zmontowana płytka.
+			Na rysunku~\ref{3/hw_kicad_pcb} przedstawiony został projekt płytki. Zaznaczono na nim dwie najważniejsze sekcje. W~centrum znajduje się płytka Raspberry Pi Pico~W, a~w jej sąsiedztwie slot na karty SD oraz przyłącza do ekranu LCD (po lewej, 8-pinowe) i~przycisków (po prawej, 6-pinowe). Obok, na rysunku~\ref{3/hw_pcb}, przedstawiona została zmontowana płytka.
 			
 			\imghss{3/hw_kicad_pcb}{Projekt płytki}{3/hw_pcb}{Zmontowana, gotowa płytka (bez modułów)}
 			
@@ -869,7 +899,7 @@ backend=biber,
 				
 %		\paragraph{Karta SD -- FatFS}
 		\subsection{Pamięć Flash -- LittleFS}
-			Aby lista ulubionych stacji czy lista zapisanych sieci Wi-Fi były przechowywane pomiędzy wyłączeniami urządzenia, musiały one być zapisane w~pamięci nieulotnej. Mikrokontroler RP2040 przechowuje program w~zewnętrznej pamięci typu \textit{flash}. Na płytkach Pi Pico dostarczone zostały układy o~rozmiarach 2MB. Środowisko programistyczne umożliwia, oprócz oczywistej operacji odczytu, także zapis do tej pamięci. Wykorzystano tą właściwość do umieszczenia w~końcowych 64KB systemu plików LittleFS\textsuperscript{\cite{littlefs}}, specjalnie stworzonego do przechowywania danych w~środowiskach wbudowanych i~pamięciach typu \textit{flash}. Stworzona została klasa \lstinline|LFSAccess|, która dostarcza podstawowe metody do manipulacji tekstami, jak również implementuje interfejs \lstinline|DataSource|.
+			Aby lista ulubionych stacji czy lista zapisanych sieci Wi-Fi były przechowywane pomiędzy wyłączeniami urządzenia, musiały one być zapisane w~pamięci nieulotnej. Mikrokontroler RP2040 przechowuje program w~zewnętrznej pamięci typu \textit{flash}. Na płytkach Pi Pico~W dostarczone zostały układy o~rozmiarach 2MB. Środowisko programistyczne umożliwia, oprócz oczywistej operacji odczytu, także zapis do tej pamięci. Wykorzystano tą właściwość do umieszczenia w~końcowych 64KB systemu plików LittleFS\textsuperscript{\cite{littlefs}}, specjalnie stworzonego do przechowywania danych w~środowiskach wbudowanych i~pamięciach typu \textit{flash}. Stworzona została klasa \lstinline|LFSAccess|, która dostarcza podstawowe metody do manipulacji tekstami, jak również implementuje interfejs \lstinline|DataSource|.
 			
 		\subsection{Sortowanie -- LFSorter}
 			Niektóre metody zwracają wyniki w~postaci strumienia kolejnych wyników, bez możliwości indeksacji indywidualnych pozycji. Z~powodu ograniczonej pamięci RAM, nie jest możliwe wczytanie wszystkich wyników i~wybranie z~nich kilku w~zadanej kolejności. Ten problem rozwiązuje klasa \lstinline|LFSorter|, która zapisuje cały strumień do pamięci nieulotnej \textit{flash} (przy użyciu \lstinline|LFSAccess|). Następnie, przy użyciu metody \lstinline|get_smallest_n_skip_k(n, k)|, pozwala wczytać elementy $k,\; k+1,\; ...,\; k+n-1$ z~ciągu posortowanych elementów (indeksowanie od 0, sortowanie wg dostarczonej funkcji porównującej). Ciąg ten nie jest nigdzie zapisywany.
@@ -1033,6 +1063,7 @@ backend=biber,
 		\subsection{Połączenie po uruchomieniu}
 			Gdy urządzenie zostanie uruchomione, użytkownik oczekuje że samo odnajdzie ono najlepszą do połączenia sieć. Zachowanie takie implementuje funkcja \lstinline|connect_best_saved()|. Wykorzystuje ona funkcje \lstinline|scan()| i~\lstinline|read()| żeby pojedynczo wczytywać sieci, poczynając od tej o~najwyższej sile sygnału. Gdy sieć istnieje w~zapisanych sieciach, inicjowane jest połączenie. W~przeciwnym wypadku ładowana jest następna sieć i~tak aż do skutku, albo do wyczerpania się przeskanowanych sieci.
 			
+\cleardoublepage
 \chapter{Organizacja pracy}
 	W tym rozdziale opisano organizację i~przebieg prac nad projektem.
 	
@@ -1068,7 +1099,7 @@ backend=biber,
 			
 		\subsection{Standaryzacja interfejsu i~radio internetowe}
 			Pod koniec kwietnia w~repozytorium projektu znajdowało się wiele dosyć luźno powiązanych ze sobą fragmentów kodu, które były wykorzystane do sprawdzenia pojedynczych funkcjonalności.
-			Przystąpiono do prac nad refaktoryzacją i~integracją opracowanych wcześniej rozwiązań, a~także dodaniem nowych by finalnie uzyskać w~maju oprogramowanie układowe dla Raspberry Pi Pico realizujące funkcje odtwarzania strumienia stacji radiowej.
+			Przystąpiono do prac nad refaktoryzacją i~integracją opracowanych wcześniej rozwiązań, a~także dodaniem nowych by finalnie uzyskać w~maju oprogramowanie układowe dla Raspberry Pi Pico~W realizujące funkcje odtwarzania strumienia stacji radiowej.
 			$ $\\
 			
 %			W trakcie standaryzacji interfejsu odtwarzanie plików MP3 oraz WAV zostało zintegrowane i~obsługiwane jest obecnie przez jedną wspólną funkcję.
@@ -1081,7 +1112,7 @@ backend=biber,
 			
 			\imgh{4/prototype_2}{Prototyp z~wyświetlaczem i~klawiaturą}{0.8}
 			
-			Dosyć szybko okazało się, że samodzielne stworzenie oprogramowania, które będzie równocześnie wykonywało wiele funkcji, efektywnie wykorzystując przy tym zasoby Raspberry Pi Pico może się okazać dużym wyzwaniem mogącym negatywnie wpłynąć na czas realizacji projektu.
+			Dosyć szybko okazało się, że samodzielne stworzenie oprogramowania, które będzie równocześnie wykonywało wiele funkcji, efektywnie wykorzystując przy tym zasoby Raspberry Pi Pico~W może się okazać dużym wyzwaniem mogącym negatywnie wpłynąć na czas realizacji projektu.
 			$ $\\
 			
 			Zdecydowano się wykorzystać do tego celu dedykowany dla mikrokontrolerów system operacyjny czasu rzeczywistego FreeRTOS. Wymagało to wprowadzenia zmian w~projekcie, jednak uzyskane w~ten sposób korzyści były znaczące.
@@ -1234,6 +1265,7 @@ backend=biber,
 		 
 		Sposób organizacji pracy przy budowie urządzenia i~wytworzeniu jego oprogramowania układowego był  inspirowany był metodyką Scrum. Została ona jednak znacznie uproszczona w~związku z~realizacją projektu przez jedną osobę.
 	 	
+\cleardoublepage
 \chapter{Wyniki projektu}
 	W tym rozdziale omówione zostały wyniki pracy.
 	Projekt podsumowano i~wyciągnięto wnioski.
@@ -1345,7 +1377,7 @@ backend=biber,
 				\item Rys.~\rflwifi{l} -- użytkownik może teraz z~powodzeniem słuchać radia korzystając z~nowej sieci Wi-Fi.
 			\end{itemize}
 			
-	\section{Podsumowanie oprogramowania układowego}
+	\section{Zrealizowane oprogramowanie układowe}
 		Produkt końcowy posiada wiele funkcji. Przeważająca większość z~nich jest kompletna.
 		% TODO dopisać coś
 		
@@ -1444,9 +1476,27 @@ backend=biber,
 			
 	% TODO warnings gdzieś przy flow??
 	% TODO instrukcja obsługi (rozdział 5) ??
-		
-	\printbibliography
 	
+\cleardoublepage
+\phantomsection
+\addcontentsline{toc}{chapter}{Bibliografia}
+	\printbibliography
+
+\cleardoublepage
+\phantomsection
+\addcontentsline{toc}{chapter}{Spis rysunków}
 	\listoffigures
+
+\cleardoublepage
+\phantomsection
+\addcontentsline{toc}{chapter}{Załączniki}
+\chapter*{Załączniki}
+%	abc
+	\begin{enumerate}[label=Załącznik \arabic*, itemsep=0.5cm, leftmargin=3.0cm]
+		\item (plik \lstinline|kicad.zip|) -- Projekt elektryczny odbiornika w programie KiCAD. Zawiera pliki schematu oraz płytki PCB.
+		\item (plik \lstinline|3d.zip|) -- Projekt obudowy 3D w programie OpenSCAD oraz wygenerowane pliki \lstinline|.stl| poszczególnych elementów urządzenia gotowe do wykorzystania w programie typu \textit{slicer}.
+		\item (plik \lstinline|pico-radio-cpp.zip|) -- Kod źródłowy oprogramowania układowego oraz plik \lstinline|.uf2| gotowy do wgrania do urządzenia.
+	\end{enumerate}
+
 	
 \end{document}
