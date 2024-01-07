@@ -469,55 +469,57 @@ backend=biber,
 				Napięcie 3.3V, niezbędne do zasilania wyświetlacza oraz karty SD pobierane jest z~wyjścia stabilizatora 3.3V znajdującego się na płytce Raspberry Pi Pico~W.
 				
 			\subsubsection{Panel LCD, przyciski, karta SD}
-				Na rysunku~\ref{3/hw_kicad_sch_perip} przedstawione zostało dołączenie peryferiów wejścia/wyjścia do układu.
+				Na rysunku~\ref{3/hw_kicad_sch_perip} przedstawiono schemat dołączenia modułów realizujących funkcje wejścia/wyjścia w odbiorniku.
 				\imgh{3/hw_kicad_sch_perip}{Schemat elektryczny radia: peryferia wejścia/wyjścia}{0.95}
 				
-				Te trzy sekcje łączą poszczególne gotowe moduły z~główną jednostką.
-				Wyświetlacz LCD oraz gniazdo karty SD dołączone są bezpośrednio do wyprowadzeń modułu Raspberry Pi Pico~W. Niezbędne do ich zasilania napięcie 3.3V jest również pobierane z~Pi Pico~W
+				Wyświetlacz LCD oraz gniazdo karty SD dołączone są bezpośrednio do wyprowadzeń modułu Raspberry Pi Pico~W. Niezbędne do ich zasilania napięcie 3.3V jest również pobierane z~Pi Pico~W.
 				$ $\\
 				
 				Moduł klawiatury składa się z~pięciu przycisków membranowych typu pushbutton zwierających do masy odpowiednie wyjście. Zrealizowany jest jako osobna płytka (zostanie zamontowany na przednim panelu obudowy).  Do wszystkich sygnałów pochodzących z~wejść będących stykami mechanicznymi dołączone zostały równolegle kondensatory 100nF służące do eliminacji zjawiska drgania styków.
 				\pagebreak
 				
 			\subsubsection{Tor audio}
-				Rysunek~\ref{3/hw_kicad_sch_audio} ukazuje tor analogowy, którego celem jest odtwarzanie dźwięku.
+				Rysunek~\ref{3/hw_kicad_sch_audio} przedstawia schemat toru analogowego, który jest odpowiedzialny za odtwarzanie dźwięku.
 				\imgh{3/hw_kicad_sch_audio}{Schemat elektryczny radia: Tor audio}{0.95}
 				
-				W torze audio zastosowano gotowy moduł oparty o~scalony, stereofoniczny przetwornik PCM5102a\textsuperscript{\cite{hw_dac}}. Dane do przetwornika dostarczane są z~modułu Raspberry Pi Pico~W przez interfejs I2S. Moduł przetwornika posiada własne stabilizatory napięcia, w~związku z~tym zasilany jest napięciem 3.7V pobieranym bezpośrednio z~ogniw.
+				W torze audio zastosowano gotowy moduł oparty o~scalony, stereofoniczny przetwornik PCM5102A\textsuperscript{\cite{hw_dac}}. Dane do przetwornika dostarczane są z~modułu Raspberry Pi Pico~W przez interfejs \isqs{}. Moduł przetwornika posiada własne stabilizatory napięcia, w~związku z~tym zasilany jest napięciem 3.7V pobieranym bezpośrednio z~ogniw.
 				$ $\\
 				
-				Z wyjścia przetwornika sygnały poszczególnych kanałów są wprowadzane na dwustopniowy dzielnik napięcia zrealizowany na dwóch podwójnych, sprzężonych potencjometrach obrotowych. Pierwszy stopień regulacji dostępny jest wewnątrz urządzenia i~służy do ograniczenia, na etapie uruchamiania odbiornika, maksymalnej amplitudy sygnału audio jaka może zostać podana na wyjściowe wzmacniacze mocy. Drugi stopień regulacji jest dostępy z~zewnątrz urządzenia i~służy do ustawiania przez użytkownika poziomu głośności odbieranej stacji. 
+				Z wyjścia przetwornika sygnały poszczególnych kanałów są wprowadzane na dwustopniowy dzielnik napięcia zrealizowany na dwóch podwójnych, sprzężonych potencjometrach obrotowych. Pierwszy stopień regulacji dostępny jest wewnątrz urządzenia i~służy do ograniczenia, na etapie uruchamiania odbiornika, maksymalnej amplitudy sygnału audio jaka może zostać podana na wyjściowe wzmacniacze mocy. Drugi stopień regulacji jest dostępny z~zewnątrz urządzenia i~służy do ustawiania przez użytkownika poziomu głośności odbieranej stacji. 
 				$ $\\
 				
-				Jako wyjściowy wzmacniacz mocy wykorzystano gotowy moduł z~układem PAM8403\textsuperscript{\cite{hw_amp}}, który steruje głośnikami o~mocy 3W i~impedancji 4$\Omega$. Moduł jest wyposażony w~wejście \lstinline|MUTE| wykorzystywane do całkowitego wyciszenia wzmacniacza w~sytuacji, w~której nie jest odbierany sygnał radiowy.
+				Jako wyjściowy wzmacniacz mocy wykorzystano gotowy moduł z~układem PAM8403\textsuperscript{\cite{hw_amp}}, który steruje głośnikami o~mocy 3W i~impedancji 4$\Omega$. Moduł jest wyposażony w~wejście \lstinline|MUTE| wykorzystywane do całkowitego wyciszenia wzmacniacza w~sytuacji, w~której nie jest odbierany strumień danych ze stacji radiowej.
 				
-							
 			\subsubsection{Raspberry Pi Pico W}
-				Główny moduł został przedstawiony na rysunku~\ref{3/hw_kicad_sch_picow}.
-			 	Składa się on głównie z~płytki rozwojowej Raspberry Pi Pico~W, która zawiera układ mikrokontrolera RP2040 oraz pamięć oprogramowania układowego typu FLASH. Znajduje się tam także moduł komunikacji bezprzewodowej Wi-Fi.
+				Schemat ilustrujący sposób podłączenia modułu uruchomieniowego Raspberry Pi Pico~W z resztą podzespołów odbiornika został przedstawiony na rysunku~\ref{3/hw_kicad_sch_picow}.
+%			 	Składa się on głównie z~płytki rozwojowej Raspberry Pi Pico~W, która zawiera układ mikrokontrolera RP2040 oraz pamięć oprogramowania układowego typu FLASH. Znajduje się tam także moduł komunikacji bezprzewodowej Wi-Fi.
 				\imgh{3/hw_kicad_sch_picow}{Schemat elektryczny radia: Raspberry Pi Pico~W}{0.65}
+				
+				Moduł czytnika kart SD podłączony jest do wyprowadzeń \lstinline|GPIO1| - \lstinline|GPIO6|.
+				Interfejs \isqs{} toru audio podłączony został do wyprowadzeń \lstinline|GPIO7| - \lstinline|GPIO9|.
+				Moduł wyświetlacza korzysta z wyprowadzeń \lstinline|GPIO10| - \lstinline|GPIO15|. Klawiaturę sterującą podłączono do wyprowadzeń \lstinline|GPIO18| - \lstinline|GPIO22|. Wyjścia dzielników pomiarowych napięć sekcji zasilającej wprowadzono na wejścia przetwornika analogowo-cyfrowego: \lstinline|GPIO27| i \lstinline|GPIO28|. Sterowanie wyciszeniem wzmacniacza mocy odbywa się przez \lstinline|GPIO26|.
+				$ $\\
 				
 				Z głównego modułu wyprowadzone zostało 5-pinowe złącze komunikacyjne. Znajduje się ono na tylnej ścianie obudowy i~zawiera sygnały:
 				\begin{enumerate}
 					\setlength{\itemsep}{0cm}
-					\item \lstinline|SWCLK| -- linia zegarowa magistrali debugowania,
+					\item \lstinline|SWCLK| -- linia zegarowa interfejsu SWD\textsuperscript{\cite{swd}},
 					\item \lstinline|GND| -- masa układu,
-					\item \lstinline|SWCLK| -- dwukierunkowa linia danych magistrali debugowania,
-					\item \lstinline|RX| -- odbiór danych tekstowych
-					\item \lstinline|TX| -- nadawanie danych tekstowych
+					\item \lstinline|SWDIO| -- dwukierunkowa linia danych interfejsu SWD,
+					\item \lstinline|RX| -- linia odbierania danych interfejsu \lstinline|UART0|,
+					\item \lstinline|TX| -- linia nadawania danych interfejsu \lstinline|UART0|.
 				\end{enumerate}
 				
-				Pozwala ono na wgrywanie oraz debugowanie oprogramowania układowego poprzez interfejs SWD\textsuperscript{\cite{swd}}. Obsługuje on punkty wstrzymania (ang. \textit{breakpoints}) oraz kontrolę zawartości pamięci RAM w~toku wykonywania programu.
-				$ $\\
-				
-				Pin \lstinline|TX| służy do wysyłania tekstowych informacji o~stanie urządzenia. Są one bardziej szczegółowym rozszerzeniem tych prezentowanych użytkownikowi na wyświetlaczu. Pin \lstinline|RX| obecnie nie jest używany.
+				Interfejs SWD służy do wgrywania oraz debugowania oprogramowania układowego.
+				Pin \lstinline|TX| służy do wysyłania tekstowych informacji o~stanie urządzenia z poziomu oprogramowania układowego.
+				Pin \lstinline|RX| obecnie nie jest używany.
 				
 		\subsection{Płytka drukowana}
 			Na podstawie wyżej opisanego schematu została zaprojektowana i~wykonana płytka drukowana.
-			Zapewnia ona odpowiednia trwałość mechaniczna i~dobrą jakość połączeń elektrycznych pomiędzy poszczególnymi modułami wykorzystanymi do skonstruowania urządzenia.
+			Zapewnia ona odpowiednią trwałość mechaniczna i~dobrą jakość połączeń elektrycznych pomiędzy poszczególnymi modułami wykorzystanymi do skonstruowania urządzenia.
 			$ $\\
-			
-			Na rysunku~\ref{3/hw_kicad_pcb} przedstawiony został projekt płytki. Zaznaczono na nim dwie najważniejsze sekcje. W~centrum znajduje się płytka Raspberry Pi Pico~W, a~w jej sąsiedztwie slot na karty SD oraz przyłącza do ekranu LCD (po lewej, 8-pinowe) i~przycisków (po prawej, 6-pinowe). Obok, na rysunku~\ref{3/hw_pcb}, przedstawiona została zmontowana płytka.
+
+			Na rysunku~\ref{3/hw_kicad_pcb} przedstawiony został projekt mozaiki ścieżek i rozmieszczenia elementów obwodu drukowanego. Zaznaczono na nim położenie dwóch najważniejszych sekcji. W~centrum znajduje się płytka Raspberry Pi Pico~W, a~w jej sąsiedztwie slot na karty SD oraz przyłącza do ekranu LCD (po lewej, 8-pinowe) i~przycisków (po prawej, 6-pinowe). Obok, na rysunku~\ref{3/hw_pcb}, przedstawiona została zmontowana płytka.
 			
 			\imghss{3/hw_kicad_pcb}{Projekt płytki}{3/hw_pcb}{Zmontowana, gotowa płytka (bez modułów)}
 			
@@ -525,12 +527,12 @@ backend=biber,
 			Po zwymiarowaniu wszystkich komponentów systemu i~płytki PCB powstał projekt obudowy przeznaczonej do wykonania w~technologii druku 3D.
 			$ $\\
 			
-			Obudowa została zaprojektowana w~programie OpenSCAD\textsuperscript{\cite{hw_openscad}}. Wybór programu jest nieoczywisty ponieważ umożliwia on projektowanie 3D oparte o~prosty język skryptowy. Dzięki temu podejście do projektowania może tylko nieznacznie różnić się od pisania oprogramowania. Fragment kodu opisu obudowy został przedstawiony na listingu~\ref{lst/3/buttons.scad}. Linie 3-4 generują siatkę 3x3 na której zostaną umieszczone przyciski/otwory na śruby. Operator trójargumentowy w~liniach 7-8 powoduje że w~rogach siatki otwory będą miały inną średnicę. Warto też zwrócić uwagę na wykorzystanie nazw zamiast wartości, co umożliwia łatwiejszą modyfikację.
+			Obudowa została zaprojektowana w~programie OpenSCAD\textsuperscript{\cite{hw_openscad}}. Wybór programu jest nieoczywisty ponieważ umożliwia on projektowanie 3D oparte o~prosty język skryptowy. Dzięki temu podejście do projektowania może tylko nieznacznie różnić się od pisania oprogramowania. Fragment kodu opisujący wygląd jednego z elementów obudowy został przedstawiony na listingu~\ref{lst/3/buttons.scad}. Linie 3-4 generują siatkę 3x3 na której zostaną umieszczone przyciski/otwory na śruby. Operator trójargumentowy w~liniach 7-8 powoduje że w~rogach siatki otwory będą miały inną średnicę. Warto też zwrócić uwagę na wykorzystanie nazw zamiast wartości, co umożliwia łatwiejszą modyfikację.
 			
 			\lstfile{scad}{Kod generujący otwory na przyciski i~śruby montażowe}{lst/3/buttons.scad}
 			\pagebreak
 			
-			Na rysunku~\ref{3/hw_scad_case} przedstawiono projekt całej obudowy. Obok zaprezentowano efekt finalny, funkcjonalne radio w~obudowie (rysunek~\ref{3/hw_case}).
+			Na rysunku~\ref{3/hw_scad_case} przedstawiono wizualizacja projektu całej obudowy. Poniżej, na rysunku~\ref{3/hw_case}, zaprezentowano efekt finalny, funkcjonalne radio w~obudowie.
 			\imgh{3/hw_scad_case}{Wizualizacja projektu obudowy radia}{0.8}
 			\imgh{3/hw_case}{Efekt końcowy, radio w~obudowie}{0.8}
 			\pagebreak
@@ -545,64 +547,64 @@ backend=biber,
 		
 			\paragraph{Wejście}
 				\begin{itemize}
-					\item \lstinline|analog| -- dostęp do pomiaru poziomu naładowania baterii
-					\item \lstinline|buttons| -- funkcje do obsługi przycisków
-					\item \lstinline|sd| -- wykrywanie i~montowanie karty SD z~systemem plików FAT
+					\item \lstinline|analog| -- dostęp do pomiaru poziomu naładowania baterii,
+					\item \lstinline|buttons| -- funkcje do obsługi przycisków,
+					\item \lstinline|sd| -- wykrywanie i~montowanie karty SD z~systemem plików FAT.
 				\end{itemize}
 			\pagebreak
 			
 			\paragraph{Wyjście}
 				\begin{itemize}
-					\item \lstinline|display| -- obsługa wyświetlacza
+					\item \lstinline|display| -- obsługa wyświetlacza:
 					\begin{itemize}
-						\item \lstinline|assets| -- artefakty; takie jak czcionki i~ikony
-						\item \lstinline|screens| -- widoki użytkownika
-						\item \lstinline|tft| -- niskopoziomowa obsługa ekranu ze sterownikiem ST7735s. Kod inicjalizacji i~przesyłania pikseli zaczerpnięty z~\textit{Adafruit-ST7735-Library}\textsuperscript{\cite{adafruit_st7735}}
+						\item \lstinline|assets| -- artefakty; takie jak czcionki i~ikony,
+						\item \lstinline|screens| -- widoki użytkownika,
+						\item \lstinline|tft| -- niskopoziomowa obsługa ekranu ze sterownikiem ST7735s. Kod inicjalizacji i~przesyłania pikseli zaczerpnięty z~\textit{Adafruit-ST7735-Library}\textsuperscript{\cite{adafruit_st7735}}.
 					\end{itemize}
 				\end{itemize}
 			
 			\paragraph{Obsługa list}
 				\begin{itemize}
-					\item \lstinline|list| -- obsługa list jak i~ich ładowanie (wyszukiwanie/ulubione/listing plików na karcie SD)
+					\item \lstinline|list| -- obsługa list jak i~ich ładowanie (wyszukiwanie/ulubione/listing plików na karcie SD).
 				\end{itemize}
 			
 			\paragraph{Odtwarzanie}
 				\begin{itemize}
-					\item \lstinline|mcorefifo| -- funkcje pomocnicze do przesyłania komunikatów z~rdzenia 1~do 0
-					\item \lstinline|player| -- kontrola i~odtwarzanie plików/strumieni internetowych
+					\item \lstinline|mcorefifo| -- funkcje pomocnicze do przesyłania komunikatów z~rdzenia 1~do 0,
+					\item \lstinline|player| -- kontrola i~odtwarzanie plików/strumieni internetowych:
 					\begin{itemize}
-						\item \lstinline|decode| -- abstrakcje/implementacje dekodowania typów i~odczytywania źródeł danych
-						\item \lstinline|metadata| -- dekodowanie metadanych w~różnych formatach audio
+						\item \lstinline|decode| -- abstrakcje/implementacje dekodowania typów i~odczytywania źródeł danych,
+						\item \lstinline|metadata| -- dekodowanie metadanych w~różnych formatach audio.
 					\end{itemize}
 				\end{itemize}
 		
 			\paragraph{Źródła danych}
 				\begin{itemize}
-					\item \lstinline|ds| -- interfejs \lstinline|DataSource| łączący różne źródła danych
-					\item \lstinline|httpc| -- klient protokołu HTTP
-					\item \lstinline|lfs| -- kod integrujący system plików LittleFS\textsuperscript{\cite{littlefs}}
+					\item \lstinline|ds| -- interfejs \lstinline|DataSource| łączący różne źródła danych,
+					\item \lstinline|httpc| -- klient protokołu HTTP,
+					\item \lstinline|lfs| -- kod integrujący system plików LittleFS\textsuperscript{\cite{littlefs}}.
 				\end{itemize}
 			
 			\paragraph{Wi-Fi}
 				\begin{itemize}
-					\item \lstinline|wifi| -- obsługa sieci bezprzewodowych
+					\item \lstinline|wifi| -- obsługa sieci bezprzewodowych.
 				\end{itemize}
 		
 			\paragraph{Pliki pomocnicze}
 				\begin{itemize}
-					\item \lstinline|circularbuffer| -- bufor kołowy
-					\item \lstinline|static| -- statycznie alokowane bufory
-					\item \lstinline|util| -- funkcje pomocnicze
-					\item \lstinline|settings| -- wpisy na ekranie ustawień
+					\item \lstinline|circularbuffer| -- bufor kołowy,
+					\item \lstinline|static| -- statycznie alokowane bufory,
+					\item \lstinline|util| -- funkcje pomocnicze,
+					\item \lstinline|settings| -- wpisy na ekranie ustawień.
 				\end{itemize}
 	
 		\subsection{Moduły zewnętrzne}
 		W folderze \lstinline|libs/external| umieszczone zostały moduły dostarczone z~zewnątrz:
 		\begin{itemize}
-			\item \lstinline|FreeRTOS-Kernel| -- jądro systemu czasu rzeczywistego FreeRTOS\textsuperscript{\cite{freertos_kernel}}
-			\item \lstinline|helixmp3| -- biblioteka dekodująca format MP3\textsuperscript{\cite{helixmp3_repo}} oryginalnie napisana przez firmę \textit{RealNetworks}\textsuperscript{\cite{realnetworks}}
-			\item \lstinline|littlefs| -- system plików LittleFS\textsuperscript{\cite{littlefs}}
-			\item \lstinline|sd_lib| -- biblioteka FatFS\textsuperscript{\cite{fatfs}} wraz z~kodem dostępu do karty SD\textsuperscript{\cite{sdfs}}
+			\item \lstinline|FreeRTOS-Kernel| -- jądro systemu czasu rzeczywistego FreeRTOS\textsuperscript{\cite{freertos_kernel}},
+			\item \lstinline|helixmp3| -- biblioteka dekodująca format MP3\textsuperscript{\cite{helixmp3_repo}} oryginalnie napisana przez firmę \textit{RealNetworks}\textsuperscript{\cite{realnetworks}},
+			\item \lstinline|littlefs| -- system plików LittleFS\textsuperscript{\cite{littlefs}},
+			\item \lstinline|sd_lib| -- biblioteka FatFS\textsuperscript{\cite{fatfs}} wraz z~kodem dostępu do karty SD\textsuperscript{\cite{sdfs}}.
 		\end{itemize}
 
 	\section{Odtwarzanie dźwięku}
@@ -624,14 +626,14 @@ backend=biber,
 		
 		\subsection{Komunikacja z~przetwornikiem}
 			Komunikacja ze sprzętową częścią audio odbywa się poprzez podsystem DMA i~bloki programowalne PIO.
-			W programie utworzony został bufor nieskompresowanego dźwięku PCM \lstinline|audio_pcm|. Ma on konfigurowalny rozmiar wyrażony w~jednostkach 32-bitowych (2 kanały * 16-bitowa próbka). Przekazywany jest on do systemu DMA, który następnie transmituje go poprzez PIO zaprogramowane do symulowania interfejsu \isqs{}. Oba etapy transmisji zostały opisane poniżej.
+			W programie utworzony został bufor nieskompresowanego dźwięku PCM \lstinline|audio_pcm|. Ma on konfigurowalny rozmiar wyrażony w~jednostkach 32-bitowych (2 kanały * 16-bitowa próbka). Przekazywany jest on do systemu DMA, który następnie transmituje jego zawartość poprzez PIO zaprogramowane do symulowania interfejsu \isqs{}. Oba etapy transmisji zostały opisane poniżej.
 		
 		\subsection{PIO}
 			RP2040 posiada 8~programowalnych maszyn stanów, zgrupowanych w~2~bloki.
 			Maszyny te można wykorzystać do symulacji szerokiej gamy interfejsów komunikacyjnych.
 			Poprzez ich zastosowanie, możliwe jest m.in. utworzenie dodatkowego bloku komunikacji UART czy SPI.
 			Jednak największy potencjał PIO wykazuje gdy w~układzie brak jest obsługi niezbędnego w~projekcie interfejsu, np. CAN czy \isqs{}.
-			Blok PIO przedstawiono na rysunku~\ref{3/pio_block}.
+			Schemat budowy bloku PIO przedstawiono na rysunku~\ref{3/pio_block}.
 			\imgh{3/pio_block}{Pojedynczy blok PIO (dokumentacja RP2040\textsuperscript{\cite{pico_pdf}}, strona 309)}{0.75}
 			
 			W ramach jednego bloku maszyny współdzielą pamięć 32 instrukcji. Może wydawać się to mało, lecz instrukcje te są bardzo skondensowane. Język do programowania PIO to własnościowy język z~rodziny assembler. Do środowiska \lstinline|pico-sdk| dołączony jest assembler \lstinline|picoasm|. Zestaw instrukcji przedstawiono na rysunku \ref{3/pio_instr}.
@@ -641,7 +643,7 @@ backend=biber,
 			Instrukcja skoku obsługuje także dekrementację zmiennej w~warunku. Same maszyny mogą mieć ustawiony dowolny adres wejścia i~zapętlenia programu. Oszczędza to kilka instrukcji.
 			
 			\paragraph{Wyjścia typu \sset{}}
-				Jest to specjalny rodzaj wyjść, które mogą być ustawiane równocześnie z~wykonywaniem innych instrukcji. Są szczególnie przydatne przy ustawianiu linii zegarowych i~pozostałych linii kontrolnych. Minusem wykorzystania ustawiania wyjść \textit{na boku} jest konieczność poświęcenia możliwości opóźniania programu. W~liście instrukcji pole \sset{} jest współdzielone z~polem \lstinline|delay|. Jednak zaimplementowany program nie używa opóźnień.
+				Jest to specjalny rodzaj wyjść, które mogą być ustawiane równocześnie z~wykonywaniem innych instrukcji. Są szczególnie przydatne przy ustawianiu linii zegarowych i~pozostałych linii kontrolnych. Minusem wykorzystania ustawiania wyjść \sset{} jest konieczność poświęcenia możliwości opóźniania programu. W~liście instrukcji pole \sset{} jest współdzielone z~polem \lstinline|delay|. Jednak zaimplementowany program nie używa opóźnień.
 			$ $\\
 			
 			Dzięki tym maszynom, możliwe jest dodanie do mikrokontrolera dowolnego protokołu transmisji danych bez zbytniego obciążenia procesora jego pełną symulacją.
@@ -657,13 +659,13 @@ backend=biber,
 			\lstfile{pio}{Kod programu \isqs{}}{lst/3/i2s.pio}
 			
 			\noindent
-			Kod bloku PIO z~listingu powyżej działa następująco:
+			Kod bloku PIO z~listingu~\ref{lst/3/i2s.pio} odpowiada za realizacje transmisji w standardzie \isqs{} ilustrowanej przebiegiem pokazanym na rys~\ref{3/pio_i2s_docs} i działa następująco:
 			\begin{itemize}
 				\item Linia nr 3~ustawia ile bitów jest typu \lstinline|side-set|. Bity \lstinline|side-set| są wykorzystywane odpowiednio do: ustawienia linii \lstinline|WS| i~linii \lstinline|BCK|.
 				
 				\item Punktem wejścia programu jest linia nr 18. Ustawia ona liczbę powtórzeń i~inicjalizuje linię \lstinline|WS| na 1~(kanał prawy) oraz linię \lstinline|BCK| na 1. Odwrócenie kolejności kanałów związane jest z~kolejnością bajtów typu \textit{little-endian}). Następnie program automatycznie zapętla się do pierwszej instrukcji.
 				
-				\item Instrukcja \lstinline|out| powoduje wystawienie na linię \lstinline|DATA| jednego bitu z~rejestru przesuwnego danych. \textit{Na boku} przełącza linię zegarową w~stan niski
+				\item Instrukcja \lstinline|out| powoduje wystawienie na linię \lstinline|DATA| jednego bitu z~rejestru przesuwnego danych. Przy pomocy funkcjonalności \sset{} przełącza linię zegarową w~stan niski.
 				
 				\item Instrukcja \lstinline|jmp| najpierw sprawdza wartość rejestru \lstinline|X|. Jeżeli jest ona niezerowa to dekrementuje ją i~skacze do etykiety \lstinline|right|. Pętla ta wykonuje się 15 razy.
 				
@@ -683,7 +685,7 @@ backend=biber,
 			\newcommand{\rdmabuf}[1]{\ref{3/PicoRadio-dma-buf}#1}
 			\newcommand{\dmacite}{\textsuperscript{\cite{dma_dbl_buf1} \cite{dma_dbl_buf2}}}
 			
-			Aby zachować płynność odtwarzania, wykorzystano podwójne buforowanie\dmacite{}.Na rysunku~\rdmabuf{} przedstawiono schematy blokowe jego działania.
+			Aby zachować płynność odtwarzania, wykorzystano podwójne buforowanie\dmacite{}. Na rysunku~\rdmabuf{} przedstawiono schematy blokowe ilustrujące jego działania.
 			
 			\imgh{3/PicoRadio-dma-buf}{Schemat blokowy podwójnego buforowania DMA\dmacite{}}{1}
 			
@@ -788,18 +790,23 @@ backend=biber,
 			$ $\\
 			
 			Funkcja \lstinline|DecodeStream::play()|, jeżeli dostępny jest nagłówek \lstinline|icy-metaint|, inicjalizuje odbierane danych metodą \lstinline|ICY::start()|. Następnie rejestruje odwołanie, które jest wywoływane po każdym zapisie do bufora oraz przetwarza już odebrane dane. W~trakcie tych czynności blokowany jest kontekst biblioteki sieciowej, aby w~trakcie przetwarzania danych nie zostały odebrane żadne nowe dane, a~po odblokowaniu każde następne były wychwycone przez funkcję \lstinline|cbuf_write_cb()|.
+			$ $\\
 			
 			W każdym z~tych scenariuszy (wstępne i~późniejsze przetwarzanie) wywoływana jest w~pętli funkcja \lstinline|ICY::read()|. Pętla jest potrzebna, ponieważ w~porcji odebranych danych, szczególnie dla niskich wartości \lstinline|icy-metaint|, może wystąpić więcej niż jedna ramka ICY.
 			
 			\paragraph{Format danych ICY}
-				Nagłówek metadanych ICY składa się z~jednego bajtu kodującego rozmiar danych (bez nagłówka) podzielony przez 16. Dane dopełniane są zerami do podanego rozmiaru. Wewnątrz ramki kolejne pola oddzielone są od siebie średnikami, a~same pola są w~formacie \lstinline|klucz='wartosc'|. Dekoder zaimplementowany w~projekcie obsługuje tylko klucz \lstinline|StreamTitle|, którego wartość to zazwyczaj tytuł utworu i~jego wykonawca. Ramka ICY została przedstawiona na rysunku~\ref{3/PicoRadio-icy}.
+				Nagłówek metadanych ICY składa się z~jednego bajtu kodującego rozmiar danych (bez nagłówka) podzielony przez 16. Dane dopełniane są zerami do podanego rozmiaru. Ramka ICY została przedstawiona na rysunku~\ref{3/PicoRadio-icy}.
 				
-			\imgh{3/PicoRadio-icy}{Ramka MP3 rozdzielona ramką ICY}{0.9}
+				\imgh{3/PicoRadio-icy}{Ramka MP3 rozdzielona ramką ICY}{0.9}
+				
+				\noindent
+				Wewnątrz ramki kolejne pola oddzielone są od siebie średnikami, a~same pola są w~formacie \lstinline|klucz='wartosc'|. Dekoder zaimplementowany w~projekcie obsługuje tylko klucz \lstinline|StreamTitle|, którego wartość to zazwyczaj tytuł utworu i~jego wykonawca.
+				$ $\\
 				
 			Wywołanie \lstinline|ICY::read()| kopiuje ramkę ICY z~bufora audio do bufora tymczasowego, a~następnie przesuwa dane za ramką wstecz o~rozmiar ramki. Operację można porównać do wycinania tekstu z~dokumentu tekstowego. W~ten sposób przywracamy ciągłość ramce MP3. Dane w~buforze tymczasowym nie są interpretowane aby zaoszczędzić cenny czas. Nalezy pamiętać, że cała ta operacja odbywa się przy zablokowanej komunikacji sieciowej. Dane analizowane są dopiero gdy zadanie aktualizacji statystyk odtwarzania \lstinline|player stat| wywoła \lstinline|DecodeBase::get_meta_str()|, która w~implementacji \lstinline|DecodeStream| odwołuje się do metody \lstinline|ICY::get_stream_title()|. Funkcja ta blokuje mutex bufora tymczasowego i~kopiuje dane do swojego bufora na stosie. Dopiero wtedy rozpoczyna potencjalnie kosztowną czasowo interpretację danych.
 		
 		\subsubsection{Lokalne pliki MP3 -- ID3v2}
-			Tagowanie MP3 obsługiwane jest zupełnie inaczej od ramek ICY. Tagi MP3 one występować na początku plików MP3. Sygnalizuje to fakt, że pliki te rozpoczynają się 3 bajtami równymi \lstinline|ID3|. Funkcje do obsługi tego typu tagowań zostały zaimplementowane w~klasach pochodnych \lstinline|Format|. Wykorzystana została już wcześniej istniejąca funkcja \lstinline|Format::decode_header()|. Obsługiwała ona dekodowanie nagłówków WAVE. Wywoływana jest ona po pierwszym załadowaniu bufora, tylko raz na dany plik/strumień. Implementacja \lstinline|FormatMP3| wywołuje wtedy funkcję \lstinline|ID3::try_parse()|.
+			Tagowanie MP3 obsługiwane jest zupełnie inaczej od ramek ICY. Tagi ID3v2 mogą występować na początku plików MP3. Sygnalizuje to fakt, że pliki te rozpoczynają się 3~bajtami reprezentującymi ciąg znaków \lstinline|ID3|. Funkcje do obsługi tego typu tagowań zostały zaimplementowane w~klasach pochodnych \lstinline|Format|. Wykorzystana została już wcześniej istniejąca funkcja \lstinline|Format::decode_header()|. Obsługiwała ona dekodowanie nagłówków WAVE. Wywoływana jest ona po pierwszym załadowaniu bufora, tylko raz na dany plik/strumień. Implementacja \lstinline|FormatMP3| wywołuje wtedy funkcję \lstinline|ID3::try_parse()|.
 			
 			\paragraph{Standard ID3v2}
 			Ramki ID3 w~wersji drugiej mają znacznie bardziej rozbudowane kodowanie od np. ramek ICY czy starszego formatu ID3v1. Dokumentacja oryginalnie dostępna była pod adresem \href{id3.org}{id3.org} lecz w~trakcie pisania pracy była ona niedostępna. Skorzystano z~alternatywnej strony\textsuperscript{\cite{id3_spec_mutagen}}.
@@ -848,11 +855,11 @@ backend=biber,
 		\begin{itemize}
 			\item \lstinline|Location| -- wykorzystywane przy przekierowaniach,
 			\item \lstinline|Content-Type| -- typ treści, używane głownie przy przetwarzaniu wyników wyszukiwania,
-			\item \lstinline|Content-Length| -- długość treści, j.w.
+			\item \lstinline|Content-Length| -- długość treści, j.w.,
 			\item \lstinline|Icy-Metaint| -- używane przy przetwarzaniu metadanych ICY.
 		\end{itemize}
 		
-		Niestety brak jest obsługi szyfrowania. Środowisko zawiera implementację TLS, lecz nie została ona wykorzystana z~uwagi na prawdopodobnie niewystarczającą moc obliczeniową mikrokontrolera. Wiele stacji transmituje z~użyciem protokołu HTTP, tylko niewielka część z~nich wymuszała przekierowania na szyfrowaną transmisję. Klient musi je obsługiwać ponieważ wiele stacji wykorzystuje je do geolokalizacji serwera transmitującego. W~konfiguracji zawarta została opcja \lstinline|HTTP_MAX_REDIRECTS| (domyślnie 2), która mówi, ile razy maksymalnie przekierowań chcemy obsłużyć. Zwykle jeżeli jest to więcej niż jedno, serwer próbuje wymusić transmisję szyfrowaną.
+		Niestety brak jest obsługi szyfrowania. Środowisko \lstinline|pico-sdk| zawiera implementację TLS, lecz nie została ona wykorzystana z~uwagi na prawdopodobnie niewystarczającą moc obliczeniową mikrokontrolera. Wiele stacji transmituje z~użyciem protokołu HTTP, tylko niewielka część z~nich wymuszała przekierowania na szyfrowaną transmisję. Klient musi je obsługiwać ponieważ wiele stacji wykorzystuje je do geolokalizacji serwera transmitującego. W~konfiguracji zawarta została opcja \lstinline|HTTP_MAX_REDIRECTS| (domyślnie 2), która mówi, ile razy maksymalnie przekierowań chcemy obsłużyć. Zwykle jeżeli jest to więcej niż jedno, serwer próbuje wymusić transmisję szyfrowaną.
 		
 	\section{Ładowanie i~przechowywanie danych}
 		Główną jednostką informacji w~projekcie jest stacja radiowa. Na potrzeby unifikacji dostępu do danych o~stacjach powstał interfejs \lstinline|DataSource|. Zawiera on dwie metody:
@@ -868,10 +875,12 @@ backend=biber,
 			\paragraph{Statyczna alokacja} Wszystkie klasy list są tworzone statycznie i~współdzielą pamięć wpisów. Jest to bardzo istotnie w~środowisku o~ograniczonej pamięci operacyjnej. Zazwyczaj ładowanie jednego typu wyników nie koliduje z~pozostałymi, a~jeżeli tak się dzieje to resetowany jest stan programu ładującego który przy następnym użyciu musi przeładować dane listy, bo zostały one nadpisane. Z~tego też powodu modyfikowanie listy ulubionych odbywa się bezpośrednio w~pamięci stałej, bez ładowania całej listy stacji. Statyczna alokacja ma też swoje pozytywne strony, mianowicie przechowywany jest stan list. Po powrocie z~wybranej stacji do wyników ładowania (do listy ulubionych lub wyszukiwania) nie ma potrzeby od nowa ładować danych.
 			
 			\subsubsection{Format M3U}
-				Jednym z~formatów obsługiwanych przez projekt jest format M3U\textsuperscript{\cite{m3u}} w~wersji \textit{Extended}. Format ten został wybrany z~uwagi na jego prostotę budowy oraz to, że strony agregujące stacje radiowe go obsługują. Jest to popularny format zapisu list odtwarzania. W~wersji standardowej przybiera postać linków do plików/strumieni zapisanych w~osobnych liniach pliku tekstowego. Wersja rozszerzona wprowadza specjalne komentarze. Zaimplementowany interpreter obsługuje komentarz \lstinline|EXTINF|, który zawiera czas trwania ścieżki oraz jej nazwę.
+				Jednym z~formatów obsługiwanych przez oprogramowanie odbiornika jest format M3U\textsuperscript{\cite{m3u}} w~wersji \textit{Extended}. Format ten został wybrany z~uwagi na jego prostotę budowy oraz to, że strony agregujące stacje radiowe go obsługują. Jest to popularny format zapisu list odtwarzania. W~wersji standardowej przybiera postać linków do plików/strumieni zapisanych w~osobnych liniach pliku tekstowego. Wersja rozszerzona wprowadza specjalne komentarze. Zaimplementowany interpreter obsługuje komentarz \lstinline|EXTINF|, który zawiera czas trwania ścieżki oraz jej nazwę.
 			
 			\subsubsection{Format PLS}
-				Niektóre stacje radiowe przed wysłaniem strumienia audio, wysyłają plik w~formacie PLS\textsuperscript{\cite{pls}}. Plik taki zawiera różne warianty tego samego strumienia w~celu równoważenia obciążenia. Po wykryciu tego formatu ładowane są pierwsze 2~stacje (konfigurowalne) i~wybierana jest losowa z~nich. Format składa się z~par deklaracji postaci \lstinline|FileX| i~\lstinline|TitleX|, gdzie \lstinline|X| to kolejne liczby naturalne.
+				Niektóre stacje radiowe przed wysłaniem strumienia audio, wysyłają plik w~formacie PLS\textsuperscript{\cite{pls}}. Plik taki zawiera adresy kilku serwerów strumieniujących tą samą stację.
+				Klient powinien połączyć się z losowo wybranym serwerem w~celu uniknięcia nadmiernego obciążenia jednego z nich.
+				Po wykryciu tego formatu ładowane są pierwsze 2~stacje (konfigurowalne) i~wybierana jest jedna z~nich. Format składa się z~par deklaracji postaci \lstinline|FileX| i~\lstinline|TitleX|, gdzie \lstinline|X| to kolejne liczby naturalne.
 			
 		% TODO \subsection{Wpis na liście}
 		% TODO \subsection{Pliki pomocnicze}
@@ -899,7 +908,7 @@ backend=biber,
 				
 %		\paragraph{Karta SD -- FatFS}
 		\subsection{Pamięć Flash -- LittleFS}
-			Aby lista ulubionych stacji czy lista zapisanych sieci Wi-Fi były przechowywane pomiędzy wyłączeniami urządzenia, musiały one być zapisane w~pamięci nieulotnej. Mikrokontroler RP2040 przechowuje program w~zewnętrznej pamięci typu \textit{flash}. Na płytkach Pi Pico~W dostarczone zostały układy o~rozmiarach 2MB. Środowisko programistyczne umożliwia, oprócz oczywistej operacji odczytu, także zapis do tej pamięci. Wykorzystano tą właściwość do umieszczenia w~końcowych 64KB systemu plików LittleFS\textsuperscript{\cite{littlefs}}, specjalnie stworzonego do przechowywania danych w~środowiskach wbudowanych i~pamięciach typu \textit{flash}. Stworzona została klasa \lstinline|LFSAccess|, która dostarcza podstawowe metody do manipulacji tekstami, jak również implementuje interfejs \lstinline|DataSource|.
+			Aby lista ulubionych stacji czy lista zapisanych sieci Wi-Fi były przechowywane pomiędzy wyłączeniami urządzenia, musiały one być zapisane w~pamięci nieulotnej. Mikrokontroler RP2040 przechowuje program w~zewnętrznej pamięci typu \textit{flash}. Na płytkach Pi Pico~W zamontowane zostały układy pamięci o~rozmiarze 2MB. Środowisko programistyczne umożliwia, oprócz oczywistej operacji odczytu, także zapis do tej pamięci. Wykorzystano tą właściwość do umieszczenia w~końcowych 64KB systemu plików LittleFS\textsuperscript{\cite{littlefs}}, specjalnie stworzonego do przechowywania danych w~środowiskach wbudowanych i~pamięciach typu \textit{flash}. Stworzona została klasa \lstinline|LFSAccess|, która dostarcza podstawowe metody do manipulacji tekstami, jak również implementuje interfejs \lstinline|DataSource|.
 			
 		\subsection{Sortowanie -- LFSorter}
 			Niektóre metody zwracają wyniki w~postaci strumienia kolejnych wyników, bez możliwości indeksacji indywidualnych pozycji. Z~powodu ograniczonej pamięci RAM, nie jest możliwe wczytanie wszystkich wyników i~wybranie z~nich kilku w~zadanej kolejności. Ten problem rozwiązuje klasa \lstinline|LFSorter|, która zapisuje cały strumień do pamięci nieulotnej \textit{flash} (przy użyciu \lstinline|LFSAccess|). Następnie, przy użyciu metody \lstinline|get_smallest_n_skip_k(n, k)|, pozwala wczytać elementy $k,\; k+1,\; ...,\; k+n-1$ z~ciągu posortowanych elementów (indeksowanie od 0, sortowanie wg dostarczonej funkcji porównującej). Ciąg ten nie jest nigdzie zapisywany.
@@ -1017,13 +1026,13 @@ backend=biber,
 		Katalogi te zawierają po 2~pliki (nagłówkowy i~kod źródłowy) realizujące funkcje opisane poniżej.
 		
 		\subsection{Interakcje użytkownika}
-			Dane od użytkownika pobierane są za pomocą przycisków. Każdy z~nich dołączony jest bezpośrednio do mikrokontrolera. Naciśnięcie przycisku powoduje wywołanie zbocza opadającego. Wykryte przez układ, aktywuje ono przerwanie. Eliminacja drgań styków została osiągnięta poprzez zastosowanie zewnętrznych kondensatorów i~wbudowanych przerzutników Schmitta dostępnych na każdym wejściu RP2040, oraz poprzez odczekanie 20ms po wywołaniu przerwania i~ponownym sprawdzeniu stanu na wejściu. Przerwanie, zgodnie z~dobrymi praktykami, ustawia jedynie odpowiednie flagi, które zostały opisane poniżej.
+			Dane od użytkownika pobierane są za pomocą przycisków. Każdy z~nich dołączony jest bezpośrednio do mikrokontrolera. Naciśnięcie przycisku powoduje wygenerowanie zbocza opadającego. Wykryte przez układ, aktywuje ono przerwanie. Eliminacja drgań styków została osiągnięta poprzez zastosowanie zewnętrznych kondensatorów i~wbudowanych przerzutników Schmitta dostępnych na każdym wejściu RP2040, oraz poprzez odczekanie 20ms po wywołaniu przerwania i~ponownym sprawdzeniu stanu na wejściu. Przerwanie, zgodnie z~dobrymi praktykami, ustawia jedynie odpowiednie flagi, które zostały opisane poniżej.
 			
 			\paragraph{Przekazywanie danych}
 				Podsystem przycisków opiera się o dwie tablice zawierające odpowiednie dane dla każdego przycisku z~osobna. Pierwsza z~nich, o~nazwie \lstinline|b_pressed[]|, zawiera wartości logiczne. Mówią one o~tym czy przycisk jest w~danej chwili wciśnięty czy nie. Druga, \lstinline|b_pressed_time_us[]|, zawiera informację, w~której mikrosekundzie nastąpiło wciśnięcie przycisku. Używa ona wbudowanej funkcji \lstinline|time_us_32()| do pobierania czasu.
 			$ $\\
 			
-			Przerwanie, oprócz ustawienia odpowiednich wartości w~tablicach, wybudza zadanie \lstinline|input handle|. Zawiera ono maszynę stanów, która umożliwia, oprócz podstawowego przekazywania zdarzeń do interfejsu, powtarzanie naciśnięć, tak jak robią to klawiatury komputerowe. Dodatkowo zawarto w~niej także obsługę wygaszania ekranu. Na rysunku~\ref{3/PicoRadio-buttons} przedstawiono schemat blokowy ilustrujący jej funkcjonowania.
+			Przerwanie, oprócz ustawienia odpowiednich wartości w~tablicach, wybudza zadanie \lstinline|input handle|. Zawiera ono maszynę stanów, która umożliwia, oprócz podstawowego przekazywania zdarzeń do interfejsu, powtarzanie naciśnięć, tak jak robią to klawiatury komputerowe. Dodatkowo zawarto w~niej także obsługę wygaszania ekranu. Na rysunku~\ref{3/PicoRadio-buttons} przedstawiono schemat blokowy ilustrujący jej funkcjonowanie.
 			
 			\imgh{3/PicoRadio-buttons}{Maszyna stanów w~module przycisków}{0.75}
 			
@@ -1034,14 +1043,17 @@ backend=biber,
 			Pin \textit{Card Detect} slotu na karty SD również został bezpośrednio podłączony do mikrokontrolera i~działa zgodnie z~tymi samymi zasadami co piny przycisków. Jednak obsługa wykrywania karty jest znacznie prostsza. Zadanie \lstinline|sd| wykrywa zmianę stanu na odpowiednim pinie i~montuje lub odmontowuje kartę SD z~wykorzystaniem biblioteki FatFS.
 			
 		\subsection{Bateria}
-			Poziom baterii jest wykrywany poprzez użycie jednego z~analogowych wejść mikrokontrolera. Na wejściu zastosowano dzielnik napięcia, współczynnik podziału wynosi 2. Dzięki niemu maksymalne napięcie ogniwa 4.2V równa się 2.1V, co mieści się w~zakresie pomiarowym mikrokontrolera (0V - 3.3V). W~pliku \lstinline|analog.cpp| zaimplementowano funkcję \lstinline|battery_voltage()|, która zwraca napięcie ogniwa po wszystkich niezbędnych przekształceniach. Dodatkowo, kod zawiera aproksymację poziomu naładowania baterii w~procentach. Funkcja \lstinline|battery_percentage()| zwraca liczbę z zakresu 0~- 100, która oznacza poziom naładowania ogniwa. Na podstawie wyniku tej funkcji rysowana jest ikona baterii w~górnym pasku ikon statusowych. Ma ona kolor zielony i~jest w~pełni naładowana gdy bateria posiada 60\% lub więcej energii, 20\% i~więcej to kolor żółty, natomiast poniżej 20\% ma ona kolor czerwony.
+			Poziom naładowania baterii jest określany przez pomiar napięcia na jednym z wejść wewnętrznego przetwornika analogowo-cyfrowego mikrokontrolera RP2040.
+			Na wejściu zastosowano dzielnik napięcia, współczynnik podziału wynosi 2.
+			Dzięki niemu przy maksymalnym napięciu ogniwa wynoszącym 4,2V na wejście przetwornika podawane jest 2,1V co mieści się w zakresie poprawnych napięć wejściowych przetwornika (0 - 3,3V).
+			W~pliku \lstinline|analog.cpp| zaimplementowano funkcję \lstinline|battery_voltage()|, która zwraca napięcie ogniwa po wszystkich niezbędnych przekształceniach. Dodatkowo, kod zawiera funkcję zwracającą aproksymowany poziom naładowania baterii w~procentach. Funkcja \lstinline|battery_percentage()| zwraca liczbę z zakresu 0~- 100, która oznacza poziom naładowania ogniwa. Na podstawie wyniku tej funkcji rysowana jest ikona baterii w~górnym pasku ikon statusowych. Ma ona kolor zielony i~jest w~pełni naładowana gdy bateria posiada 60\% lub więcej energii, 20\% i~więcej to kolor żółty, natomiast poniżej 20\% ma ona kolor czerwony.
 		
 	\section{Bezprzewodowy dostęp do Internetu}
 		Obsługa sieci bezprzewodowej podzielona została na 3~pod-moduły:
 		\begin{itemize}
-			\item \lstinline|wificonnect| -- połączenie z~Wi-Fi
-			\item \lstinline|wifiscan| -- skanowanie dostępnych sieci
-			\item \lstinline|wifibest| -- znalezienie najlepszej sieci do połączenia po uruchomieniu
+			\item \lstinline|wificonnect| -- połączenie z~Wi-Fi,
+			\item \lstinline|wifiscan| -- skanowanie dostępnych sieci,
+			\item \lstinline|wifibest| -- znalezienie najlepszej sieci do połączenia po uruchomieniu.
 		\end{itemize}
 		
 		Każdy z~tych modułów dodaje nowe funkcje do przestrzeni nazw \lstinline|wifi|.
@@ -1054,14 +1066,15 @@ backend=biber,
 				\item \lstinline|conn| -- wywoływane po pomyślnym podłączeniu do sieci.
 			\end{itemize}
 			
-			Odwołanie \lstinline|conn| powoduje także zapisanie sieci z~hasłem do przyszłego użycia. Dodatkowe funkcje w~tym module umożliwiają inicjalizację podsystemu Wi-Fi oraz np. sprawdzenie stanu połączenia.
+			Odwołanie \lstinline|conn| powoduje także zapisanie, do przyszłego użycia, identyfikatora sieci wraz z~hasłem dostępu.
+			Dodatkowe funkcje w~tym module umożliwiają inicjalizację podsystemu Wi-Fi oraz np. sprawdzenie stanu połączenia.
 			
 		\subsection{Skanowanie dostępnych sieci}
 %			Wykorzystywany przez ekran \lstinline|ScWifiScan| oraz klasę ładującą \lstinline|LoaderWifiScan|,
-			Moduł ten umożliwia przeskanowanie pobliskich sieci metodą \lstinline|scan()|. Są one zapisywane do pamięci stałej przy użyciu przekazanej instancji \lstinline|LFSAccess|. Następnie ładowanie kolejnych stron wyników umożliwia funkcja \lstinline|read(n, k)|, która działa analogicznie do funkcji \lstinline|LFSorter::get_smallest_n_skip_k(n, k)|. Sortowanie odbywa się nierosnąco wg siły sygnału.
+			Moduł ten umożliwia wyszukanie metodą \lstinline|scan()| pobliskich sieci. Wyniki skanowania są zapisywane do pamięci nieulotnej przy użyciu przekazanej instancji \lstinline|LFSAccess|. Następnie ładowanie kolejnych stron wyników umożliwia funkcja \lstinline|read(n, k)|, która działa analogicznie do funkcji \lstinline|LFSorter::get_smallest_n_skip_k(n, k)|. Sortowanie odbywa się nierosnąco wg siły sygnału.
 			
 		\subsection{Połączenie po uruchomieniu}
-			Gdy urządzenie zostanie uruchomione, użytkownik oczekuje że samo odnajdzie ono najlepszą do połączenia sieć. Zachowanie takie implementuje funkcja \lstinline|connect_best_saved()|. Wykorzystuje ona funkcje \lstinline|scan()| i~\lstinline|read()| żeby pojedynczo wczytywać sieci, poczynając od tej o~najwyższej sile sygnału. Gdy sieć istnieje w~zapisanych sieciach, inicjowane jest połączenie. W~przeciwnym wypadku ładowana jest następna sieć i~tak aż do skutku, albo do wyczerpania się przeskanowanych sieci.
+			Gdy urządzenie zostanie uruchomione, użytkownik oczekuje że samo odnajdzie ono najlepszą do połączenia sieć. Zachowanie takie implementuje funkcja \lstinline|connect_best_saved()|. Wykorzystuje ona funkcje \lstinline|scan()| i~\lstinline|read()| żeby pojedynczo wczytywać sieci, poczynając od tej o~najwyższej sile sygnału. Gdy sieć istnieje w~zapisanych sieciach, inicjowane jest połączenie. W~przeciwnym wypadku ładowana jest następna sieć i~tak aż do skutku, albo do wyczerpania się listy wykrytych sieci.
 			
 \cleardoublepage
 \chapter{Organizacja pracy}
