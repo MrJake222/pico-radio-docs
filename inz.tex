@@ -219,8 +219,8 @@ backend=biber,
 %		Standardem kodowania wykorzystywanym przez serwery jest format MP3 lub AAC/AAC+.
 		Drugim współpracującym systemem jest baza danych zbierająca informacje o~dostępnych stacjach radia internetowego na świecie. Baza taka powinna umożliwiać zapytania poprzez udokumentowane i~dostępne API. List baz brana pod uwagę przy projektowaniu urządzenia:
 		\begin{itemize}
-			\item Radio-browser\textsuperscript{\cite{radio-browser}}
-			\item fmstream\textsuperscript{\cite{fmstream}}
+			\item Radio-browser\textsuperscript{\cite{radio-browser}},
+			\item fmstream\textsuperscript{\cite{fmstream}}.
 		\end{itemize}
 		
 		Druga baza, choć obszerniejsza (86,000 a~38,578 stacji), nie udostępnia interfejsu dla wszystkich. Autor życzy sobie osobistej prośby o~dostęp, która na ten moment została wysłana i~czeka na odpowiedź.
@@ -256,7 +256,7 @@ backend=biber,
 			\end{itemize}
 		
 		\subsection{Wymagania niefunkcjonalne}
-			Urządzenie ma być wykonane z~wykorzystaniem mikrokontrolera, lub płytki rozwojowej opartej o~mikrokontroler.
+			Urządzenie ma być zbudowane z~wykorzystaniem mikrokontrolera lub płytki rozwojowej opartej o~mikrokontroler.
 			Do pobierania strumienia danych audio z~serwera wykorzystać należy  bezprzewodowe połączenie z~Internetem oparte o~technologię Wi-Fi.
 			Produkt musi także poradzić sobie z~obsługą odpowiedniego formatu kodowania dźwięku.
 			Rysunek~\ref{3/rb_chart_new} przestawia procentowe wykorzystanie kodeków przez stacje radiowe (wg wyszukiwarki \textit{Radio Browser}\textsuperscript{\cite{radio_browser_codecs}}).
@@ -457,7 +457,7 @@ backend=biber,
 			Schemat całości systemu został podzielony na 6~funkcjonalnych bloków, które zostały opisane poniżej.
 			
 			\subsubsection{Sekcja zasilania}
-				Rysunek~\ref{3/hw_kicad_sch_power} przedstawia zaprojektowaną sekcję zasilania.
+				Rysunek~\ref{3/hw_kicad_sch_power} przedstawia schemat sekcji zasilania.
 				\imgh{3/hw_kicad_sch_power}{Schemat elektryczny radia: Sekcja zasilania}{0.95}
 				
 				Urządzenie posiada własne zasilanie oparte o~dwa ogniwa litowo-jonowe typu 18650~o~sumarycznej pojemności 4Ah i~znamionowym napięciu 3.6V. Na schemacie ogniwa zaznaczono wspólnym symbolem \lstinline|BT1|. W~roli układu ładowania i~zabezpieczeń został wykorzystany gotowy moduł z~układem TP4056\textsuperscript{\cite{hw_chg}} (schemat ozn.~\lstinline|B3|). Dzięki niemu, produkt nie wymaga stosowania specjalistycznej ładowarki, a~same ogniwa są zabezpieczone przed nadmiernym rozładowaniem i~przeładowaniem. Zgodnie z~najnowszymi trendami, zasilanie z~zewnątrz dostarczane jest przez złącze USB-C. Użytkownik może wykorzystać do tego dowolną kompatybilną ładowarkę o~prądzie minimalnym 1A.
@@ -532,7 +532,7 @@ backend=biber,
 			\lstfile{scad}{Kod generujący otwory na przyciski i~śruby montażowe}{lst/3/buttons.scad}
 			\pagebreak
 			
-			Na rysunku~\ref{3/hw_scad_case} przedstawiono wizualizacja projektu całej obudowy. Poniżej, na rysunku~\ref{3/hw_case}, zaprezentowano efekt finalny, funkcjonalne radio w~obudowie.
+			Na rysunku~\ref{3/hw_scad_case} przedstawiono wizualizację projektu całej obudowy. Poniżej, na rysunku~\ref{3/hw_case}, zaprezentowano efekt finalny, funkcjonalne radio w~obudowie.
 			\imgh{3/hw_scad_case}{Wizualizacja projektu obudowy radia}{0.8}
 			\imgh{3/hw_case}{Efekt końcowy, radio w~obudowie}{0.8}
 			\pagebreak
@@ -543,7 +543,7 @@ backend=biber,
 		\imgh{3/PicoRadio-code-block-diagram}{Schemat blokowy modułów projektu}{0.75}
 		
 		\subsection{Moduły własne}
-			Większość kodu projektu zawiera katalog \lstinline|libs|. W~nim znajdują się poszczególne moduły (nazwane odpowiednimi nazwami podfolderów). Wszystkie wypisane w~tej sekcji zostały zaimplementowane samodzielnie, chyba, że zaznaczono inaczej. Dla przejrzystości pogrupowano moduły wg ich ról.
+			Większość kodu projektu zawiera katalog \lstinline|libs|. W~nim znajdują się poszczególne moduły (opisane odpowiednimi nazwami podfolderów). Wszystkie wymienione w~tej sekcji zostały zaimplementowane samodzielnie, chyba, że zaznaczono inaczej. Dla przejrzystości pogrupowano moduły wg ich ról.
 		
 			\paragraph{Wejście}
 				\begin{itemize}
@@ -647,7 +647,7 @@ backend=biber,
 			$ $\\
 			
 			Dzięki tym maszynom, możliwe jest dodanie do mikrokontrolera dowolnego protokołu transmisji danych bez zbytniego obciążenia procesora jego pełną symulacją.
-			W~ramach pracy został stworzony blok obsługi interfejsu \isqs{}, który serializuje dane dostarczane przez DMA i~wysyła do układu DAC. Kod tego bloku przedstawiony jest na listingu \ref{lst/3/i2s.pio}.
+			W~ramach pracy został stworzony blok obsługi interfejsu \isqs{}, który serializuje dane dostarczane przez DMA i~wysyła do układu DAC.
 			$ $\\
 			
 			Przebieg czasowy protokołu \isqs{} przedstawia rysunek~\ref{3/pio_i2s_docs}.
@@ -656,10 +656,13 @@ backend=biber,
 			
 %			Jak widać zmiana kanału (kodowanego poziomem linii \lstinline|WS|)  musi nastąpić przed wysłaniem ostatniego bitu poprzedniego kanału (\lstinline|LSB|, czyli \textit{Least Significant Bit}, najmniej znaczący bit kanału lewego). Z~tego powodu program wydłużył się do 8~instrukcji. Niektóre układy obsługują protokół \textit{left-just}, który nie posiada tego ograniczenia, jednak z~uwagi na niewystarczającą dokumentacje i~małe wsparcie przez układy, wybrany został klasyczny \isqs{}.
 			
+%			\noindent
+			Kod bloku PIO z~listingu~\ref{lst/3/i2s.pio} odpowiada za realizację transmisji w~standardzie \isqs{} ilustrowanej przebiegiem pokazanym na rys~\ref{3/pio_i2s_docs}.
+			
 			\lstfile{pio}{Kod programu \isqs{}}{lst/3/i2s.pio}
 			
 			\noindent
-			Kod bloku PIO z~listingu~\ref{lst/3/i2s.pio} odpowiada za realizacje transmisji w~standardzie \isqs{} ilustrowanej przebiegiem pokazanym na rys~\ref{3/pio_i2s_docs} i~działa następująco:
+			Przedstawiony program działa następująco:
 			\begin{itemize}
 				\item Linia nr 3~ustawia ile bitów jest typu \lstinline|side-set|. Bity \lstinline|side-set| są wykorzystywane odpowiednio do: ustawienia linii \lstinline|WS| i~linii \lstinline|BCK|.
 				
@@ -685,7 +688,7 @@ backend=biber,
 			\newcommand{\rdmabuf}[1]{\ref{3/PicoRadio-dma-buf}#1}
 			\newcommand{\dmacite}{\textsuperscript{\cite{dma_dbl_buf1} \cite{dma_dbl_buf2}}}
 			
-			Aby zachować płynność odtwarzania, wykorzystano podwójne buforowanie\dmacite{}. Na rysunku~\rdmabuf{} przedstawiono schematy blokowe ilustrujące jego działania.
+			Aby zachować płynność odtwarzania, wykorzystano podwójne buforowanie\dmacite{}. Na rysunku~\rdmabuf{} przedstawiono schematy blokowe ilustrujące jego działanie.
 			
 			\imgh{3/PicoRadio-dma-buf}{Schemat blokowy podwójnego buforowania DMA\dmacite{}}{1}
 			
@@ -695,10 +698,8 @@ backend=biber,
 			Na rysunku~\rdmabuf{a} przedstawiono proces wykonywany przed rozpoczęciem odtwarzania.
 			Bufor wypełniany jest w~całości.
 			Po rozpoczęciu odtwarzania podsystem DMA kopiuje sukcesywne próbki z~bufora do maszyny PIO. Podczas pierwszego transferu procesor nie musi nic robić, ponieważ załadował on na początku cały bufor. Sytuację tę ukazuje rysunek~\rdmabuf{b}.
-			$ $\\
-			
 			W~momencie, gdy transfer pierwszej części bufora się zakończy, automatycznie, bez ingerencji procesora, uruchamiany jest drugi kanał DMA. Jednocześnie wywoływane jest przerwanie, które informuje procesor, że należy załadować więcej danych do pierwszej połowy bufora. Cały proces został zilustrowany na rysunku~\rdmabuf{c}.
-			Ukończenie przesyłania drugiej części bufora przebiega analogicznie. Uruchamiany jest pierwszy kanał DMA i~procesor uzupełnia drugą część bufora. Sytuację przedstawia rysunek~\rdmabuf{d}.
+			Ukończenie przesyłania drugiej części bufora przebiega analogicznie. Uruchamiany jest pierwszy kanał DMA, a~procesor uzupełnia drugą część bufora. Sytuację przedstawia rysunek~\rdmabuf{d}.
 			$ $\\
 		
 			Stany przedstawione na rysunkach~\rdmabuf{c} oraz \rdmabuf{d} powtarzane są dopóki odtwarzanie nie zostanie zakończone. W~ten sposób przebiega ono w~sposób płynny. Kanały uruchamiane są w~pętli, z~minimalnym opóźnieniem, na poziomie sprzętowym. 			
@@ -1171,11 +1172,9 @@ backend=biber,
 			
 			Od czasu ok. 1:24 rozpoczęły się wspomniane problemy. Okazało się, że gdy bufor zaczyna się wyczerpywać, nie może on zostać wystarczająco szybko uzupełniony, ponieważ ilość danych na łączu ograniczona jest przez rozmiar okna TCP i~opóźnienie sieci.
 			Problem został rozwiązany poprzez zwiększenie maksymalnego rozmiaru okna TCP do 56kB.
-			$ $\\
-			
 			Skuteczność rozwiązania zweryfikowano przeprowadzając próby odbioru strumienia ze stacji z~której docierał on z~największym opóźnieniem. Wybrano do tego stacje nadająca z~Nowej Zelandii (opóźnienie 322ms). Wykres ogłaszanego przez odbiornik rozmiaru okna TCP podczas tej transmisji przedstawia rysunek~\ref{4/tcp_good}.
 			
-			\imgh{4/tcp_good}{Rozmiar okna TCP ogłaszany w~trakcie połączenia o znacznym opóźnieniu}{0.6}
+			\imgh{4/tcp_good}{Rozmiar okna TCP ogłaszany w~trakcie połączenia o~znacznym opóźnieniu}{0.6}
 
 			Jak widać, podobny problem zacząłby występować ok. 40~sekundy. Jednak rozmiar okna został zwiększony do ponad 40kB i~serwer szybko dostarczył brakujące dane.
 %			Na uznanie zasługuje sugestia z~listy mailingowej projektu LwIP.
@@ -1186,7 +1185,7 @@ backend=biber,
 			\begin{itemize}
 				\item Wyświetlanie statystyk odtwarzania,
 				\item Interpretacja metadanych ICY i~wyświetlanie tytułów utworów na ekranie,
-				\item Lista ulubionych
+				\item Lista ulubionych.
 			\end{itemize}
 			
 			Oprócz powyższych ulepszeń, odnaleziono i~naprawiono szereg błędów takich jak nieprawidłowe zakańczanie odtwarzania i~w konsekwencji zawieszanie się programu, niemożność wyjścia z~ekranu ładowania wyników wyszukiwania czy dereferencja zerowego wskaźnika w~zadaniu wypisywania statystyk po zakończeniu odtwarzania.
@@ -1199,7 +1198,7 @@ backend=biber,
 			\begin{itemize}
 				\item Prąd chwilowy pobierany przez wzmacniacz przekroczył możliwości przetwornicy, układ zasilony został z~niższego napięcia bezpośrednio z~ogniw,
 				\item Dodany został pomiar napięcia baterii,
-				\item Do wzmacniacza doprowadzony został sygnał wyciszający, co pozwoliło zmniejszyć uciążliwość szumów pochodzących od niedostatecznie filtrowanego napięcia zasilającego, szczególnie słyszalne przy braku innych dźwięków.
+				\item Do wzmacniacza doprowadzony został sygnał wyciszający, co pozwoliło zmniejszyć uciążliwość szumów pochodzących od niedostatecznie filtrowanego napięcia zasilającego. Zakłócenia te były szczególnie słyszalne przy braku innych dźwięków.
 			\end{itemize}
 			
 			Na podstawie schematu zaprojektowano mozaikę ścieżek obwodu drukowanego, który następnie wykonano wykorzystując metodę termotransferową \cite{ch4_pcb_method}.
@@ -1220,7 +1219,7 @@ backend=biber,
 
 		\subsection{Testowanie}
 			Odbiornik przekazano do użytkowania osobom, które można określić mianem standardowego użytkownika.
-			Pierwszym z~zauważonych problemów był zbyt krótki czas oczekiwania na połączenie z~serwerem stacji i~odbiór danych. Radio dotychczas było testowane w~bezpośrednim sąsiedztwie routera Wi-Fi. Po przeniesieniu do innego pomieszczenia radio nie mogło połączyć się z~większością stacji z~powodu zbyt szybkiego zgłaszania błędu przekroczenia czasu oczekiwania na dane.
+			Pierwszym z~zauważonych problemów był zbyt krótki czas oczekiwania na połączenie z~serwerem stacji i~odbiór danych. Radio dotychczas było testowane w~bezpośrednim sąsiedztwie routera Wi-Fi. Po przeniesieniu do innego pomieszczenia, radio nie mogło połączyć się z~większością stacji z~powodu zbyt szybkiego zgłaszania błędu przekroczenia czasu oczekiwania na dane.
 			Powiększono zatem czas oczekiwania do 4~sekund, co rozwiązało problem.
 			$ $\\
 			
@@ -1305,7 +1304,7 @@ backend=biber,
 			
 			\imgh{5/fav}{Ekran \textit{Ulubione stacje}}{0.5}
 			
-			Jest to także ekran startowy. Wyświetla się on jako pierwszy po starcie programu. Dlatego jest też traktowany jako ekran główny i~posiada najwięcej ikon akcji na dole ekranu.
+			Jest to także ekran startowy. Wyświetla się on jako pierwszy po uruchomieniu urządzenia. Dlatego jest też traktowany jako ekran główny i~posiada najwięcej ikon akcji na dole ekranu.
 			Ikona najbardziej po lewej to ikona folderu służąca do uruchamiania odtwarzacza plików lokalnych. Zaraz obok znajduje się ikona ustawień. Po prawej użytkownik może przejść do wyszukiwarki stacji.
 			
 			\paragraph{Dalszy rozwój}
@@ -1322,7 +1321,7 @@ backend=biber,
 				Obecnie obsługiwany jest tylko jeden dostawca wyszukiwania. Istnieje infrastruktura do obsługi wielu takich serwerów, lecz żaden inny nie został dodany.
 			
 		\subsection{Przeglądarka i~odtwarzacz plików lokalnych}
-			Listing plików lokalnych odczytanych z karty SD przedstawiony został na rysunku~\ref{5/local}.
+			Listing plików lokalnych odczytanych z~karty SD przedstawiony został na rysunku~\ref{5/local}.
 %			Tworzony jest on na podstawie plików znajdujących się na karcie SD.
 			Zapewnione jest sortowanie wpisów (foldery sortowane są jako pierwsze). Możliwe jest rekurencyjne przeglądanie drzewa katalogów. Nazwa ekranu jest dynamicznie aktualizowana i~wyświetla nazwę aktualnego folderu. Jak widać obsługiwane jest także przewijanie długich tekstów poziomo na ekranie oraz dekodowanie metadanych ID3v2. Utwory w~ramach jednego folderu są automatycznie odtwarzane jeden po drugim. Interfejs lokalnego odtwarzacza można zobaczyć na rysunku~\ref{5/local_play}.
 			
@@ -1333,10 +1332,10 @@ backend=biber,
 				Implementacja bezstratnego kodowania plików FLAC zapewniłaby większą kompatybilność urządzenia oraz potencjalne podniesienie jakości dźwięku.
 		
 		\subsection{Połączenie z~Internetem}
-			Urządzenie do odtwarzania radia i~wyszukiwania nowych stacji wymaga połączenia z~Internetem. W~aktualnej wersji oprogramowania zostały zaimplementowane funkcje wyszukiwania, zapisywania oraz łączenia się z~sieciami Wi-Fi.
+			Do odtwarzania radia i~wyszukiwania nowych stacji urządzenie wymaga połączenia z~Internetem. W~aktualnej wersji oprogramowania zostały zaimplementowane funkcje wyszukiwania, zapisywania oraz łączenia się z~sieciami Wi-Fi.
 			$ $\\
 			
-			Dane dostępowe do znalezionych sieci z którymi udało się połączyć są zapisywane w~pamięci nieulotnej odbiornika. Urządzenie po uruchomieniu automatycznie wyszukuje najlepszą sieć, do której hasło zostało wcześniej zapisane. Dzięki temu, użytkownik od razu może rozpocząć odtwarzanie radia.
+			Dane dostępowe do znalezionych sieci z~którymi udało się połączyć są zapisywane w~pamięci nieulotnej odbiornika. Urządzenie po uruchomieniu automatycznie wyszukuje najlepszą sieć, do której hasło zostało wcześniej zapisane. Dzięki temu, użytkownik od razu może rozpocząć odtwarzanie radia.
 	
 	\section{Scenariusze użytkowania}
 		W~tej sekcji przedstawione zostały scenariusze użytkowania urządzenia.
@@ -1351,7 +1350,7 @@ backend=biber,
 			\begin{itemize}
 				\item Rys.~\rfladd{a} -- użytkownik uruchomił radio i~zmienił pozycję kursora na przycisk akcji odpowiedzialny za wyszukiwanie,
 				\item Rys.~\rfladd{b} -- po naciśnięciu środkowego przycisku, wyświetlony został ekran wyszukiwania z~klawiaturą i~wpisana została fraza filtrująca,
-				\item Rys.~\rfladd{c} -- na 3. stronie odnaleziona została żądana stacja
+				\item Rys.~\rfladd{c} -- na trzeciej stronie odnaleziona została żądana stacja
 				\item Rys.~\rfladd{d} -- po akceptacji wyboru (środkowy przycisk), rozpoczęło się odtwarzanie; użytkownik przeniósł kursor na przycisk gwiazdki,
 			\end{itemize}
 			Warto nadmienić, że w~każdej chwili możliwa jest korekta wyboru. Gdy jednak znaleziona stacja nie jest odpowiednia lub popełniono błąd we frazie wyszukiwania, użytkownik może cofnąć się przy użyciu skrajnie lewej ikony akcji do poprzedniego ekranu.
@@ -1380,7 +1379,7 @@ backend=biber,
 		\subsection{Połączenie z~nową siecią Wi-Fi}
 			\newcommand{\rflwifi}[1]{\ref{5/PicoRadio-fl-wifi}#1}
 			
-			Na rysunku~\rflwifi{} przedstawiono scenariusz łączenia się z~nową siecią Wi-Fi i~zapisanie jej do znanych sieci.
+			Na rysunku~\rflwifi{} przedstawiono scenariusz łączenia się z~nową siecią Wi-Fi i~dodanie jej do listy znanych sieci.
 			
 			\imgh{5/PicoRadio-fl-wifi}{Użytkownik łączy się z~nową siecią}{0.9}
 			
@@ -1394,8 +1393,8 @@ backend=biber,
 			\end{itemize}
 			
 	\section{Zrealizowane oprogramowanie układowe}
-			Oprogramowanie układowe sprawia, że odbiornik spełnia wszystkie wymagania sformułowane w założeniach.
-			Udało się zaimplementować dekodowanie MP3 z~każdą przepływnością, nawet 320~kbps, w~wariantach MPEG1 oraz MPEG2, a także odtwarzanie plików w formacie WAV.
+			Oprogramowanie układowe sprawia, że odbiornik spełnia wszystkie wymagania sformułowane w~założeniach.
+			Udało się zaimplementować dekodowanie MP3 z~każdą przepływnością, nawet 320~kbps, w~wariantach MPEG1 oraz MPEG2, a~także odtwarzanie plików w~formacie WAV.
 			Zrealizowana została obsługa metadanych zarówno strumieni internetowych (ICY) jak i~lokalnych plików MP3 (ID3v2). Dekoder potrafi uwzględniać i~korygować wiele nieprawidłowości w~strumieniu danych. Obsługiwane jest także wykrywanie i~zgłaszanie błędów dekodowania. Klient HTTP obsługuje minimum funkcji, lecz jest to wystarczające do poprawnego odbioru strumienia radia internetowego.
 			$ $\\
 			
@@ -1404,19 +1403,19 @@ backend=biber,
 %			
 %			Błędy zgłaszane użytkownikowi są zbyt ogólne. Konieczna jest unifikacja kodów błędów w~projekcie i~wyświetlanie adekwatnej wiadomości zamiast ogólnikowego \textit{Wystąpił błąd}. Brak jest także ekranu potwierdzenia usunięcia wpisu z~ulubionych oraz edycji nazwy zapisanej stacji.
 
-			Pośród zrealizowanych funkcjonalności są takie, które działają, ale wymagałyby dalszego dopracowania. Jedną z nich jest określanie stopnia naładowania wbudowanego ogniwa. Obecnie szacowanie pojemności w trakcie rozładowywania jest poprawne ale mało dokładne, natomiast podczas ładowania wskazania są mocno zawyżone. 
-			Drugim zagadnieniem jest uporządkowanie podsystemu zgłaszania przez oprogramowanie błędów w działaniu urządzenia. Konieczna jest unifikacja kodów błędów i rozbudowa systemu powiadamiania o nich użytkownika.
-			Pewnego dopracowania wymaga również funkcjonalność operowania listą ulubionych. Aktualnie brakuje ekranu potwierdzenia usunięcia pozycji z listy oraz możliwości edytowania nazwy stacji znajdującej się na tej lisie.
+			Pośród zrealizowanych funkcjonalności są takie, które działają, ale wymagałyby dalszego dopracowania. Jedną z~nich jest określanie stopnia naładowania wbudowanego ogniwa. Obecnie szacowanie pojemności w~trakcie rozładowywania jest poprawne ale mało dokładne, natomiast podczas ładowania wskazania są mocno zawyżone. 
+			Drugim zagadnieniem jest uporządkowanie podsystemu zgłaszania przez oprogramowanie błędów w~działaniu urządzenia. Konieczna jest unifikacja kodów błędów i~rozbudowa systemu powiadamiania o~nich użytkownika.
+			Pewnego dopracowania wymaga również funkcjonalność operowania listą ulubionych. Aktualnie brakuje ekranu potwierdzenia usunięcia pozycji z~listy oraz możliwości edytowania nazwy stacji znajdującej się na tej lisie.
 		
 		\subsection{Perspektywa nowej generacji projektu}
-			Swoista wersja 2.0 oprogramowania układowego mogłaby zawierać dodatkowe funkcjonalności, które można by zrealizować bez wprowadzania zmian w części sprzętowej odbiornika.
+			Swoista wersja 2.0 oprogramowania układowego mogłaby zawierać dodatkowe funkcjonalności, które można by zrealizować bez wprowadzania zmian w~części sprzętowej odbiornika.
 			$ $\\
 			
-			Istniejąca architektura oprogramowania pozwala na zaimplementowanie funkcjonalności tworzenia więcej niż jednej listy ulubionych. Nie zostało to jednak obecnej wersji zrealizowane. Dodanie takiej możliwości z pewnością uatrakcyjniło by korzystanie z odbiornika pozwalając użytkownikowi grupować utwory czy stacje według gatunków muzycznych, wykonawców czy też innych kryteriów.
-			Bardzo atrakcyjne wydaje się dodanie możliwości obsługi modemów USB pozwalających na korzystanie z sieci komórkowych LTE/5G. Modem taki zapewniałby dostęp do Internetu praktycznie w dowolnym miejscu a to pozwoliłoby to korzystać z urządzenia w sposób niemal identyczny jak korzysta się z tradycyjnego odbiornika radiowego, bez potrzeby podłączania się do lokalnej sieci Wi-Fi. Trzecia, warta rozważenia funkcjonalność wiąże się z faktem, że cześć stacji internetowych w momencie nawiązywania połączenia próbuje wymusić przejście na połączenie szyfrowane z użyciem protokołu TLS. Obecnie odbiornik odrzuca takie prośby i zgłasza błąd. W nowej wersji oprogramowania należało by rozważyć zaimplementowanie obsługi takich połączeń. 
+			Istniejąca architektura oprogramowania pozwala na zaimplementowanie funkcjonalności tworzenia więcej niż jednej listy ulubionych. Nie zostało to jednak obecnej wersji zrealizowane. Dodanie takiej możliwości z~pewnością uatrakcyjniłoby korzystanie z~odbiornika pozwalając użytkownikowi grupować utwory czy stacje według gatunków muzycznych, wykonawców czy też innych kryteriów.
+			Bardzo atrakcyjne wydaje się dodanie możliwości obsługi modemów USB pozwalających na korzystanie z~sieci komórkowych LTE/5G. Modem taki zapewniałby dostęp do Internetu praktycznie w~dowolnym miejscu a~to pozwoliłoby to korzystać z~urządzenia w~sposób niemal identyczny jak korzysta się z~tradycyjnego odbiornika radiowego, bez potrzeby podłączania się do lokalnej sieci Wi-Fi. Trzecia, warta rozważenia funkcjonalność wiąże się z~faktem, że cześć stacji internetowych w~momencie nawiązywania połączenia próbuje wymusić przejście na połączenie szyfrowane z~użyciem protokołu TLS. Obecnie odbiornik odrzuca takie prośby i~zgłasza błąd. W~nowej wersji oprogramowania należałoby rozważyć zaimplementowanie obsługi takich połączeń. 
 			
 	\section{Część sprzętowa}
-		Projekt od strony sprzętowej został udokumentowany w~sekcji~\ref{sec:hw}. Oprócz schematu, powstała także płytka PCB, oraz obudowa wykonana w technice druku~3D. Całość widoczna jest na rysunku~\ref{5/hw_result}.
+		Projekt od strony sprzętowej został udokumentowany w~sekcji~\ref{sec:hw}. Oprócz schematu, powstała także płytka PCB, oraz obudowa wykonana w~technice druku~3D. Całość widoczna jest na rysunku~\ref{5/hw_result}.
 		$ $\\
 		
 		Od strony funkcjonalnej urządzenie posiada wbudowane ogniwa, dzięki czemu nie potrzebuje zewnętrznego zasilania. Zintegrowany układ ładowania ze złączem USB~C pozwala na wykorzystanie praktycznie dowolnej ładowarki z~tym złączem (prąd wykorzystany do ładowania to 1A). Produkt posiada analogową regulację głośności potencjometrem wyprowadzonym na lewą stronę urządzenia. Lokalizacja została dobrana ze względu na bliskość sekcji audio na płytce i~chęć minimalizacji długości ścieżek, które im dłuższe tym większe zakłócenia wprowadzają do systemu. Obok gałki potencjometru znajduje się także złącze JACK~3.5mm przeznaczone do podłączenia zewnętrznego wzmacniacza.
@@ -1424,25 +1423,25 @@ backend=biber,
 		\imgh{5/hw_result}{Gotowy produkt w~obudowie}{0.7}
 		
 		\subsection{Ocena wyników}
-%			Prawie wszystkie wykryte we wcześniejszych wersjach zostały naprawione w trzeciej wersji prototypu odbiornika.
+%			Prawie wszystkie wykryte we wcześniejszych wersjach zostały naprawione w~trzeciej wersji prototypu odbiornika.
 			Sprzętowa natura projektu spowodowała, że znacznie trudniej było korygować powstałe błędy.
-			Ta sekcja zawiera listę niedociągnięć, których wyeliminowanie umożliwiłoby w przyszłości stworzenie lepszego produktu.
+			Ta sekcja zawiera listę niedociągnięć, których wyeliminowanie umożliwiłoby w~przyszłości stworzenie lepszego produktu.
 
 				\begin{itemize}
-					\setlength{\itemsep}{0.5cm}
-					\item Błędy w schemacie elektrycznym:
+					\setlength{\itemsep}{0.4cm}
+					\item Błędy w~schemacie elektrycznym:
 					\begin{itemize}
 						\setlength{\itemsep}{0.2cm}
 						\item brak kondensatorów filtrujących, które mogłyby poprawić parametry pracy niektórych modułów,
-						\item niedokładne rezystory pomiarowe w~dzielnikach napięć powodują odchylenia w~pomiarze napięć \lstinline|VCC| i~ogniw,
+						\item nieprecyzyjne rezystory pomiarowe w~dzielnikach napięć powodują niedokładności w~pomiarze napięć \lstinline|VCC| i~ogniw,
 					\end{itemize}
 
-					\item Błędy w projekcie obwodu drukowanego:
+					\item Błędy w~projekcie obwodu drukowanego:
 					\begin{itemize}
 						\setlength{\itemsep}{0.2cm}
 						\item brak otworów montażowych w~obrębie głównej części płytki, przez co posiada ona dość niestandardowy kształt,
-						\item płytka zamontowana jest w rogu obudowy, uniemożliwiając umieszczenie w tym miejscu elementów łączących fragmenty obudowy, co powoduje jej niestabilność,
-						\item podłączanie modułów do głównej płytki z wykorzystaniem złączy typu goldpin, jest zawodne, gdyż może to skutkować ich wypadnięciem lub utratą kontaktu elektrycznego.
+						\item płytka zamontowana jest w~rogu obudowy, uniemożliwiając umieszczenie w~tym miejscu elementów łączących fragmenty obudowy, co powoduje jej niestabilność,
+						\item podłączanie modułów do głównej płytki z~wykorzystaniem złączy typu goldpin, jest zawodne, gdyż może to skutkować ich wypadnięciem lub utratą kontaktu elektrycznego.
 					\end{itemize}
 				\end{itemize}
 				
@@ -1459,19 +1458,20 @@ backend=biber,
 %					\item moduły są wpinane w~złącza typu \textit{goldpin}, co w~przypadku obecności na nich złącz zewnętrznych (JACK, port USB~C), powoduje że wpinanie wtyków w~te złącza odchyla je i~w konsekwencji moduł wypada lub traci kontakt. Zostało to częściowo naprawione przy module ładowania. Wlutowany na stałe, stał się stabilniejszy.
 %				\end{itemize}
 				
-				Metoda termotransferu nie zapewnia najlepszych parametrów produkcyjnych. Niektóre ścieżki są cieńsze niż w projekcie, a~część padów lutowniczych jest tak cienka, że montaż był znacząco utrudniony. Lepszym i~powtarzalnym sposobem na wytwarzanie płytek drukowanych byłoby zlecenie ich wykonania zewnętrznej firmie.
+				Metoda termotransferu nie zapewnia odpowiedniej jakości wykonania płytki. Niektóre ścieżki są cieńsze niż w projekcie, a~część padów lutowniczych jest tak cienka, że montaż był znacząco utrudniony. Lepszym i~powtarzalnym sposobem na wytwarzanie płytek drukowanych byłoby zlecenie ich wykonania zewnętrznej firmie.
 		
 		\subsection{Radio nowej generacji}
-			Pierwszym ulepszeniem powinno być skorygowanie schematu oraz stworzenie nowej płytki, z zaprojektowaną od podstaw mozaiką ścieżek. Wykonana profesjonalnie, dwuwarstwowo, pozwoliłaby na poprawienie parametrów pracy, głównie obniżenie szumów sekcji zasilającej. Powinny zostać uwzględnione otwory montażowe płytki.
+			Pierwszym ulepszeniem powinno być skorygowanie schematu oraz stworzenie nowej płytki, z~zaprojektowaną od podstaw mozaiką ścieżek. Wykonana profesjonalnie, dwuwarstwowo, pozwoliłaby na poprawienie parametrów pracy, głównie obniżenie szumów sekcji zasilającej.
+			Należy odpowiednio rozmieścić otwory montażowe służące zamocowaniu płytki w~obudowie.
 			Złącza zamontowane na modułach nie powinny być wykorzystywane.
-			Podłączanie do nich zewnętrznych przewodów, wywiera nadmierne naprężenia na ich zawodne połączenie z resztą obwodu.
-			W miejsce tych złączy powinny zostać wyprowadzone ich lutowane lub przykręcane odpowiedniki.
+			Podłączanie do nich zewnętrznych przewodów, wywiera nadmierne naprężenia na ich zawodne połączenie z~resztą obwodu.
+			W~miejsce tych złączy powinny zostać wyprowadzone ich lutowane lub przykręcane odpowiedniki.
 			$ $\\
 
-			Należałoby się zastanowić także, czy jakość i poziom głośności dźwięku odpowiada użytkownikowi. Jeżeli nie, istnieje możliwość wykorzystania mocniejszego wzmacniacza w~celu obniżenia zniekształceń przy cichym słuchaniu lub zwiększenia mocy maksymalnej.
+			Należałoby się zastanowić także, czy jakość i poziom głośności dźwięku odpowiada użytkownikowi. Jeżeli nie, istnieje możliwość wykorzystania mocniejszego wzmacniacza, który przy cichym słuchaniu będzie oferował mniejszy poziom zniekształceń lub pozwoli odtwarzać dźwięk z~większą mocą. 
 			Należy jednak mieć na uwadze, że układy o~większej mocy wymagają wyższego napięcia zasilającego.
-			Przykładowo PAM8610\textsuperscript{\cite{ch5_pam8610}} przy napięciu 7V (przybliżone napięcie 2~ogniw połączonych szeregowo) jest w~stanie oddać moc 4W na kanał (obecnie użyty wzmacniacz posiada moc ok. 1W na kanał). Nowszy PAM8006a\textsuperscript{\cite{ch5_pam8006a}} jest w~stanie wysterować głośniki mocą aż 8W na kanał, lecz wiąże się to z~napięciem zasilania 12V (3 ogniwa szeregowo) i~zmianą głośników na takie o~impedancji $8 \Omega$.
-			Podwyższenie napięcia zasilającego niesie ze sobą konieczność wprowadzenia poważnych zmian w budowie sekcji zasilającej. Połączone szeregowo ogniwa litowo-jonowe wymagają znacznie bardziej zaawansowanych układów zabezpieczających i ładujących. Bardziej skomplikowane byłoby również wykorzystanie złącza USB-C do ładowania i zasilania urządzenia (należałoby zastosować moduł ładowarki obsługujący funkcjonalność USB-PD\textsuperscript{\cite{usb_pd}}).
+			Przykładowo PAM8610\textsuperscript{\cite{ch5_pam8610}} przy napięciu 7V (przybliżone napięcie 2~ogniw połączonych szeregowo) jest w~stanie oddać moc 4W na kanał (obecnie użyty wzmacniacz posiada moc ok. 1W na kanał). Nowszy PAM8006a\textsuperscript{\cite{ch5_pam8006a}} jest w~stanie wysterować głośniki mocą aż 8W na kanał, lecz wiąże się to z~podwyższeniem napięcia zasilania do 12V (3 ogniwa szeregowo) i~zmianą głośników na takie o~impedancji $8 \Omega$.
+			Podwyższenie napięcia zasilającego niesie ze sobą konieczność wprowadzenia poważnych zmian w~budowie sekcji zasilającej. Połączone szeregowo ogniwa litowo-jonowe wymagają znacznie bardziej zaawansowanych układów zabezpieczających i~ładujących. Bardziej skomplikowane byłoby również wykorzystanie złącza USB-C do ładowania i~zasilania urządzenia (należałoby zastosować moduł ładowarki obsługujący funkcjonalność USB-PD\textsuperscript{\cite{usb_pd}}).
 			$ $\\
 			
 			Dodatkowym modułem poprawiającym jakość dźwięku mógłby być prosty \textit{equalizer}. Dwa pokrętła do wyrównania pasma akustycznego (bas i~treble), zrealizowane z~wykorzystaniem pasywnych elementów elektronicznych.
