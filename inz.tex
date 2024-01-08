@@ -198,7 +198,7 @@ backend=biber,
 	Tradycyjne radio powstało na początku XX wieku i~do dzisiaj audycje radiowe cieszą się wysoką popularnością. Według podsumowania serwisu iloveradio.pl\textsuperscript{\cite{iloveradio_stats}} w~2022~roku 65\% Polaków słuchała radia codziennie, a~prawie 87\% co najmniej raz w~tygodniu uruchamiało swoje radioodbiorniki. 
 	$ $\\
 	
-	Uwarunkowania prawno-ekonomiczne, związane z~tradycyjną emisją programu radiowego i~postęp w~dziedzinie technologii komunikacyjnych sprawiły, że rozwinęło się radio Internetowe, którego popularność i~słuchalność regularnie wzrasta. Według badań Krajowego Instytutu Mediów łączny zasięg dzienny stacji słuchanych przez Internet w~2022~wyniósł z~6,3\%\textsuperscript{\cite{kim_2022}}. W~analogicznym okresie 2023~roku wynik podwyższył się do 7,6\%\textsuperscript{\cite{kim_2023}}.
+	Uwarunkowania prawno-ekonomiczne, związane z~tradycyjną emisją programu radiowego i~postęp w~dziedzinie technologii komunikacyjnych sprawiły, że rozwinęło się radio Internetowe, którego popularność i~słuchalność regularnie wzrasta. Według badań Krajowego Instytutu Mediów łączny zasięg dzienny stacji słuchanych przez Internet w~2022~wyniósł 6,3\%\textsuperscript{\cite{kim_2022}}. W~analogicznym okresie 2023~roku wynik podwyższył się do 7,6\%\textsuperscript{\cite{kim_2023}}.
 	Związane jest to z~kilkoma czynnikami. Radio internetowe często oferuje dużo lepszą technicznie jakość odbieranego dźwięku. Do wyboru jest znacznie większa liczba rozgłośni, wśród nich są rozgłośnie tematyczne, emitujące określony typ audycji czy rodzaj muzyki. Dodatkowo, radio internetowe nie ma ograniczeń geograficznych związanych z~odbiorem, jak ma to miejsce w~przypadku tradycyjnego radia. Przez Internet można słuchać stacji nadającej z~dowolnego miejsca na świecie.
 	
 	\section{Opis problemu}
@@ -1291,17 +1291,12 @@ backend=biber,
 %	skupiono się na finalnym efekcie projektu.
 	
 	\section{Przegląd zrealizowanych funkcji}
-		Poniżej przedstawiono posiadane przez urządzenie funkcje.
-	
-		\subsection{Odtwarzacz radiowy}			
-			Główną funkcją produktu jest odtwarzanie radia internetowego. Odtwarzacz został zrealizowany w~postaci dedykowanego ekranu przedstawionego na rysunku~\ref{5/radio}. Urządzenie prezentuje na nim podstawowe informacje na temat stacji radiowej oraz stanu odtwarzacza. Obsługa metadanych ICY pozwala na wyświetlanie tytułu i~wykonawcy granego w~danej chwili utworu. Poniżej wyświetlane są statystyki działanie dekodera. \textit{CPU} odnosi się do procentu wykorzystania rdzenia dekodującego, natomiast \textit{Bufor} informuje użytkownika o~poziomie wypełnienia bufora (przydatne, gdy występują problemy z~odtwarzaniem spowodowane niską jakością połączenia internetowego).
-			
-			\imghss{5/radio}{Ekran \textit{Radio} (włączone z~listy ulubionych)}{5/radio_search}{Ekran \textit{Radio} (wyszukane)}
-			
-%			Na dole ekranu dostępne są 2~lub 3~ikony. Pierwsza z~nich zakańcza odtwarzanie i~powraca do poprzedniego ekranu. Druga, ikona gwiazdy, pozwala dodawać/usuwać stację z listy ulubionych. Jeśli jest ona wypełniona, oznacza to że stacja jest zapisana i~kliknięcie jej spowoduje jej usunięcie. Natomiast pusta ikona wskazuje, że jest to nowa stacja i~pozwala na dodanie jej do listy ulubionych. Trzecia ikona jest dostępna tylko w~przypadku uruchomienia radia z~poziomu wyników wyszukiwania (rys.~\ref{5/radio_search}). Pozwala ona wrócić bezpośrednio do ekranu listy ulubionych stacji.
+		Główną funkcją produktu jest odtwarzanie radia internetowego. Odtwarzacz został zrealizowany w~postaci dedykowanego ekranu przedstawionego na rysunku~\ref{5/radio}. Urządzenie prezentuje na nim podstawowe informacje na temat stacji radiowej oraz stanu odtwarzacza. Obsługa metadanych ICY pozwala na wyświetlanie tytułu i~wykonawcy granego w~danej chwili utworu. Poniżej wyświetlane są statystyki działanie dekodera. \textit{CPU} odnosi się do procentu wykorzystania rdzenia dekodującego, natomiast \textit{Bufor} informuje użytkownika o~poziomie wypełnienia bufora (przydatne, gdy występują problemy z~odtwarzaniem spowodowane niską jakością połączenia internetowego).
 		
-			\paragraph{Dalszy rozwój}
-				Implementacja dekodowania formatu AAC/AAC+ znacząco podniosłaby użyteczność produktu.
+		\imghss{5/radio}{Ekran \textit{Radio} (włączone z~listy ulubionych)}{5/radio_search}{Ekran \textit{Radio} (wyszukane)}
+	
+		\paragraph{Dalszy rozwój}
+			Implementacja dekodowania formatu AAC/AAC+ znacząco podniosłaby użyteczność produktu.
 			
 		\subsection{Lista ulubionych stacji}
 			Przechowywana w~pamięci urządzenia lista ulubionych stacji zawiera znalezione i~zapisane przez użytkownika stacje. Przedstawia ją rysunek~\ref{5/fav}.
@@ -1311,13 +1306,13 @@ backend=biber,
 			\imgh{5/fav}{Ekran \textit{Ulubione stacje}}{0.5}
 			
 			Jest to także ekran startowy. Wyświetla się on jako pierwszy po starcie programu. Dlatego jest też traktowany jako ekran główny i~posiada najwięcej ikon akcji na dole ekranu.
-			Ikona najbardziej po lewej to ikona folderu i~uruchamia listing plików lokalnych. Zaraz obok znajduje się ikona ustawień. Po prawej użytkownik może uruchomić wyszukiwarkę stacji.
+			Ikona najbardziej po lewej to ikona folderu służąca do uruchamiania odtwarzacza plików lokalnych. Zaraz obok znajduje się ikona ustawień. Po prawej użytkownik może przejść do wyszukiwarki stacji.
 			
 			\paragraph{Dalszy rozwój}
-				Warto zwrócić uwagę, że stacje są zawsze dodawane na koniec listy ulubionych. Nie ma żadnej możliwości zmiany ich ustawienia. Opcja taka znacząco podniosłaby komfort użytkowania produktu. Możliwość importu/eksportu listy ulubionych stacji z/na kartę SD umożliwiłaby tworzenie kopii zapasowych listy ulubionych stacji lub też ręczne dodawanie strumieni których nie ma w~obsługiwanych wyszukiwarkach stacji internetowych.
+				Warto zwrócić uwagę, że nowe stacje są zawsze dodawane na koniec listy ulubionych. Nie ma żadnej możliwości zmiany ich ustawienia. Opcja ręcznego sortowania listy ulubionych znacząco podniosłaby komfort użytkowania produktu. Przydatną opcją byłaby także lista ostatnio odtwarzanych stacji. Możliwość importu/eksportu listy ulubionych stacji z/na kartę SD umożliwiłaby tworzenie kopii zapasowych listy ulubionych stacji lub też ręczne dodawanie strumieni których nie ma w~obsługiwanych wyszukiwarkach stacji internetowych.
 			
 		\subsection{Wyszukiwarka stacji radiowych}
-			Wyszukiwanie stacji jest dwuetapowe. Najpierw użytkownik na ekranie z~klawiaturą (rys.~\ref{5/search}) podaje fragment nazwy stacji, którą chciałby wyszukać. Po kliknięciu ikony lupy w~prawym dolnym rogu ekranu, ładowane są stacje pasujące do wyszukiwania. Pojawia się nowy ekran przedstawiony na rysunku~\ref{5/searchres}. Są na nim zawarte wyszukane stacje.
+			Wyszukiwanie stacji jest dwuetapowe. Najpierw użytkownik na ekranie z~klawiaturą (rys.~\ref{5/search}) podaje fragment nazwy stacji, którą chciałby wyszukać. Po kliknięciu znajdującej się w~prawym dolnym rogu ekranu ikony lupy, ładowane są stacje pasujące do wyszukiwanego wzorca. Pojawia się nowy, przedstawiony na rysunku~\ref{5/searchres} ekran, na którym wyświetlają się wyszukane stacje.
 			
 			\imghss{5/search}{Ekran wyszukiwania stacji}{5/searchres}{Ekran wyników wyszukiwania}
 			
@@ -1327,18 +1322,21 @@ backend=biber,
 				Obecnie obsługiwany jest tylko jeden dostawca wyszukiwania. Istnieje infrastruktura do obsługi wielu takich serwerów, lecz żaden inny nie został dodany.
 			
 		\subsection{Przeglądarka i~odtwarzacz plików lokalnych}
-			Listing plików lokalnych przedstawiony został na rysunku~\ref{5/local}. Tworzony jest on na podstawie plików znajdujących się na karcie SD. Zapewnione jest sortowanie wpisów (foldery sortowane są jako pierwsze). Możliwe jest rekurencyjne przeglądanie drzewa katalogów. Nazwa ekranu jest dynamicznie aktualizowana i~wyświetla nazwę aktualnego folderu. Jak widać obsługiwane jest także przewijanie długich tekstów poziomo na ekranie oraz dekodowanie metadanych ID3v2. Utwory w~ramach jednego folderu są automatycznie odtwarzane jeden po drugim. Interfejs lokalnego odtwarzacza można zobaczyć na rysunku~\ref{5/local_play}.
+			Listing plików lokalnych odczytanych z karty SD przedstawiony został na rysunku~\ref{5/local}.
+%			Tworzony jest on na podstawie plików znajdujących się na karcie SD.
+			Zapewnione jest sortowanie wpisów (foldery sortowane są jako pierwsze). Możliwe jest rekurencyjne przeglądanie drzewa katalogów. Nazwa ekranu jest dynamicznie aktualizowana i~wyświetla nazwę aktualnego folderu. Jak widać obsługiwane jest także przewijanie długich tekstów poziomo na ekranie oraz dekodowanie metadanych ID3v2. Utwory w~ramach jednego folderu są automatycznie odtwarzane jeden po drugim. Interfejs lokalnego odtwarzacza można zobaczyć na rysunku~\ref{5/local_play}.
 			
 			\imghss{5/local}{Ekran \textit{Pliki lokalne}}{5/local_play}{Odtwarzacz plików lokalnych}
 			
 			\paragraph{Dalszy rozwój}
-				Przydatnym dodatkiem byłaby możliwość randomizacji kolejności automatycznego odtwarzania utworów oraz opcja odtworzenia całego folderu rekurencyjnie. Pozwoliłoby to np. na losowe odtworzenie całej dyskografii jednego zespołu. Implementacja bezstratnego kodowania plików FLAC umożliwiłaby podniesienie jakości odtwarzanego dźwięku.
+				Przydatnym dodatkiem byłaby możliwość randomizacji kolejności automatycznego odtwarzania utworów oraz opcja odtworzenia całego folderu rekurencyjnie. Pozwoliłoby to np. na losowe odtworzenie całej dyskografii jednego zespołu.
+				Implementacja bezstratnego kodowania plików FLAC zapewniłaby większą kompatybilność urządzenia oraz potencjalne podniesienie jakości dźwięku.
 		
 		\subsection{Połączenie z~Internetem}
-			Urządzenie do odtwarzania radia i~wyszukiwania nowych stacji wymaga połączenia z~Internetem. W~projekcie zostały zaimplementowane funkcje wyszukiwania, zapisywania oraz łączenia się z~sieciami Wi-Fi.
+			Urządzenie do odtwarzania radia i~wyszukiwania nowych stacji wymaga połączenia z~Internetem. W~aktualnej wersji oprogramowania zostały zaimplementowane funkcje wyszukiwania, zapisywania oraz łączenia się z~sieciami Wi-Fi.
 			$ $\\
 			
-			Sieci po wyszukaniu, wprowadzeniu hasła i~poprawnym ustanowieniu połączenia są zapisywane w~pamięci nieulotnej. Urządzenie po uruchomieniu automatycznie wyszukuje najlepszą sieć, do której hasło zostało wcześniej zapisane. Dzięki temu, użytkownik od razu może rozpocząć odtwarzanie radia.
+			Dane dostępowe do znalezionych sieci z którymi udało się połączyć są zapisywane w~pamięci nieulotnej odbiornika. Urządzenie po uruchomieniu automatycznie wyszukuje najlepszą sieć, do której hasło zostało wcześniej zapisane. Dzięki temu, użytkownik od razu może rozpocząć odtwarzanie radia.
 	
 	\section{Scenariusze użytkowania}
 		W~tej sekcji przedstawione zostały scenariusze użytkowania urządzenia.
@@ -1396,74 +1394,84 @@ backend=biber,
 			\end{itemize}
 			
 	\section{Zrealizowane oprogramowanie układowe}
-		Produkt końcowy posiada wiele funkcji. Przeważająca większość z~nich jest kompletna.
-		% TODO dopisać coś
-		
-		\subsection{Ocena obecnej wersji produktu}
-			Udało się zaimplementować dekodowanie MP3 z~każdą przepływnością, nawet 320~kbps, w~wariantach MPEG1 oraz MPEG2. Ponad to obsługiwane są pliki WAV. Udało się także odczytać metadane zarówno strumieni internetowych (ICY) jak i~lokalnych plików MP3 (ID3v2). Dekoder potrafi uwzględniać i~korygować wiele nieprawidłowości w~strumieniu danych. Obsługiwane jest także wykrywanie i~zgłaszanie błędów dekodowania. Klient HTTP obsługuje minimum funkcji, lecz jest to wystarczające do poprawnego strumieniowania radia internetowego.
+			Oprogramowanie układowe sprawia, że odbiornik spełnia wszystkie wymagania sformułowane w założeniach.
+			Udało się zaimplementować dekodowanie MP3 z~każdą przepływnością, nawet 320~kbps, w~wariantach MPEG1 oraz MPEG2, a także odtwarzanie plików w formacie WAV.
+			Zrealizowana została obsługa metadanych zarówno strumieni internetowych (ICY) jak i~lokalnych plików MP3 (ID3v2). Dekoder potrafi uwzględniać i~korygować wiele nieprawidłowości w~strumieniu danych. Obsługiwane jest także wykrywanie i~zgłaszanie błędów dekodowania. Klient HTTP obsługuje minimum funkcji, lecz jest to wystarczające do poprawnego odbioru strumienia radia internetowego.
 			$ $\\
 			
-			Należałoby poprawić dokładność wyliczania procentu pozostałej energii w~ogniwach. Aproksymacja zgrubnie jest poprawna lecz do pełnej poprawności brakuje wielogodzinnych testów i~poprawek. Podczas ładowania, wskazanie poziomu baterii jest znacznie zawyżone.
-			$ $\\
-			
-			Błędy zgłaszane użytkownikowi są zbyt ogólne. Konieczna jest unifikacja kodów błędów w~projekcie i~wyświetlanie adekwatnej wiadomości zamiast ogólnikowego \textit{Wystąpił błąd}. Brak jest także ekranu potwierdzenia usunięcia wpisu z~ulubionych oraz edycji nazwy zapisanej stacji.
+%			Należałoby poprawić dokładność wyliczania procentu pozostałej energii w~ogniwach. Aproksymacja zgrubnie jest poprawna lecz do pełnej poprawności brakuje wielogodzinnych testów i~poprawek. Podczas ładowania, wskazanie poziomu baterii jest znacznie zawyżone.
+%			$ $\\
+%			
+%			Błędy zgłaszane użytkownikowi są zbyt ogólne. Konieczna jest unifikacja kodów błędów w~projekcie i~wyświetlanie adekwatnej wiadomości zamiast ogólnikowego \textit{Wystąpił błąd}. Brak jest także ekranu potwierdzenia usunięcia wpisu z~ulubionych oraz edycji nazwy zapisanej stacji.
+
+			Pośród zrealizowanych funkcjonalności są takie, które działają, ale wymagałyby dalszego dopracowania. Jedną z nich jest określanie stopnia naładowania wbudowanego ogniwa. Obecnie szacowanie pojemności w trakcie rozładowywania jest poprawne ale mało dokładne, natomiast podczas ładowania wskazania są mocno zawyżone. 
+			Drugim zagadnieniem jest uporządkowanie podsystemu zgłaszania przez oprogramowanie błędów w działaniu urządzenia. Konieczna jest unifikacja kodów błędów i rozbudowa systemu powiadamiania o nich użytkownika.
+			Pewnego dopracowania wymaga również funkcjonalność operowania listą ulubionych. Aktualnie brakuje ekranu potwierdzenia usunięcia pozycji z listy oraz możliwości edytowania nazwy stacji znajdującej się na tej lisie.
 		
 		\subsection{Perspektywa nowej generacji projektu}
-			Swoista wersja 2.0 mogłaby zawierać przykładowo obsługę modemów USB. Dzięki temu, użytkownik mógłby podłączyć do płytki modem sieci komórkowej i~używać urządzenia bez dostępu do sieci Wi-Fi (np. w~miejscu pracy). Taki produkt nie wymagałby żadnej konfiguracji początkowej ani ingerencji w~istniejącą infrastrukturę sieciową. Jest to duża zaleta tradycyjnego radia.
+			Swoista wersja 2.0 oprogramowania układowego mogłaby zawierać dodatkowe funkcjonalności, które można by zrealizować bez wprowadzania zmian w części sprzętowej odbiornika.
 			$ $\\
 			
-			Część stacji internetowych próbuje wymusić połączenie szyfrowane TLS. Obecnie radio odrzuca takie próby i~zgłasza błąd. Dołączenie do projektu obsługi takich połączeń podniosłoby jego użyteczność. Powstały jednak obawy czy urządzenie poradzi sobie z~deszyfrowaniem danych w~czasie rzeczywistym, więc kwestia TLS nie została poruszona w~obecnej wersji projektu.
-			$ $\\
-			
-			Istniejąca infrastruktura pozwala na zaimplementowanie tworzenia wielu list ulubionych, jednak tak funkcjonalność nie została utworzona. Gdyby ją zaimplementowano, użytkownik mógłby grupować swoje utwory według własnego uznania. Odtwarzanie np. konkretnych gatunków muzycznych stałoby się o~wiele prostsze.
+			Istniejąca architektura oprogramowania pozwala na zaimplementowanie funkcjonalności tworzenia więcej niż jednej listy ulubionych. Nie zostało to jednak obecnej wersji zrealizowane. Dodanie takiej możliwości z pewnością uatrakcyjniło by korzystanie z odbiornika pozwalając użytkownikowi grupować utwory czy stacje według gatunków muzycznych, wykonawców czy też innych kryteriów.
+			Bardzo atrakcyjne wydaje się dodanie możliwości obsługi modemów USB pozwalających na korzystanie z sieci komórkowych LTE/5G. Modem taki zapewniałby dostęp do Internetu praktycznie w dowolnym miejscu a to pozwoliłoby to korzystać z urządzenia w sposób niemal identyczny jak korzysta się z tradycyjnego odbiornika radiowego, bez potrzeby podłączania się do lokalnej sieci Wi-Fi. Trzecia, warta rozważenia funkcjonalność wiąże się z faktem, że cześć stacji internetowych w momencie nawiązywania połączenia próbuje wymusić przejście na połączenie szyfrowane z użyciem protokołu TLS. Obecnie odbiornik odrzuca takie prośby i zgłasza błąd. W nowej wersji oprogramowania należało by rozważyć zaimplementowanie obsługi takich połączeń. 
 			
 	\section{Część sprzętowa}
-		Projekt od strony sprzętowej został udokumentowany w~sekcji~\ref{sec:hw}. Oprócz schematu, powstała także płytka PCB, oraz obudowa wydrukowana przy użyciu drukarki~3D. Całość widoczna jest na rysunku~\ref{5/hw_result}.
+		Projekt od strony sprzętowej został udokumentowany w~sekcji~\ref{sec:hw}. Oprócz schematu, powstała także płytka PCB, oraz obudowa wykonana w technice druku~3D. Całość widoczna jest na rysunku~\ref{5/hw_result}.
+		$ $\\
+		
+		Od strony funkcjonalnej urządzenie posiada wbudowane ogniwa, dzięki czemu nie potrzebuje zewnętrznego zasilania. Zintegrowany układ ładowania ze złączem USB~C pozwala na wykorzystanie praktycznie dowolnej ładowarki z~tym złączem (prąd wykorzystany do ładowania to 1A). Produkt posiada analogową regulację głośności potencjometrem wyprowadzonym na lewą stronę urządzenia. Lokalizacja została dobrana ze względu na bliskość sekcji audio na płytce i~chęć minimalizacji długości ścieżek, które im dłuższe tym większe zakłócenia wprowadzają do systemu. Obok gałki potencjometru znajduje się także złącze JACK~3.5mm przeznaczone do podłączenia zewnętrznego wzmacniacza.
 		
 		\imgh{5/hw_result}{Gotowy produkt w~obudowie}{0.7}
 		
-		Od strony funkcjonalnej urządzenie posiada wbudowane ogniwa, dzięki czemu nie potrzebuje zewnętrznego zasilania. Zintegrowany układ ładowania ze złączem USB~C pozwala na wykorzystanie praktycznie dowolnej ładowarki z~tym złączem (prąd wykorzystany do ładowania to 1A). Produkt posiada analogową regulację głośności potencjometrem wyprowadzonym na lewą stronę urządzenia. Lokalizacja została dobrana ze względu na bliskość sekcji audio na płytce i~chęć minimalizacji długości ścieżek, które im dłuższe tym większe zakłócenia wprowadzają do systemu. Obok gałki potencjometru znajduje się także złącze JACK~3.5mm do podłączenia zewnętrznego wzmacniacza.
-		
 		\subsection{Ocena wyników}
-			Natura sprzętowej realizacji tej części projektu powoduje, że znacznie ciężej jest korygować powstałe błędy. Dlatego ta sekcja zawiera dużo niedociągnięć. Jednak wszystkie te mankamenty mogą zostać naprawione w~nowej wersji sprzętu.
-			
-			\subsubsection{Schemat}
-				\noindent
-				Podczas tworzenia pierwszej wersji schematu popełniono szereg drobnych błędów:
+%			Prawie wszystkie wykryte we wcześniejszych wersjach zostały naprawione w trzeciej wersji prototypu odbiornika.
+			Sprzętowa natura projektu spowodowała, że znacznie trudniej było korygować powstałe błędy.
+			Ta sekcja zawiera listę niedociągnięć, których wyeliminowanie umożliwiłoby w przyszłości stworzenie lepszego produktu.
+
 				\begin{itemize}
-					\item brak kondensatorów filtrujących, które mogłyby poprawić parametry pracy niektórych elementów takich jak wzmacniacz,
-					\item RP2040 mierzy napięcie \lstinline|VCC| a~nie napięcie ogniw, co powoduje, że podczas ładowania nie ma on możliwości pomiaru poziomu naładowania,
-					\item niedokładne rezystory pomiarowe w~dzielnikach napięć, powodują one niedokładności w~pomiarze napięć \lstinline|VCC| i~ogniw,
-					\item brak ochrony przed drganiem styków (kondensatorów) pinów detekcji karty SD,
-					\item zastosowana przetwornica nie jest przystosowana do wysokiego, skokowego poboru prądu przez wzmacniacz,
-					\item wzmacniacz powinien mieć pin wyciszający lub wyłączający, aby obniżyć pobór prądu i~ukrywać szumy przy braku odtwarzania dźwięków,
+					\setlength{\itemsep}{0.5cm}
+					\item Błędy w schemacie elektrycznym:
+					\begin{itemize}
+						\setlength{\itemsep}{0.2cm}
+						\item brak kondensatorów filtrujących, które mogłyby poprawić parametry pracy niektórych modułów,
+						\item niedokładne rezystory pomiarowe w~dzielnikach napięć powodują odchylenia w~pomiarze napięć \lstinline|VCC| i~ogniw,
+					\end{itemize}
+
+					\item Błędy w projekcie obwodu drukowanego:
+					\begin{itemize}
+						\setlength{\itemsep}{0.2cm}
+						\item brak otworów montażowych w~obrębie głównej części płytki, przez co posiada ona dość niestandardowy kształt,
+						\item płytka zamontowana jest w rogu obudowy, uniemożliwiając umieszczenie w tym miejscu elementów łączących fragmenty obudowy, co powoduje jej niestabilność,
+						\item podłączanie modułów do głównej płytki z wykorzystaniem złączy typu goldpin, jest zawodne, gdyż może to skutkować ich wypadnięciem lub utratą kontaktu elektrycznego.
+					\end{itemize}
 				\end{itemize}
 				
-				W~przedstawionym finalnym schemacie powyższe pomyłki zostały naprawione. Na płytce brakujące połączenia były wykonywane przy użyciu przewodów lutowanych bezpośrednio do płytki od strony miedzi.
-				$ $\\
-				
-				Dodatkowo wykryte zostały problemy, które nie zostały poprawione w~tej wersji produktu. Parametr $\text{RDS}_{\text{(on)}}$ tranzystora \lstinline|Q1| przy małych napięciach jest relatywnie duży, co przy znacznym poborze prądu przez wzmacniacz powoduje odkładanie się na nim nietrywialnej mocy. Przykładowym rozwiązaniem tego problemu może być zastosowanie tranzystora o~lepszych parametrach, lub zrezygnowanie wbudowanej ładowarki ogniw.
-				$ $\\
-				
+				Dodatkowo, podczas testowania wykryte zostały problemy, których nie udało się poprawić w~tej wersji produktu.
+				Parametr $\text{RDS}_{\text{(on)}}$ tranzystora \lstinline|Q1| przy małych napięciach jest relatywnie duży, co przy znacznym poborze prądu przez wzmacniacz powoduje odkładanie się na nim nietrywialnej mocy. Przykładowym rozwiązaniem tego problemu może być zastosowanie tranzystora o~lepszych parametrach, lub zrezygnowanie wbudowanej ładowarki ogniw.
 				Niewystarczające filtrowanie zasilania powoduje słyszalne szumy, szczególnie wtedy, kiedy nic nie jest odtwarzane. Komunikacja Wi-Fi powoduje znaczny chwilowy wzrost prądu pobieranego przez płytkę Pi~Pico~W, co powoduje zakłócenia w~zasilaniu wzmacniacza. Częściowo zostało to naprawione przez wyciszanie wzmacniacza, lecz nie jest to rozwiązanie idealne. Należałoby odseparować od siebie te dwa obwody zasilające.
+				$ $\\
 				
-			\subsubsection{Płytka PCB}
-				Przy projektowaniu płytki PCB również wystąpiły niedopatrzenia:
-				\begin{itemize}
-					\item brak otworów montażowych w~obrębie głównej części płytki, przez co posiada ona dość niestandardowy kształt,
-					\item brak miejsca na elementy spajające obudowę, tam gdzie płytka dotyka ścianek nie ma wkrętów mocujących, co powoduje niestabilność obudowy,
-					\item moduły są wpinane w~złącza typu \textit{goldpin}, co w~przypadku obecności na nich złącz zewnętrznych (JACK, port USB~C), powoduje że wpinanie wtyków w~te złącza odchyla je i~w konsekwencji moduł wypada lub traci kontakt. Zostało to częściowo naprawione przy module ładowania. Wlutowany na stałe, stał się stabilniejszy.
-				\end{itemize}
+%			\subsubsection{Płytka PCB}
+%				Przy projektowaniu płytki PCB również wystąpiły niedopatrzenia:
+%				\begin{itemize}
+%					\item brak otworów montażowych w~obrębie głównej części płytki, przez co posiada ona dość niestandardowy kształt,
+%					\item brak miejsca na elementy spajające obudowę, tam gdzie płytka dotyka ścianek nie ma wkrętów mocujących, co powoduje niestabilność obudowy,
+%					\item moduły są wpinane w~złącza typu \textit{goldpin}, co w~przypadku obecności na nich złącz zewnętrznych (JACK, port USB~C), powoduje że wpinanie wtyków w~te złącza odchyla je i~w konsekwencji moduł wypada lub traci kontakt. Zostało to częściowo naprawione przy module ładowania. Wlutowany na stałe, stał się stabilniejszy.
+%				\end{itemize}
 				
-				Domowa metoda termotransferu nie zapewnia najlepszych parametrów produkcyjnych. Niektóre ścieżki są cieńsze niż w projekcie, a~część padów jest tak cienka, że montaż był znacząco utrudniony. Znacznie lepszym i~powtarzalnym sposobem na wytworzenie płytki byłoby zlecenie jej wykonania zewnętrznej firmie, jednak znacznie opóźnia to prototypowanie.
+				Metoda termotransferu nie zapewnia najlepszych parametrów produkcyjnych. Niektóre ścieżki są cieńsze niż w projekcie, a~część padów lutowniczych jest tak cienka, że montaż był znacząco utrudniony. Lepszym i~powtarzalnym sposobem na wytwarzanie płytek drukowanych byłoby zlecenie ich wykonania zewnętrznej firmie.
 		
 		\subsection{Radio nowej generacji}
-			Pierwszym ulepszeniem powinna być nowa płytka, zaprojektowana od podstaw z~uwzględnieniem powyższych uwag. Wykonana profesjonalnie, dwuwarstwowo, pozwoliłaby na miniaturyzację urządzenia i~poprawienie parametrów pracy, głównie obniżenie szumów sekcji zasilającej. Powinny zostać uwzględnione wszystkie otwory montażowe samej płytki jak i~elementy obudowy z~którymi nie może kolidować. Moduły powinny zostać odsunięte od krawędzi płytki, ponieważ (jak napisano wyżej) i~tak nie nadają się do bezpośredniego wpinania zewnętrznych złączy. Za to powinny zostać wyprowadzone dedykowane, lutowane lub przykręcane złącza.
+			Pierwszym ulepszeniem powinno być skorygowanie schematu oraz stworzenie nowej płytki, z zaprojektowaną od podstaw mozaiką ścieżek. Wykonana profesjonalnie, dwuwarstwowo, pozwoliłaby na poprawienie parametrów pracy, głównie obniżenie szumów sekcji zasilającej. Powinny zostać uwzględnione otwory montażowe płytki.
+			Złącza zamontowane na modułach nie powinny być wykorzystywane.
+			Podłączanie do nich zewnętrznych przewodów, wywiera nadmierne naprężenia na ich zawodne połączenie z resztą obwodu.
+			W miejsce tych złączy powinny zostać wyprowadzone ich lutowane lub przykręcane odpowiedniki.
 			$ $\\
 
-			Należałoby się zastanowić także, czy jakość i poziom głośności dźwięku odpowiada użytkownikowi. Jeżeli nie, istnieje możliwość wykorzystania mocniejszego wzmacniacza w~celu obniżenia zniekształceń przy cichym słuchaniu lub zwiększenia mocy maksymalnej. Jednak układy o~większej mocy wymagają wyższego napięcia.
+			Należałoby się zastanowić także, czy jakość i poziom głośności dźwięku odpowiada użytkownikowi. Jeżeli nie, istnieje możliwość wykorzystania mocniejszego wzmacniacza w~celu obniżenia zniekształceń przy cichym słuchaniu lub zwiększenia mocy maksymalnej.
+			Należy jednak mieć na uwadze, że układy o~większej mocy wymagają wyższego napięcia zasilającego.
 			Przykładowo PAM8610\textsuperscript{\cite{ch5_pam8610}} przy napięciu 7V (przybliżone napięcie 2~ogniw połączonych szeregowo) jest w~stanie oddać moc 4W na kanał (obecnie użyty wzmacniacz posiada moc ok. 1W na kanał). Nowszy PAM8006a\textsuperscript{\cite{ch5_pam8006a}} jest w~stanie wysterować głośniki mocą aż 8W na kanał, lecz wiąże się to z~napięciem zasilania 12V (3 ogniwa szeregowo) i~zmianą głośników na takie o~impedancji $8 \Omega$.
-			Jednak pociąga to za sobą komplikacje sekcji zasilającej. Ogniwa szeregowe musiałyby być ładowane wyższym napięciem i~prawdopodobnie poskutkowałoby to zrezygnowaniem z~wysokiej kompatybilności USB~C. Dostarcza ono zbyt niskiego napięcia. Istnieje opcja wykorzystania protokołu USB~PD (ang. \textit{power delivery}), który, może poinformować ładowarkę, że urządzenie obsługuje napięcie wyższe niż 5V, np. 9V czy 12V.
+			Podwyższenie napięcia zasilającego niesie ze sobą konieczność wprowadzenia poważnych zmian w budowie sekcji zasilającej. Połączone szeregowo ogniwa litowo-jonowe wymagają znacznie bardziej zaawansowanych układów zabezpieczających i ładujących. Bardziej skomplikowane byłoby również wykorzystanie złącza USB-C do ładowania i zasilania urządzenia (należałoby zastosować moduł ładowarki obsługujący funkcjonalność USB-PD\textsuperscript{\cite{usb_pd}}).
 			$ $\\
 			
 			Dodatkowym modułem poprawiającym jakość dźwięku mógłby być prosty \textit{equalizer}. Dwa pokrętła do wyrównania pasma akustycznego (bas i~treble), zrealizowane z~wykorzystaniem pasywnych elementów elektronicznych.
@@ -1471,13 +1479,7 @@ backend=biber,
 	\section{Podsumowanie}
 	
 		W~niniejszej pracy inżynierskiej udało się zaprojektować i~zbudować odbiornik internetowych stacji radiowych z~opcją odtwarzania plików lokalnych.
-		Wszystkie założone cele zostały spełnione. Pomimo kilku niedociągnięć urządzenie jest w~pełni funkcjonalne i~z powodzeniem może być wykorzystane do odtwarzania radia internetowego i~lokalnych plików MP3 oraz WAV. Powstała też założona obudowa, dzięki której radio nabiera wyglądu kompletnego produktu.
-		$ $\\
-		
-		Projekt się udał. Efekty są zadowalające. Urządzenie da się wykorzystać do codziennego słuchania radia czy muzyki. Wbudowane ogniwa zapewniają przenośność urządzenia.
-		Temat był propozycją promotora.
-		Zostały zrealizowane, a~nawet przekroczone wszystkie jego założenia. Ponad wymagania zrealizowano projekt płytki i~obudowy, w~której został zamknięty finalny produkt.
-		$ $\\
+		Wszystkie założone funkcjonalności zostały zrealizowane. Pomimo kilku niedociągnięć urządzenie jest w~pełni funkcjonalne i~z powodzeniem może być wykorzystane do odtwarzania radia internetowego i~lokalnych plików MP3 oraz WAV. Powstała też założona obudowa, dzięki której radio nabiera wyglądu kompletnego produktu.
 		
 %		Projekt uważam za udany. 
 %		Z~efektów pracy jestem nad wyraz zadowolony. Urządzenie da się wykorzystać do codziennego słuchania radia czy muzyki.
